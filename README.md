@@ -12,6 +12,8 @@ Contains all the same features as v1 (custom image sizes, borders, background co
 4. Single image - Custom name can be displayed
 5. Single image - Custom link can be used for click action on name
 6. Single image - Custom image source can be used for the image, this can be either a pointer to a different image as a URL, or can be an HTML snippet to enable iFrame embedding.
+7. Grid - added toggle to display or hide measures on grid.
+8. Grid - added way to set the opacity of each image based on the 1st measure
 
 ## Example App
 There are 2 examples included in this propject.
