@@ -1,0 +1,10 @@
+{
+	"name" : "MGO Image Grid v2",
+	"description" : "Create an image grid using a dimension containing the filename. The images are loaded from a web or local folder.",
+	"icon" : "extension",
+	"preview": "MGOImageGridv2.png",
+	"type" : "visualization",
+	"version": 2.0,
+	"preview" : "extension",
+	"author": "Murray Grigo-McMahon"
+}

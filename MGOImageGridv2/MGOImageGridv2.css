@@ -1,0 +1,138 @@
+.qv-object-MGOImageGridv2 div.qv-object-content-container {
+	overflow: auto;
+}
+
+
+.qv-object-MGOImageGridv2 {
+	font-size: 0px;
+}
+.qv-object-MGOImageGridv2 span.mgoPicGrid {
+	font-size: 0px;
+	display: inline-block;
+
+}
+
+.qv-object-MGOImageGridv2 div.mgoHeader {	
+	margin:0px;
+	font-size: 12px;
+	font-weight: bold;
+	display:block;
+	background-color:#000;
+	color:#fff;
+	opacity:0.7;
+	position: absolute;
+    bottom: 0px;
+    right:0px;
+    overflow: hidden;
+    width:auto%;
+	line-height: 12px;
+	text-align: right;
+}
+.qv-object-MGOImageGridv2 div.mgoHeader a{
+	color:#fff;
+	font-size: 12px;
+	font-weight: bold;
+	text-decoration: none;¨
+	text-overflow: ellipsis;
+	width:auto;
+	padding:2px;
+	margin:0px;
+	display:block;
+}
+
+
+
+.qv-object-MGOImageGridv2 div.mgoSinglePic {
+	padding:0px;
+	margin:0px;
+	font-size: 16px;
+	display:block;
+	text-align: center;
+	height:100%; 
+	width:100%;
+	
+}
+/* hover for popups */
+a.mgotooltip {outline:none;}
+a.mgotooltip:hover {text-decoration:none;} 
+a.mgotooltip span.mgoimghoversm {
+    z-index:9999;display:none;
+}
+
+span.mgoPopinEdit span.mgoimghoversm {
+		z-index:9999;display:none;
+	}
+
+ a.mgotooltip:hover span.mgoimghoversm{
+    display:inline; position:absolute; 
+    background:#000;
+	padding:2px 2px;
+    margin-top:0px; margin-left:-24px;
+    width:20px;
+    height:auto;
+    overflow: hidden;
+    font-size:12px;
+    color:#fff;
+    opacity: 0.7;
+    border-top-left-radius:0px;
+	border-top-right-radius:0;
+	border-bottom-right-radius:0;
+	border-bottom-left-radius:4px;
+}
+
+/* image scaling */
+/* always fit in container */
+.mgoImgScaleFit{
+	background-size: contain; background-position: 50% 50%; background-repeat: no-repeat;
+}
+/* Stretch to fill container */
+.mgoImgScaleStretch{
+	background-size: 100% 100%; background-position: 50% 50%; background-repeat: no-repeat;
+}
+/* Always fit height of container */
+.mgoImgScaleFitHeight{
+	background-size: auto 100%; background-position: 50% 50%; background-repeat: no-repeat;
+}
+
+/* Always fit width of container */
+.mgoImgScaleFitWidth{
+	background-size: 100%; background-position: 50% 50%; background-repeat: no-repeat;
+}
+/* Actual size (clipped by container) */
+.mgoImgScaleActual{
+	background-size: auto; background-position: 0% 0%; background-repeat: no-repeat;
+}
+
+.mgoMeasureSingle{
+	font-size: 12px; font-weight: bold; color:#fff; text-shadow: 0px 0px 3px black;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display:inline; position:absolute; 
+	padding:2px;
+	line-height: 12px;
+	}
+.mgoMeasureSingleBar{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display:inline; position:absolute; 
+    padding: 0px 0px 0px 0px;
+	}
+
+.mgoMeasureSinglePic{
+	font-size: 16px; font-weight: bold; color:#fff;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display:block; position:absolute; 
+	padding:4px;
+	opacity: 0.8;
+	background-color: #000;
+	text-align: left;
+
+	}
+.mgoMeasureSinglePicBar{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display:inline; position:absolute; 
+    padding: 0px 0px 0px 0px;
+	}
+
