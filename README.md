@@ -15,7 +15,7 @@ Contains all the same features as v1 (custom image sizes, borders, background co
 
 ## Example App
 There are 2 examples included in this propject.
-**MGO Image Grid v2 example.qvf** This includes an examples of different property settings and an example of both local and remote images using Instagram. To enable the local images to work unzip and add the image folder (IG) to the "MGOImageGridv2" folder inside the "Extensions" folder.
+**MGO Image Grid v2 example.qvf** This includes an examples of different property settings and an example of both local and remote images using Instagram. To enable the local images to work unzip and add the image folder (IG) to the "MGOImageGridv2" folder inside the "Extensions" folder. Download from dropbox https://dl.dropboxusercontent.com/u/771748/IG.zip
 
 **NY public library 2.qvf** This example uses the New York Public Library public domain dataset and calls the images from their server.
 
