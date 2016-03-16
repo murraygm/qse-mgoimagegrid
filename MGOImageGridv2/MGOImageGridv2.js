@@ -77,8 +77,14 @@ function($, cssContent) {'use strict';
 						},
 					measureDisplay: {
 						type:"items",
-						label:"Measure display options",
+						label:"Measure display on grid",
 						items: {
+							measGridDisplayTog : {
+								ref: "qDef.IMGMEASGRIDDISPLAYTOG",
+								label: "Show measures on grid",
+								type: "boolean",
+								defaultValue: true
+								},
 							measOverStyle : {
 								ref: "qDef.IMGMEASDISPLAYSTYLE",
 								type: "boolean",
@@ -93,7 +99,8 @@ function($, cssContent) {'use strict';
 									label: "Number",
 									tooltip: "Display as number"
 								}],
-								defaultValue: false
+								defaultValue: false,
+								show: function(layout) { return layout.qDef.IMGMEASGRIDDISPLAYTOG } 
 								},
 							measColOne : {
 								ref: "qDef.IMGMEASDISPLAYSTYLEBARCOL1",
@@ -101,7 +108,7 @@ function($, cssContent) {'use strict';
 								type: "string",
 								expression: "optional",
 								defaultValue: "FFF",
-								show: function(layout) { return layout.qDef.IMGMEASDISPLAYSTYLE } 
+								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
 								},
 							measColtwo : {
 								ref: "qDef.IMGMEASDISPLAYSTYLEBARCOL2",
@@ -109,7 +116,7 @@ function($, cssContent) {'use strict';
 								type: "string",
 								expression: "optional",
 								defaultValue: "FFF",
-								show: function(layout) { return layout.qDef.IMGMEASDISPLAYSTYLE } 
+								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
 								}
 							}
 						},	
@@ -193,13 +200,30 @@ function($, cssContent) {'use strict';
 								type : "boolean",
 								defaultValue : false
 								},
+							customImageOpacityType : {
+								type: "string",
+								component: "buttongroup",
+								label: "Set the opacity using the 1st measure or by a fixed amount",
+								ref: "qDef.IMGOPACITYTYPE",
+								options: [{
+									value: "m",
+									label: "Measure 1",
+									tooltip: "Use the first measure to set opacity per image"
+								}, {
+									value: "n",
+									label: "Fixed amount",
+									tooltip: "Set a fixed opacity for the grid"
+								}],
+								defaultValue: "n",
+								show: function(layout) { return layout.qDef.IMGOPACITY } 
+								},
 							customImageOpacityVal : {
 								ref: "qDef.IMGOPACITYVAL",
 								label: "Image opacity (range 1-100) %",
 								type: "number",
 								expression: "optional",
 								defaultValue: 100,
-								show: function(layout) { return layout.qDef.IMGOPACITY } 
+								show: function(layout) { if( layout.qDef.IMGOPACITY & layout.qDef.IMGOPACITYTYPE == "n"){ return true } else { return false } }
 								},
 							customImageBGCol : {
 								ref : "qDef.IMGOBGCOL",
@@ -408,7 +432,7 @@ function($, cssContent) {'use strict';
 		
 
 		paint: function ( $element,layout ) {
-			var html = "", self = this, lastrow = 0, firstrow = 0, morebutton = false, lessbutton = false, imgSelectType = layout.qDef.IMGLINK, rowcount = this.backendApi.getRowCount(), imgFolderLocation = "", qData = layout.qHyperCube.qDataPages[(layout.qHyperCube.qDataPages.length - 1)], mymeasureCount = layout.qHyperCube.qMeasureInfo.length, imageOpacity = 100, measBarCol1 = "FFF", measBarCol2="FFF", measBarHeight=10,  imgScaleSingle = "mgoImgScaleFit", imgBGCol = "FFF", imgBorderCol = "FFF", imgBorderSize = 0, imgCHeight = 100, imgCWidth = 100, imgScaleGrid = "mgoImgScaleFit";
+			var html = "", self = this, lastrow = 0, firstrow = 0, morebutton = false, lessbutton = false, imgSelectType = layout.qDef.IMGLINK, rowcount = this.backendApi.getRowCount(), imgFolderLocation = "", qData = layout.qHyperCube.qDataPages[(layout.qHyperCube.qDataPages.length - 1)], mymeasureCount = layout.qHyperCube.qMeasureInfo.length, measBarCol1 = "FFF", measBarCol2="FFF", measBarHeight=10,  imgScaleSingle = "mgoImgScaleFit", imgBGCol = "FFF", imgBorderCol = "FFF", imgBorderSize = 0, imgCHeight = 100, imgCWidth = 100, imgScaleGrid = "mgoImgScaleFit";
 			var imgriduniqueID = layout.qInfo.qId;
 			var imgridpage = layout.qDef.IMGPAGINGSIZE;
 
@@ -437,12 +461,6 @@ function($, cssContent) {'use strict';
 					imgScaleGrid = "mgoImgScaleFit";
 				};
 			
-			//set up image opcaity value
-			if(layout.qDef.IMGOPACITY){
-					imageOpacity = (layout.qDef.IMGOPACITYVAL / 100); 
-				} else {
-					imageOpacity = 100;
-				};
 			
 			//set up measure bar size
 			if(imgCHeight > 20){
@@ -509,9 +527,28 @@ function($, cssContent) {'use strict';
 			//render data
 				$.each(qData.qMatrix, function ( key, row  ) {
 					var dim = row[0], meas1 = row[1], meas2 = row[2];
+
+					
 					
 					lastrow = key * layout.qHyperCube.qDataPages.length;
 					firstrow = (key * layout.qHyperCube.qDataPages.length)-imgridpage+1;
+
+					//set up image opcaity value
+					var imageOpacity = 1;
+							if(layout.qDef.IMGOPACITY){
+									if(layout.qDef.IMGOPACITYTYPE == "m"){
+										if(mymeasureCount>0){
+											var mmfact4op = meas1.qNum/layout.qHyperCube.qMeasureInfo[0].qMax;
+											imageOpacity = mmfact4op; 
+										} else {
+											imageOpacity = 1;
+										};
+									} else if (layout.qDef.IMGOPACITYTYPE == "n"){
+										imageOpacity = layout.qDef.IMGOPACITYVAL/100;
+									};
+								} else {
+									imageOpacity = 1;
+								};
 					
 					//Check count and choose Grid or Single pic layout
 					if(rowcount > 1){
@@ -531,11 +568,12 @@ function($, cssContent) {'use strict';
 							};
 							
 							//render image
+
 							html += '<span class="mgoPicGrid '+imgScaleGrid+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: #' + imgBGCol +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; opacity: '+ imageOpacity +';">';
 							html += '</span>';
 						
 							//check if measure added
-							if(mymeasureCount==1){
+							if((mymeasureCount==1) & (layout.qDef.IMGMEASGRIDDISPLAYTOG)){
 								// For 1 measure
 								
 								// render measure
@@ -554,7 +592,7 @@ function($, cssContent) {'use strict';
 									html += '<span class="mgoMeasureSingleBar" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
 									
 								};
-							} else if(mymeasureCount==2){
+							} else if((mymeasureCount==2) & (layout.qDef.IMGMEASGRIDDISPLAYTOG)){
 									// For 2 measures
 									// render measure
 									// check style
@@ -604,7 +642,7 @@ function($, cssContent) {'use strict';
 							
 
 							//check if measure added
-							if(mymeasureCount==1){
+							if((mymeasureCount==1) & (layout.qDef.IMGMEASGRIDDISPLAYTOG)){
 								// For 1 measure
 								
 								// render measure
@@ -623,7 +661,7 @@ function($, cssContent) {'use strict';
 									html += '<span class="mgoMeasureSingleBar" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
 									
 								};
-							} else if(mymeasureCount==2){
+							} else if((mymeasureCount==2) & (layout.qDef.IMGMEASGRIDDISPLAYTOG)){
 									// For 2 measures
 									// render measure
 									// check style
