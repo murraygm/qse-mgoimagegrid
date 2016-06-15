@@ -17,6 +17,10 @@ Contains all the same features as v1 (custom image sizes, borders, background co
 6. Single image - Custom image source can be used for the image, this can be either a pointer to a different image as a URL, or can be an HTML snippet to enable iFrame embedding.
 7. Grid - added toggle to display or hide measures on grid.
 8. Grid - added way to set the opacity of each image based on the 1st measure
+ 
+UPDATE - June 2016:
+1. Added support for second dimension to be used as a seperate link (url) to the image source, for immediate popups from grid and on single image view
+2. stopped popups activating on grid view whilst in edit mode
 
 ## Example App
 There are 2 examples included in this propject.
