@@ -9,7 +9,7 @@ function($, cssContent) {'use strict';
 				qDimensions: [],
 				qMeasures: [],
 				qInitialDataFetch: [{
-					qWidth: 3,
+					qWidth: 4,
 					qHeight: 100
 				}]
 			}
@@ -21,7 +21,7 @@ function($, cssContent) {'use strict';
 				dimensions: {
 					uses: "dimensions",
 					min : 1,
-					max: 1
+					max: 2
 
 				},
 				measures: {
@@ -141,20 +141,30 @@ function($, cssContent) {'use strict';
 								}],
 								defaultValue: true
 								},
-							imagePopCustom : {
-								ref: "qDef.IMGLINKPOPLINKTOG",
-								label: "Use a custom link",
-								type: "boolean",
-								defaultValue: false,
+							imagePopSourceLinkType : {
+								type: "string",
+								component: "dropdown",
+								label: "Popup URL source",
+								ref: "qDef.IMGLINKPOPLINKSOURCE",
+								options: [{
+									value: "d1",
+									label: "1st dimension"
+								}, {
+									value: "d2",
+									label: "2nd dimension"
+								}, {
+									value: "c",
+									label: "Custom"
+								}],
+								defaultValue: "d1",
 								show: function(layout) { if( layout.qDef.IMGLINK == false ){ return true } else { return false } }
 								},
 							imagePopCustomLink : {
 								ref: "qDef.IMGLINKPOPLINK",
 								label: "URL or path for popup link",
 								type: "string",
-								expression: "optional",
 								defaultValue: "",
-								show: function(layout) { return layout.qDef.IMGLINKPOPLINKTOG } 
+								show: function(layout) { if( layout.qDef.IMGLINKPOPLINKSOURCE == "c" & layout.qDef.IMGLINK == false ){ return true } else { return false }  } 
 								},
 							imageScalingGrid : {
 								type: "string",
@@ -284,11 +294,22 @@ function($, cssContent) {'use strict';
 								type: "boolean",
 								defaultValue: true
 								},
-							singleImageLinkCustom : {
-								ref: "qDef.SINGLEIMGLINKCUSTOM",
-								label: "Use a custom name and link",
-								type: "boolean",
-								defaultValue: false,
+							singleImagePopSourceLinkType : {
+								type: "string",
+								component: "dropdown",
+								label: "Popup URL source",
+								ref: "qDef.SINGLEIMGLINKPOPLINKSOURCE",
+								options: [{
+									value: "d1",
+									label: "1st dimension"
+								}, {
+									value: "d2",
+									label: "2nd dimension"
+								}, {
+									value: "c",
+									label: "Custom"
+								}],
+								defaultValue: "d1",
 								show: function(layout) { return layout.qDef.SINGLEIMGHEADER }
 								},
 							singleImageLinkCustomName : {
@@ -297,7 +318,7 @@ function($, cssContent) {'use strict';
 								type: "string",
 								expression: "optional",
 								defaultValue: "",
-								show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKCUSTOM){ return true } else { return false } } 
+								show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
 								},
 							singleImageLinkCustomLink : {
 								ref: "qDef.SINGLEIMGLINKCUSTOMLINK",
@@ -305,7 +326,7 @@ function($, cssContent) {'use strict';
 								type: "string",
 								expression: "optional",
 								defaultValue: "",
-								show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKCUSTOM){ return true } else { return false } } 
+								show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
 								},
 							singleImageLinkCustomSourceTog : {
 								ref: "qDef.SINGLEIMGLINKCUSTOMSOURCETOG",
@@ -432,7 +453,7 @@ function($, cssContent) {'use strict';
 		
 
 		paint: function ( $element,layout ) {
-			var html = "", self = this, lastrow = 0, firstrow = 0, morebutton = false, lessbutton = false, imgSelectType = layout.qDef.IMGLINK, rowcount = this.backendApi.getRowCount(), imgFolderLocation = "", qData = layout.qHyperCube.qDataPages[(layout.qHyperCube.qDataPages.length - 1)], mymeasureCount = layout.qHyperCube.qMeasureInfo.length, measBarCol1 = "FFF", measBarCol2="FFF", measBarHeight=10,  imgScaleSingle = "mgoImgScaleFit", imgBGCol = "FFF", imgBorderCol = "FFF", imgBorderSize = 0, imgCHeight = 100, imgCWidth = 100, imgScaleGrid = "mgoImgScaleFit";
+			var html = "", self = this, lastrow = 0, firstrow = 0, morebutton = false, lessbutton = false, imgSelectType = layout.qDef.IMGLINK, rowcount = this.backendApi.getRowCount(), imgFolderLocation = "", qData = layout.qHyperCube.qDataPages[(layout.qHyperCube.qDataPages.length - 1)], mymeasureCount = layout.qHyperCube.qMeasureInfo.length, mydimensionCount = layout.qHyperCube.qDimensionInfo.length, measBarCol1 = "FFF", measBarCol2="FFF", measBarHeight=10,  imgScaleSingle = "mgoImgScaleFit", imgBGCol = "FFF", imgBorderCol = "FFF", imgBorderSize = 0, imgCHeight = 100, imgCWidth = 100, imgScaleGrid = "mgoImgScaleFit";
 			var imgriduniqueID = layout.qInfo.qId;
 			var imgridpage = layout.qDef.IMGPAGINGSIZE;
 
@@ -496,7 +517,7 @@ function($, cssContent) {'use strict';
 				customSingleImageSourceHTML = "";
 				customSingleImageSourceURL = "";
 			};
-			if(layout.qDef.SINGLEIMGLINKCUSTOM){
+			if(layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){
 				customSingleImageNameTog = true;
 				customSingleImageName = layout.qDef.SINGLEIMGLINKCUSTOMNAME; 
 				customSingleImageLink = layout.qDef.SINGLEIMGLINKCUSTOMLINK;
@@ -520,20 +541,27 @@ function($, cssContent) {'use strict';
 			};
 
 			
-		
-			var parentscope = angular.element($element).scope().$parent.$parent;
+			
+			var parentscope = angular.element($element).scope().$parent.$parent.$parent;
 			$element.html(parentscope.editmode ? 'In Edit Mode' : 'Not in Edit mode');
-		
+			
 			//render data
 				$.each(qData.qMatrix, function ( key, row  ) {
-					var dim = row[0], meas1 = row[1], meas2 = row[2];
+					if(mydimensionCount == 2){
 
+						var dim = row[0], dim2 = row[1], meas1 = row[2], meas2 = row[3];
+
+					} else if (mydimensionCount == 1){
+						var dim = row[0], meas1 = row[1], meas2 = row[2];
+					};
 					
-					
+					//console.log(qData.qMatrix);
+
+
 					lastrow = key * layout.qHyperCube.qDataPages.length;
 					firstrow = (key * layout.qHyperCube.qDataPages.length)-imgridpage+1;
 
-					//set up image opcaity value
+					//set up image opacity value
 					var imageOpacity = 1;
 							if(layout.qDef.IMGOPACITY){
 									if(layout.qDef.IMGOPACITYTYPE == "m"){
@@ -560,8 +588,16 @@ function($, cssContent) {'use strict';
 								//disable pop up in edit mode
 								html += '<span class="mgoPopinEdit">';
 							} else {
-								if(layout.qDef.IMGLINKPOPLINKTOG){
+								if(layout.qDef.IMGLINKPOPLINKSOURCE == "c"){
+									
 									html += '<a href="' + layout.qDef.IMGLINKPOPLINK + '" target="blank" class="mgotooltip">';
+
+								} else if((layout.qDef.IMGLINKPOPLINKSOURCE == "d2") & (mydimensionCount == 2)){
+									
+
+									html += '<a href="' + dim2.qText + '" target="blank" class="mgotooltip">';
+																	
+
 								} else {
 									html += '<a href="' + imgFolderLocation + dim.qText + '" target="blank" class="mgotooltip">';
 								}; 
@@ -730,8 +766,13 @@ function($, cssContent) {'use strict';
 							html += '<div class="mgoHeader"><a href="' + customSingleImageLink + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + customSingleImageName + '</a><br>';
 							
 							} else {
-							html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + dim.qText + '</a><br>';
-							
+								if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d1")){
+									html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + dim.qText + '</a><br>';
+								} else if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d2")) {
+									html += '<div class="mgoHeader"><a href="' + dim2.qText + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + dim2.qText + '</a><br>';
+								} else {
+									html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + dim.qText + '</a><br>';
+								};
 							}
 							html += '</div>';
 						};
@@ -796,7 +837,7 @@ function($, cssContent) {'use strict';
 				var requestPage = [{
 					qTop : lastrow+layout.qHyperCube.qDataPages.length,
 					qLeft : 0,
-					qWidth : 3, //should be # of columns
+					qWidth : 4, //should be # of columns
 					qHeight : Math.min(imgridpage, rowcount - lastrow)
 				}];
 				
