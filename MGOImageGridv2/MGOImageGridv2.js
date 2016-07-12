@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 1.0,
+			version: 2.01,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -117,7 +117,101 @@ function($, cssContent) {'use strict';
 								expression: "optional",
 								defaultValue: "FFF",
 								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
+								},
+								
+							MeasureColorGroup:{
+								ref: "qDef.colorChoice",
+								type:"integer",
+								component:"dropdown",
+								label:"Color",
+								options:
+								[
+									{
+									value:1,
+									label:"Qlik Color"
+									},
+									{
+									value:2,
+									label:"Custom Color"
+									}
+								],
+								defaultValue: 1,
+								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return false } else { return true } }
+								},
+							
+							MeasureColor:{
+								ref: "qDef.MeasureColor",
+								type: "string",
+								component: "color-picker",
+								expression: "optional",
+								label: "Color Measure",
+								defaultValue: 2,
+								show: function(layout) { return layout.qDef.colorChoice == 1 }
+								},
+								
+							MeasureColorCustom:{
+								 ref: "qDef.MeasureColorCustom",
+								 type: "string",
+								 label: "Custom Color Measure",
+								 defaultValue: "2DBDEE",
+								 show: function(layout) { return layout.qDef.colorChoice == 2 }
+							     },
+							
+							
+								
+							//Add format Option
+							Format:{
+								ref: "qDef.displayFormat",
+								type: "string",
+								component: "dropdown",
+								label: "Measure Format",
+								options: 
+								[ 
+									{
+									value: "2",
+									label: "1000.12"
+									},
+									{
+									value: "1",
+									label: "1000.1"
+									},
+									{
+									value: "0",
+									label: "1000"
+									},
+									
+								],
+									defaultValue: 0,
+									show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return false } else { return true } }
+								},
+								
+							currencySymbol:{
+								type: "string",
+								label: "Symbol for Measure (use , for second Measure",
+								ref: "qDef.currencySymbol",
+								defaultValue: "€,$",
+								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return false } else { return true } }
+								},
+							
+							
+							MeasureDisplay:{
+									ref: "qDef.displayMesure",
+									component: "switch",
+									type: "boolean",
+									translation: "Display Mesure Title",
+									defaultValue: false,
+									trueOption: {
+									  value: true,
+									  translation: "properties.on"
+									},
+									falseOption: {
+									  value: false,
+									  translation: "properties.off"
+									},
+									show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return false } else { return true } }
 								}
+								
+							
 							}
 						},	
 
@@ -457,7 +551,23 @@ function($, cssContent) {'use strict';
 			var imgriduniqueID = layout.qInfo.qId;
 			var imgridpage = layout.qDef.IMGPAGINGSIZE;
 
+			// Fonction format 		
+			function formatMeasure(n, c, d, t, m){
+			var c = isNaN(c = Math.abs(c)) ? 2 : c, 
+				d = d == undefined ? "." : d, 
+				t = t == undefined ? "," : t, 
+				s = n < 0 ? "-" : "", 
+				i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+				j = (j = i.length) > 3 ? j % 3 : 0;
+			   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "")+ m;
+			 };
+			 
+			 //Information optional
+					 
+			 var palette = ["b0afae","7b7a78","545352","4477aa","7db8da","b6d7ea","46c646","f93f17","ffcf02","276e27","ffffff","000000"];
+			 var measColTxt = (layout.qDef.colorChoice == 2) ? layout.qDef.MeasureColorCustom : palette[layout.qDef.MeasureColor];
 
+			
 			//local or online image source
 				if(layout.qDef.IMGSRCTYPEMGO){
 					imgFolderLocation = layout.qDef.IMGSRCMGO; 
@@ -615,8 +725,17 @@ function($, cssContent) {'use strict';
 								// render measure
 								// check style
 								if(!layout.qDef.IMGMEASDISPLAYSTYLE){
+									
 									//number
-									html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
+									//Add xavierlp Format 
+									
+									var MeasureTxt='';
+									if (layout.qDef.displayMesure===true) {
+										MeasureTxt = layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +  ' : ';
+									}
+									
+									html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;color: #' + measColTxt + '">'+ MeasureTxt + formatMeasure(meas1.qNum, layout.qDef.displayFormat, '.', ' ',layout.qDef.currencySymbol.split(",")[0]) +'</span>';
+									html += '</span>';
 									
 								} else {
 									//bar
@@ -634,7 +753,17 @@ function($, cssContent) {'use strict';
 									// check style
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'<br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+'</span>';
+									//Add xavierlp Format 
+									
+									var MeasureTxt='';
+									var Measure2Txt='';
+									if (layout.qDef.displayMesure===true) {
+											MeasureTxt = layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +  ' : ';
+											Measure2Txt = layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +  ' : ';
+									}
+									
+									html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;color: #' + measColTxt + '">'+ MeasureTxt + formatMeasure(meas1.qNum, layout.qDef.displayFormat, '.', ' ',layout.qDef.currencySymbol.split(",")[0]) + '<br> ' + Measure2Txt + formatMeasure(meas2.qNum, layout.qDef.displayFormat,'.',' ', layout.qDef.currencySymbol.split(",")[1]) +'</span>';
+									
 										
 									} else {
 										//bar
@@ -685,8 +814,16 @@ function($, cssContent) {'use strict';
 								// check style
 								if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 									//number
-									html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
+									//Add xavierlp Format 
+									
+									var MeasureTxt='';
+									if (layout.qDef.displayMesure===true) {
+											MeasureTxt = layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +  ' : ';
+									}
+									
+									html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;color: #' + measColTxt + '">'+ MeasureTxt + formatMeasure(meas1.qNum, layout.qDef.displayFormat, '.', ' ',layout.qDef.currencySymbol.split(",")[0]) +'</span>';
 									html += '</span>';
+									
 								} else {
 									//bar
 									//set if thresholds
@@ -703,8 +840,18 @@ function($, cssContent) {'use strict';
 									// check style
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'<br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+'</span>';
-										html += '</span>';
+									//Add xavierlp Format 
+									
+									var MeasureTxt='';
+									var Measure2Txt='';
+									if (layout.qDef.displayMesure===true) {
+											MeasureTxt = layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +  ' : ';
+											Measure2Txt = layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +  ' : ';
+									}
+									
+									html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;color: #' + measColTxt + '">'+ MeasureTxt + formatMeasure(meas1.qNum, layout.qDef.displayFormat, '.', ' ',layout.qDef.currencySymbol.split(",")[0]) + '<br> ' + Measure2Txt + formatMeasure(meas2.qNum, layout.qDef.displayFormat,'.',' ', layout.qDef.currencySymbol.split(",")[1]) +'</span>';
+									html += '</span>';
+									
 									} else {
 										//bar
 										//set if thresholds
@@ -746,14 +893,34 @@ function($, cssContent) {'use strict';
 								// For 1 measure
 								
 								// render measure
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
+								// html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
 								
+								//number
+									//Add xavierlp Format 
+									
+									var MeasureTxt='';
+									if (layout.qDef.displayMesure===true) {
+											MeasureTxt = layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +  ' : ';
+									}
+									
+									html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;color: #' + measColTxt + '">'+ MeasureTxt + formatMeasure(meas1.qNum, layout.qDef.displayFormat, '.', ' ',layout.qDef.currencySymbol.split(",")[0]) +'</span>';
+									
+									
 								
 							} else if((mymeasureCount==2) & (layout.qDef.SINGLEIMGMEASURE)){
 								// For 2 measures
 								// render measure
 									
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'<br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+'</span>';
+								var MeasureTxt='';
+								var Measure2Txt='';
+								if (layout.qDef.displayMesure===true) {
+									MeasureTxt = layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +  ' : ';
+									Measure2Txt = layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +  ' : ';
+								}
+								
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;color: #' + measColTxt + '">'+ MeasureTxt + formatMeasure(meas1.qNum, layout.qDef.displayFormat,'.',' ', layout.qDef.currencySymbol.split(",")[0]) +'<br>'+ Measure2Txt + formatMeasure(meas2.qNum, layout.qDef.displayFormat,'.',' ', layout.qDef.currencySymbol.split(",")[1]) +'</span>';
+								
+									
 								
 				
 							};

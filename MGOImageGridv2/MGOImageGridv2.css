@@ -104,7 +104,7 @@ span.mgoPopinEdit span.mgoimghoversm {
 }
 
 .mgoMeasureSingle{
-	font-size: 12px; font-weight: bold; color:#fff; text-shadow: 0px 0px 3px black;
+	font-size: 12px; font-weight: bold; color:#fff; text-shadow: 0px 0px 0px black;
 	overflow: hidden;
     text-overflow: ellipsis;
     display:inline; position:absolute; 
@@ -119,15 +119,15 @@ span.mgoPopinEdit span.mgoimghoversm {
 	}
 
 .mgoMeasureSinglePic{
-	font-size: 16px; font-weight: bold; color:#fff;
+	font-size: 16px; font-weight: bold; 
 	overflow: hidden;
     text-overflow: ellipsis;
     display:block; position:absolute; 
 	padding:4px;
 	opacity: 0.8;
-	background-color: #000;
-	text-align: left;
-
+	background-color: #fff;
+	text-align: center;
+	width: 100%;
 	}
 .mgoMeasureSinglePicBar{
 	overflow: hidden;
