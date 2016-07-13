@@ -17,9 +17,8 @@
 	font-size: 12px;
 	font-weight: bold;
 	display:block;
-	background-color:#000;
+	background-color: rgba(0,0,0,0.7);
 	color:#fff;
-	opacity:0.7;
 	position: absolute;
     bottom: 0px;
     right:0px;
@@ -81,7 +80,7 @@ span.mgoPopinEdit span.mgoimghoversm {
 
  a.mgotooltip:hover span.mgoimghoversm{
     display:inline; position:absolute; 
-    background:#000;
+    background: rgba(0,0,0,0.7);
 	padding:2px 2px;
     margin-top:0px; margin-left:-24px;
     width:20px;
@@ -89,7 +88,6 @@ span.mgoPopinEdit span.mgoimghoversm {
     overflow: hidden;
     font-size:12px;
     color:#fff;
-    opacity: 0.7;
     border-top-left-radius:0px;
 	border-top-right-radius:0;
 	border-bottom-right-radius:0;
@@ -125,12 +123,15 @@ span.mgoPopinEdit span.mgoimghoversm {
 }
 
 .mgoMeasureSingle{
-	font-size: 12px; font-weight: bold; color:#fff; text-shadow: 0px 0px 3px black;
+	font-size: 12px; 
+	font-weight: bold; 
+	color:#fff; 
+	background-color: rgba(0,0,0,0.6);
 	overflow: hidden;
     text-overflow: ellipsis;
     display:inline; position:absolute; 
 	padding:2px;
-	line-height: 12px;
+	line-height: 13px;
 	}
 .mgoMeasureSingleBar{
 	overflow: hidden;
@@ -146,8 +147,7 @@ span.mgoPopinEdit span.mgoimghoversm {
     display:block; position:absolute; 
     margin-top:0px;
 	padding:4px 4px 4px 4px;
-	opacity: 0.8;
-	background-color: #000;
+	background-color:  rgba(0,0,0,0.7);
 	text-align: left;
 
 	}
@@ -190,7 +190,7 @@ span.mgoPopinEdit span.mgoimghoversm {
 	font-family: 
 	QlikView Icons; 
 	background-color:#fff;
-	opacity: 0.3;
+	opacity: 0.4;
 	}
 .mmLessMore1upButs:hover{
 	opacity: 1.0;

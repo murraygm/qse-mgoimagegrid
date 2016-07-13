@@ -4,12 +4,12 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 1.0,
+			version: 3.0,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
 				qInitialDataFetch: [{
-					qWidth: 4,
+					qWidth: 5,
 					qHeight: 100
 				}]
 			}
@@ -77,11 +77,11 @@ function($, cssContent) {'use strict';
 						},
 					measureDisplay: {
 						type:"items",
-						label:"Measure display on grid",
+						label:"Measure display",
 						items: {
 							measGridDisplayTog : {
 								ref: "qDef.IMGMEASGRIDDISPLAYTOG",
-								label: "Show measures on grid",
+								label: "Show first 2 measures on grid",
 								type: "boolean",
 								defaultValue: true
 								},
@@ -101,6 +101,20 @@ function($, cssContent) {'use strict';
 								}],
 								defaultValue: false,
 								show: function(layout) { return layout.qDef.IMGMEASGRIDDISPLAYTOG } 
+								},
+							measGridDisplayTitles : {
+								ref: "qDef.IMGMEASGRIDDISPLAYTITLES",
+								label: "Hide measure titles (show value only)",
+								type: "boolean",
+								defaultValue: false,
+								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & !layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
+								},
+							measGridDisplaySymbols : {
+								ref: "qDef.IMGMEASGRIDDISPLAYSYMBOLS",
+								label: "Add symbols after measure value (separate symbols for 1st and 2nd measures using ',')",
+								type: "string",
+								defaultValue: "",
+								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & !layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
 								},
 							measColOne : {
 								ref: "qDef.IMGMEASDISPLAYSTYLEBARCOL1",
@@ -124,6 +138,12 @@ function($, cssContent) {'use strict';
 								type: "boolean",
 								defaultValue: false,
 								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
+								},
+							singleImageDisplayMeasure : {
+								ref: "qDef.SINGLEIMGMEASURE",
+								label: "Display first 2 measures as values in single image view",
+								type: "boolean",
+								defaultValue: true
 								}
 							}
 						},	
@@ -327,12 +347,6 @@ function($, cssContent) {'use strict';
 						type:"items",
 						label:"Single image options",
 						items: {
-							singleImageDisplayMeasure : {
-								ref: "qDef.SINGLEIMGMEASURE",
-								label: "Display first 2 measures as values",
-								type: "boolean",
-								defaultValue: false
-								},
 							singleImageDifCustomBG : {
 								ref: "qDef.SINGLEIMGCUSTBGTOG",
 								label: "Use a different background colour (separate from grid view)",
@@ -640,6 +654,18 @@ function($, cssContent) {'use strict';
 			    } : null;
 			};
 
+			//set up measure symbols
+			var measSymbols = layout.qDef.IMGMEASGRIDDISPLAYSYMBOLS, measSymbolArr, meas1Symbol='', meas2Symbol='';
+			//console.log(measSymbols);
+			if((measSymbols !='') & (typeof measSymbols != 'undefined')){
+				measSymbolArr = measSymbols.split(',');
+				meas1Symbol = measSymbolArr[0];
+				if(measSymbolArr.length == 2){
+					meas2Symbol = measSymbolArr[1];
+				} else {
+					meas2Symbol = "";
+				}
+			}
 						
 				
 			var parentscope = angular.element($element).scope().$parent.$parent.$parent;
@@ -783,14 +809,25 @@ function($, cssContent) {'use strict';
 							html += '</span></span>';
 						
 							//check if measure added
+							//number - New options around measure display, thanks to Xavier https://github.com/xavierlp
+
+
+
 							if((mymeasureCount==1) & (layout.qDef.IMGMEASGRIDDISPLAYTOG)){
 								// For 1 measure
 								
 								// render measure
 								// check style
 								if(!layout.qDef.IMGMEASDISPLAYSTYLE){
-									//number
-									html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
+									
+									if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+
+									} else {
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+
+									};
+									//html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
 									
 								} else {
 									//bar
@@ -808,8 +845,12 @@ function($, cssContent) {'use strict';
 									// check style
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
-										html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'<br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+'</span>';
-										
+										if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
+											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ meas1.qNum+' ' +meas1Symbol+'<br> '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+										} else {
+											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'<br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+
+											};
 									} else {
 										//bar
 										//set if thresholds
@@ -859,8 +900,13 @@ function($, cssContent) {'use strict';
 								// check style
 								if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 									//number
-									html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
-									html += '</span>';
+									if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+										html += '</span>';
+									} else {
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+										html += '</span>';
+									}
 								} else {
 									//bar
 									//set if thresholds
@@ -877,8 +923,13 @@ function($, cssContent) {'use strict';
 									// check style
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:' + (imgCHeight-4) + 'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'<br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+'</span>';
-										html += '</span>';
+										if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
+											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ meas1.qNum+' ' +meas1Symbol+'<br> '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+											html += '</span>';
+										} else {
+											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'<br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+											html += '</span>';
+										}
 									} else {
 										//bar
 										//set if thresholds
@@ -975,14 +1026,14 @@ function($, cssContent) {'use strict';
 								// For 1 measure
 								
 								// render measure
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'</span>';
 								
 								
 							} else if((mymeasureCount>=2) & (layout.qDef.SINGLEIMGMEASURE)){
 								// For 2 measures
 								// render measure
 									
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'<br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+'</span>';
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'<br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+' ' +meas2Symbol+'</span>';
 								
 				
 							};
@@ -1027,7 +1078,7 @@ function($, cssContent) {'use strict';
 				// 1 up or standard
 				var imgPagingButtonStyle, imgPagingButtonLStyle, imgPagingButtonMStyle, imgPagingReset;
 				if((grid1upDisplay) & (imgridpage==1)){
-					imgPagingButtonStyle = 'style="position: absolute; top: 0px; right:5px; z-index:100; font-size:10px; color:#AAA; margin:4px 0px"';
+					imgPagingButtonStyle = 'style="position: absolute; top: 0px; right:5px; z-index:100; font-size:10px; color:rgba(255,255,255,0.7); margin:4px 0px"';
 					imgPagingButtonLStyle = ' mmLessMore1upButs" style="left:5px; z-index:101; " >T';
 					imgPagingButtonMStyle = ' mmLessMore1upButs" style="right:5px; z-index:102; " >U';
 					
@@ -1091,7 +1142,7 @@ function($, cssContent) {'use strict';
 				var requestPage = [{
 					qTop : lastrow+layout.qHyperCube.qDataPages.length,
 					qLeft : 0,
-					qWidth : 4, //should be # of columns
+					qWidth : 5, //should be # of columns
 					qHeight : Math.min(imgridpage, rowcount - lastrow)
 				}];
 				
@@ -1159,9 +1210,9 @@ function($, cssContent) {'use strict';
 						var m1DataVal= $(this).attr('data-value').split(',');
 						
 						if(m1DataVal.length == 2){
-							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0] + '<br>' + layout.qHyperCube.qMeasureInfo[1].qFallbackTitle+ ': ' + m1DataVal[1] )
+							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0] + ' ' +meas1Symbol+'<br>' + layout.qHyperCube.qMeasureInfo[1].qFallbackTitle+ ': ' + m1DataVal[1] +' ' +meas2Symbol)
 						} else {
-							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0])
+							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0]+' ' +meas1Symbol)
 						};
 						tooltip2Show.css({
     						'font-size': '12px',
