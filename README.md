@@ -16,7 +16,9 @@ Version three has added/changed:
 * Mouseover auto panning when image is cropped after zooming.
 * Colour indicator added allowing you to flag images that match your criteria, can be set against measures or dimensions and applied to the background colour of those matching images or against the measure values displayed on those images.
 
+Changes to how the measure values are displayed including; ability to change colour of text, hide measure titles and add on a symbol of additional text after measure value. Idea taken from Xavierlp's fork of V2: https://github.com/xavierlp
 
+See new example app "MGO Image Grid v3 example.qvf" for more details
 
 ## Details for V2
 
