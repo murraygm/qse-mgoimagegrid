@@ -9,7 +9,7 @@ function($, cssContent) {'use strict';
 				qDimensions: [],
 				qMeasures: [],
 				qInitialDataFetch: [{
-					qWidth: 5,
+					qWidth: 6,
 					qHeight: 100
 				}]
 			}
@@ -102,9 +102,24 @@ function($, cssContent) {'use strict';
 								defaultValue: false,
 								show: function(layout) { return layout.qDef.IMGMEASGRIDDISPLAYTOG } 
 								},
+							measColTxt : {
+								ref: "qDef.IMGMEASDISPLAYSTYLETXTCOL",
+								label: "Text colour for measure (HEX)",
+								type: "string",
+								expression: "optional",
+								defaultValue: "FFF",
+								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & !layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
+								},
 							measGridDisplayTitles : {
 								ref: "qDef.IMGMEASGRIDDISPLAYTITLES",
 								label: "Hide measure titles (show value only)",
+								type: "boolean",
+								defaultValue: false,
+								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & !layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
+								},
+							measGridDisplayTextBGpan : {
+								ref: "qDef.IMGMEASGRIDDISPLAYTEXTBG",
+								label: "Hide dark background panel",
 								type: "boolean",
 								defaultValue: false,
 								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & !layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
@@ -136,7 +151,7 @@ function($, cssContent) {'use strict';
 								ref: "qDef.IMGMEASGRIDDISPLAYHOVER",
 								label: "Show popup on hover with values",
 								type: "boolean",
-								defaultValue: false,
+								defaultValue: true,
 								show: function(layout)  { if( layout.qDef.IMGMEASGRIDDISPLAYTOG & layout.qDef.IMGMEASDISPLAYSTYLE ){ return true } else { return false } }
 								},
 							singleImageDisplayMeasure : {
@@ -530,7 +545,127 @@ function($, cssContent) {'use strict';
 								}
 
 							}
-						}			
+						},
+					colourFlag: {
+						type:"items",
+						label:"Colour indicator",
+						items: {
+							colorFlagTog : {
+								ref : "qDef.IMGCOLORFLAG",
+								label : "Set a custom colour indicator",
+								type : "boolean",
+								defaultValue : false
+								},
+							colorFlagRef : {
+								ref: "qDef.IMGCOLORFLAGREF",
+								type: "string",
+								component: "dropdown",
+								label: "If the value in this (dimension or measure)...",
+								options: [{
+									value: "1",
+									label: "Dimension 1",
+									tooltip: "Assess using dimension 1"
+								},{
+									value: "2",
+									label: "Dimension 2",
+									tooltip: "Assess using dimension 1"
+								},{
+									value: "3",
+									label: "Measure 1",
+									tooltip: "Assess using measure 1"
+								},{
+									value: "4",
+									label: "Measure 2",
+									tooltip: "Assess using measure 2"
+								},{
+									value: "5",
+									label: "Measure 3",
+									tooltip: "Assess using measure 3"
+								}],
+								defaultValue: "0",
+								show: function(layout) { return layout.qDef.IMGCOLORFLAG }
+								},
+							colorFlagOperator : {
+								type: "string",
+								component: "buttongroup",
+								label: "is...",
+								ref: "qDef.IMGCOLORFLAGOP",
+								options: [{
+									value: "e",
+									label: "=",
+									tooltip: "Equal to"
+								}, {
+									value: "g",
+									label: ">",
+									tooltip: "Greater than"
+								}, {
+									value: "l",
+									label: "<",
+									tooltip: "Less than"
+								}, {
+									value: "b",
+									label: "Btw",
+									tooltip: "Between (exclusive)"
+								}],
+								defaultValue: "e",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 2)){ return true } else { return false } } 
+								},
+							colorFlagValueNum : {
+								type : "number",
+								label : "Numeric value for measure:",
+								expression: "optional",
+								defaultValue : 0,
+								ref: "qDef.IMGCOLORFLAGNUMVAL",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 2)){ return true } else { return false } } 
+								},
+							colorFlagValueNum2 : {
+								type : "number",
+								expression: "optional",
+								defaultValue : 0,
+								ref: "qDef.IMGCOLORFLAGNUMVAL2",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 2) & (layout.qDef.IMGCOLORFLAGOP =="b")){ return true } else { return false } } 
+								},
+							colorFlagValueDim : {
+								type : "string",
+								expression: "optional",
+								label : "matches this value for dimension:",
+								defaultValue : "",
+								ref: "qDef.IMGCOLORFLAGDIMVAL",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF < 3)){ return true } else { return false } } 
+								},
+							colorFlagTarget : {
+								ref: "qDef.IMGCOLORFLAGTARG",
+								type: "string",
+								component: "dropdown",
+								label: "then, flag via this property",
+								options: [{
+									value: "b",
+									label: "Background colour",
+									tooltip: "Overide background colour"
+								},{
+									value: "t1",
+									label: "Colour for measure 1",
+									tooltip: "Overide colour on measure 1"
+								},{
+									value: "t2",
+									label: "Colour for measure 2",
+									tooltip: "Overide colour on measure 2"
+								}],
+								defaultValue: "b",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0)){ return true } else { return false } } 
+								},
+							colorFlagTargetCol : {
+								type : "string",
+								expression: "optional",
+								label : "To this colour (HEX)",
+								defaultValue : "F00",
+								ref: "qDef.IMGCOLORFLAGDTARGCOL",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0)){ return true } else { return false } } 
+								}
+
+							}
+						}
+
 					}
 
 				},
@@ -577,13 +712,25 @@ function($, cssContent) {'use strict';
 				};
 			
 			
-			//set up measure bar size
+			//set up measure bar
 			if(imgCHeight > 20){
 					measBarHeight = 10; 
 				} else {
 					measBarHeight = 3;
 				};
+
 			
+
+			//measure bg panel overide
+			var measBGtextPanel= '', measBGtextCol= '';
+			if(layout.qDef.IMGMEASGRIDDISPLAYTEXTBG){
+				measBGtextPanel = 'background:transparent;';
+			};
+
+			measBGtextCol='color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL+';';
+
+
+
 			//set up BG and Borders
 			if(layout.qDef.IMGBORDER){
 				imgBorderSize = layout.qDef.IMGBORDERDEFSIZE;
@@ -655,22 +802,72 @@ function($, cssContent) {'use strict';
 			};
 
 			//set up measure symbols
-			var measSymbols = layout.qDef.IMGMEASGRIDDISPLAYSYMBOLS, measSymbolArr, meas1Symbol='', meas2Symbol='';
+			var measSymbols = layout.qDef.IMGMEASGRIDDISPLAYSYMBOLS, measSymbolArr, meas1Symbol='', meas2Symbol='', meas3Symbol='';
 			//console.log(measSymbols);
 			if((measSymbols !='') & (typeof measSymbols != 'undefined')){
 				measSymbolArr = measSymbols.split(',');
 				meas1Symbol = measSymbolArr[0];
 				if(measSymbolArr.length == 2){
 					meas2Symbol = measSymbolArr[1];
+				} else if(measSymbolArr.length == 3){
+					meas2Symbol = measSymbolArr[1];
+					meas3Symbol = measSymbolArr[2];
 				} else {
 					meas2Symbol = "";
-				}
+					meas3Symbol = "";
+				};
 			}
-						
+			
+			//SET UP COLOUR FLAG IF EXISTS
+			var colFlagToggle=layout.qDef.IMGCOLORFLAG, colFlagTargData = "", colFlagTargDataType ="", colFlagTargDataOP ="", colFlagTargValue= "", colFlagTargValue2= "", colFlagTargProperty ="", colFlagTargColValue="";
+			var colFlagTextColInsert='color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+			var colFlagTextColInsertM1='color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL, colFlagTextColInsertM2='color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+			if(colFlagToggle){
+				
+				colFlagTargData = layout.qDef.IMGCOLORFLAGREF;
+
+				if(colFlagTargData < 3){
+					colFlagTargDataType = "dim";
+					colFlagTargValue = layout.qDef.IMGCOLORFLAGDIMVAL;
+					colFlagTargProperty = layout.qDef.IMGCOLORFLAGTARG;
+					colFlagTargColValue = layout.qDef.IMGCOLORFLAGDTARGCOL;
+
+
+				} else {
+					colFlagTargDataType = "meas";
+					colFlagTargDataOP = layout.qDef.IMGCOLORFLAGOP;
+					if(colFlagTargDataOP == 'b'){
+						colFlagTargValue = layout.qDef.IMGCOLORFLAGNUMVAL;
+						colFlagTargValue2 = layout.qDef.IMGCOLORFLAGNUMVAL2;
+					} else {
+						colFlagTargValue = layout.qDef.IMGCOLORFLAGNUMVAL;
+					};
+					
+					colFlagTargProperty = layout.qDef.IMGCOLORFLAGTARG;
+					colFlagTargColValue = layout.qDef.IMGCOLORFLAGDTARGCOL;
+				};
+				/**
+				console.log(
+					'colFlagTargData ' + colFlagTargData +
+					' | colFlagTargDataType ' + colFlagTargDataType +
+					' | colFlagTargDataOP ' + colFlagTargDataOP +
+					' | colFlagTargValue ' + colFlagTargValue +
+					' | colFlagTargValue2  ' + colFlagTargValue2+ 
+					' | colFlagTargProperty ' + colFlagTargProperty+
+					' | colFlagTargColValue ' + colFlagTargColValue
+					);
+				**/
+
+		
+
+			};
+
 				
 			var parentscope = angular.element($element).scope().$parent.$parent.$parent;
 			$element.html(parentscope.editmode ? 'In Edit Mode' : 'Not in Edit mode');
 			
+			
+
 			//render data
 				$.each(qData.qMatrix, function ( key, row  ) {
 					if(mydimensionCount == 2){
@@ -682,7 +879,7 @@ function($, cssContent) {'use strict';
 					};
 					
 					
-
+					
 
 					lastrow = key * layout.qHyperCube.qDataPages.length;
 					firstrow = (key * layout.qHyperCube.qDataPages.length)-imgridpage+1;
@@ -719,6 +916,17 @@ function($, cssContent) {'use strict';
 							imageOpacity = 1;
 						};
 
+					if((mymeasureCount==1) & (layout.qDef.IMGMEASDISPLAYSTYLE)){
+						var measBarCol1 =layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
+						var measBarCol2 ="FFF";
+					} else if((mymeasureCount>1) & (layout.qDef.IMGMEASDISPLAYSTYLE)) {
+						var measBarCol1 =layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
+						var measBarCol2 =layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
+					} else {
+						var measBarCol1 ="FFF";
+						var measBarCol2 ="FFF";
+					};
+					
 					//set up BG colour 
 					var imgBGColRGB, imgBGColRGBa, imgBGColRGBAlpha, imgBGColInsert;
 					if(layout.qDef.IMGOBGCOL){
@@ -762,7 +970,140 @@ function($, cssContent) {'use strict';
 						//console.log(imgBGColInsert);
 					};
 				
-					
+					//Colour flag overide
+					if(colFlagToggle){
+						//BG color 
+						if(colFlagTargProperty=="b"){
+							if(colFlagTargDataType=="meas"){
+								// chose target measure
+								var colFlagMeasTarg;
+								if((colFlagTargData == 3) & (mymeasureCount>0)) {
+									colFlagMeasTarg= meas1.qNum;
+								} else if ((colFlagTargData == 4) & (mymeasureCount>1)) {
+									colFlagMeasTarg= meas2.qNum;
+								} else if ((colFlagTargData == 5) & (mymeasureCount>2)) {
+									colFlagMeasTarg= meas3.qNum;
+								};
+								//assess type of operator equal
+
+
+								if((colFlagTargDataOP=="e") & (colFlagMeasTarg == colFlagTargValue)){
+									imgBGColInsert = 'background-color: #' + colFlagTargColValue;
+								} else if((colFlagTargDataOP=="g") & (colFlagMeasTarg > colFlagTargValue)){
+									imgBGColInsert = 'background-color: #' + colFlagTargColValue;
+								} else if((colFlagTargDataOP=="l") & (colFlagMeasTarg < colFlagTargValue)){
+									imgBGColInsert = 'background-color: #' + colFlagTargColValue;
+								} else if((colFlagTargDataOP=="b") & (colFlagMeasTarg > colFlagTargValue) & (colFlagMeasTarg < colFlagTargValue2)){
+									imgBGColInsert = 'background-color: #' + colFlagTargColValue;
+								};
+
+							} else {
+								// chose target dim
+								var colFlagDimTarg;
+								if((colFlagTargData == 1) & (mydimensionCount>0)) {
+									colFlagDimTarg = dim.qText;
+								} else if ((colFlagTargData == 2) & (mydimensionCount>1)) {
+									colFlagDimTarg = dim2.qText;
+								} ;
+								//assess 
+								if(colFlagDimTarg == colFlagTargValue){
+									imgBGColInsert = 'background-color: #' + colFlagTargColValue;
+								}
+
+							};	
+						} else if(colFlagTargProperty=="t1"){
+							colFlagTextColInsertM1 = 'color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+							colFlagTextColInsertM2 = 'color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+
+							if(colFlagTargDataType=="meas"){
+								// chose target measure
+								var colFlagMeasTarg;
+								if((colFlagTargData == 3) & (mymeasureCount>0)) {
+									colFlagMeasTarg= meas1.qNum;
+								} else if ((colFlagTargData == 4) & (mymeasureCount>1)) {
+									colFlagMeasTarg= meas2.qNum;
+								} else if ((colFlagTargData == 5) & (mymeasureCount>2)) {
+									colFlagMeasTarg= meas3.qNum;
+								};
+								//assess type of operator equal
+
+								if((colFlagTargDataOP=="e") & (colFlagMeasTarg == colFlagTargValue)){
+									colFlagTextColInsertM1 = "color:#" + colFlagTargColValue;
+									measBarCol1=colFlagTargColValue;
+								} else if((colFlagTargDataOP=="g") & (colFlagMeasTarg > colFlagTargValue)){
+									colFlagTextColInsertM1 = "color:#" + colFlagTargColValue;
+									measBarCol1=colFlagTargColValue;
+								} else if((colFlagTargDataOP=="l") & (colFlagMeasTarg < colFlagTargValue)){
+									colFlagTextColInsertM1 = "color:#" + colFlagTargColValue;
+									measBarCol1=colFlagTargColValue;
+								} else if((colFlagTargDataOP=="b") & (colFlagMeasTarg > colFlagTargValue) & (colFlagMeasTarg < colFlagTargValue2)){
+									colFlagTextColInsertM1 = "color:#" + colFlagTargColValue;
+									measBarCol1=colFlagTargColValue;
+								};
+
+							} else {
+								// chose target dim
+								var colFlagDimTarg;
+								if((colFlagTargData == 1) & (mydimensionCount>0)) {
+									colFlagDimTarg = dim.qText;
+								} else if ((colFlagTargData == 2) & (mydimensionCount>1)) {
+									colFlagDimTarg = dim2.qText;
+								} ;
+								//assess 
+								if(colFlagDimTarg == colFlagTargValue){
+									colFlagTextColInsertM1 = "color:#" + colFlagTargColValue;
+									measBarCol1=colFlagTargColValue;
+								}
+							};
+
+						} else if((colFlagTargProperty=="t2")){
+							colFlagTextColInsertM1 = 'color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+							colFlagTextColInsertM2 = 'color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+
+							if(colFlagTargDataType=="meas"){
+								// chose target measure
+								var colFlagMeasTarg;
+								if((colFlagTargData == 3) & (mymeasureCount>0)) {
+									colFlagMeasTarg= meas1.qNum;
+								} else if ((colFlagTargData == 4) & (mymeasureCount>1)) {
+									colFlagMeasTarg= meas2.qNum;
+								} else if ((colFlagTargData == 5) & (mymeasureCount>2)) {
+									colFlagMeasTarg= meas3.qNum;
+								};
+								//assess type of operator equal
+
+
+								if((colFlagTargDataOP=="e") & (colFlagMeasTarg == colFlagTargValue)){
+									colFlagTextColInsertM2 = "color:#" + colFlagTargColValue;
+									measBarCol2=colFlagTargColValue;
+								} else if((colFlagTargDataOP=="g") & (colFlagMeasTarg > colFlagTargValue)){
+									colFlagTextColInsertM2 = "color:#" + colFlagTargColValue;
+									measBarCol2=colFlagTargColValue;
+								} else if((colFlagTargDataOP=="l") & (colFlagMeasTarg < colFlagTargValue)){
+									colFlagTextColInsertM2 = "color:#" + colFlagTargColValue;
+									measBarCol2=colFlagTargColValue;
+								} else if((colFlagTargDataOP=="b") & (colFlagMeasTarg > colFlagTargValue) & (colFlagMeasTarg < colFlagTargValue2)){
+									colFlagTextColInsertM2 = "color:#" + colFlagTargColValue;
+									measBarCol2=colFlagTargColValue;
+								};
+
+							} else {
+								// chose target dim
+								var colFlagDimTarg;
+								if((colFlagTargData == 1) & (mydimensionCount>0)) {
+									colFlagDimTarg = dim.qText;
+								} else if ((colFlagTargData == 2) & (mydimensionCount>1)) {
+									colFlagDimTarg = dim2.qText;
+								} ;
+								//assess 
+								if(colFlagDimTarg == colFlagTargValue){
+									colFlagTextColInsertM2 = "color:#" + colFlagTargColValue;
+									measBarCol2=colFlagTargColValue;
+								}
+
+							};
+						};
+					}
 
 					
 					//set 1up grid option
@@ -821,10 +1162,10 @@ function($, cssContent) {'use strict';
 								if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 									
 									if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol + measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span></span>';
 
 									} else {
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol + measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+  meas1.qNum+' ' +meas1Symbol+'</span></span>';
 
 									};
 									//html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
@@ -835,7 +1176,7 @@ function($, cssContent) {'use strict';
 									var meas1Max = layout.qHyperCube.qMeasureInfo[0].qMax;
 									var meas1Factor = (imgCWidth - 10)/meas1Max;
 									var meas1barw = Math.floor(meas1.qNum*meas1Factor);
-									measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
+									//measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
 									html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
 									
 								};
@@ -846,9 +1187,9 @@ function($, cssContent) {'use strict';
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
 										if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ meas1.qNum+' ' +meas1Symbol+'<br> '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br> <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
 										} else {
-											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'<br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
 
 											};
 									} else {
@@ -857,14 +1198,18 @@ function($, cssContent) {'use strict';
 										var meas1Max = layout.qHyperCube.qMeasureInfo[0].qMax;
 										var meas1Factor = (imgCWidth - 10)/meas1Max;
 										var meas1barw = Math.floor(meas1.qNum*meas1Factor);
-										measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
+										//measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
 										var meas2Max = layout.qHyperCube.qMeasureInfo[1].qMax;
 										var meas2Factor = (imgCWidth - 10)/meas2Max;
 										var meas2barw = Math.floor(meas2.qNum*meas2Factor);
-										measBarCol2 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
-										html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-										html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'"style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
-										
+										//measBarCol2 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
+										if(mymeasureCount==3){
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'"style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+										} else {
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'"style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+										};
 									};
 									
 				
@@ -901,10 +1246,10 @@ function($, cssContent) {'use strict';
 								if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 									//number
 									if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span></span>';
 										html += '</span>';
 									} else {
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span></span>';
 										html += '</span>';
 									}
 								} else {
@@ -913,7 +1258,7 @@ function($, cssContent) {'use strict';
 									var meas1Max = layout.qHyperCube.qMeasureInfo[0].qMax;
 									var meas1Factor = (imgCWidth - 10)/meas1Max;
 									var meas1barw = Math.floor(meas1.qNum*meas1Factor);
-									measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
+									//measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
 									html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
 									
 								};
@@ -924,10 +1269,10 @@ function($, cssContent) {'use strict';
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
 										if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ meas1.qNum+' ' +meas1Symbol+'<br> '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br> <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
 											html += '</span>';
 										} else {
-											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px;"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'<br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
 											html += '</span>';
 										}
 									} else {
@@ -936,14 +1281,18 @@ function($, cssContent) {'use strict';
 										var meas1Max = layout.qHyperCube.qMeasureInfo[0].qMax;
 										var meas1Factor = (imgCWidth - 10)/meas1Max;
 										var meas1barw = Math.floor(meas1.qNum*meas1Factor);
-										measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
+										//measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
 										var meas2Max = layout.qHyperCube.qMeasureInfo[1].qMax;
 										var meas2Factor = (imgCWidth - 10)/meas2Max;
 										var meas2barw = Math.floor(meas2.qNum*meas2Factor);
-										measBarCol2 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
-										html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-										html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
-										
+										//measBarCol2 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
+										if(mymeasureCount==3){
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+										} else {
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+										};
 									};
 									html += '</span>';
 				
@@ -1026,14 +1375,21 @@ function($, cssContent) {'use strict';
 								// For 1 measure
 								
 								// render measure
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'</span>';
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span></span>';
 								
 								
-							} else if((mymeasureCount>=2) & (layout.qDef.SINGLEIMGMEASURE)){
+							} else if((mymeasureCount==2) & (layout.qDef.SINGLEIMGMEASURE)){
 								// For 2 measures
 								// render measure
 									
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+' ' +meas1Symbol+'<br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': '+ meas2.qNum+' ' +meas2Symbol+'</span>';
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
+								
+				
+							} else if((mymeasureCount==3) & (layout.qDef.SINGLEIMGMEASURE)){
+								// For 3 measures
+								// render measure
+									
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[2].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas3.qNum+' ' +meas3Symbol+'</span></span>';
 								
 				
 							};
@@ -1142,7 +1498,7 @@ function($, cssContent) {'use strict';
 				var requestPage = [{
 					qTop : lastrow+layout.qHyperCube.qDataPages.length,
 					qLeft : 0,
-					qWidth : 5, //should be # of columns
+					qWidth : 6, //should be # of columns
 					qHeight : Math.min(imgridpage, rowcount - lastrow)
 				}];
 				
@@ -1210,9 +1566,11 @@ function($, cssContent) {'use strict';
 						var m1DataVal= $(this).attr('data-value').split(',');
 						
 						if(m1DataVal.length == 2){
-							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0] + ' ' +meas1Symbol+'<br>' + layout.qHyperCube.qMeasureInfo[1].qFallbackTitle+ ': ' + m1DataVal[1] +' ' +meas2Symbol)
+							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0] + ' ' +meas1Symbol+'<br>' + layout.qHyperCube.qMeasureInfo[1].qFallbackTitle+ ': ' + m1DataVal[1] +' ' +meas2Symbol);
+						} else if(m1DataVal.length == 3){
+							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0] + ' ' +meas1Symbol+'<br>' + layout.qHyperCube.qMeasureInfo[1].qFallbackTitle+ ': ' + m1DataVal[1] +' ' +meas2Symbol+'<br>' + layout.qHyperCube.qMeasureInfo[2].qFallbackTitle+ ': ' + m1DataVal[2] +' ' +meas3Symbol);
 						} else {
-							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0]+' ' +meas1Symbol)
+							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0]+' ' +meas1Symbol);
 						};
 						tooltip2Show.css({
     						'font-size': '12px',
