@@ -8,7 +8,7 @@ or grab just what you need from the project https://github.com/murraygm/qse-mgoi
 Version three has added/changed:
 * Up to 3 measures can be used
 * Measures can be used to change BG colour opacity and image opacity of each image in grid view (previous fixed for all)
-* Hover displays 1st 2 measure values when using bar display on grid
+* Hover displays 1st 2nd and 3rd measure values when using bar display on grid
 * 'Box' scale option added to force image to fit scaled to 80% on grid cell (revealing background colour)
 * Image paging now has a 1 up view option for the grid
 * Single image view now allows for 'actual size, 1:1 as a custom scale option
