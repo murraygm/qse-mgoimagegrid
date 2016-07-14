@@ -14,6 +14,7 @@ Version three has added/changed:
 * Single image view now allows for 'actual size, 1:1 as a custom scale option
 * Controls added to enable zooming and rotating of image
 * Mouseover auto panning when image is cropped after zooming.
+* Colour indicator added allowing you to flag images that match your criteria, can be set against measures or dimensions and applied to the background colour of those matching images or against the measure values displayed on those images.
 
 
 
