@@ -1,8 +1,39 @@
 # qse-mgoimagegrid
-Qlik Sense Extension to display images - for use with Qlik Sense 2.2
+Qlik Sense Extension to display images - for use with Qlik Sense
 
 **DOWNLOAD VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
+
+## Version 3 - for use in Qlik Sense 3.0
+Version three has added/changed:
+* Up to 3 measures can be used
+* Measures can be used to change BG colour opacity and image opacity of each image in grid view (previous fixed for all)
+* Hover displays 1st 2nd and 3rd measure values when using bar display on grid
+* 'Box' scale option added to force image to fit scaled to 80% on grid cell (revealing background colour)
+* Image paging now has a 1 up view option for the grid
+* Single image view now allows for 'actual size, 1:1 as a custom scale option
+* Controls added to enable zooming and rotating of image
+* Mouseover auto panning when image is cropped after zooming.
+* Colour indicator added allowing you to flag images that match your criteria, can be set against measures or dimensions and applied to the background colour of those matching images or against the measure values displayed on those images.
+
+Changes to how the measure values are displayed including; ability to change colour of text, hide measure titles and add on a symbol of additional text after measure value. Idea taken from Xavierlp's fork of V2: https://github.com/xavierlp
+
+See new example app "MGO Image Grid v3 example.qvf" for more details
+
+![Propertiesv3][Propsv3]
+![Screenshotv3][Examplev3]
+
+V3 properties
+
+[Propsv3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/imagegrid_props_v3.png "Propertiesv3"
+
+V3 Screenshot
+
+[Examplev3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/Screen%20Shot%20v3.png "Properties" 
+
+
+
+## Details for V2 for use in Qlik Sense 2.2
 
 This is version 2 of the MGO Image Grid. Version 1 has been retired. It enables you to display external images referenced via a field in a Qlik Sense datamodel. 
 This is an experimental extension, built for fun and NOT INTENDED FOR PRODUCTION LEVEL DEPLOYMENT.

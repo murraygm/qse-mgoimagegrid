@@ -1,0 +1,221 @@
+.qv-object-MGOImageGridv3 div.qv-object-content-container {
+	overflow: auto;
+}
+
+
+.qv-object-MGOImageGridv3 {
+	font-size: 0px;
+}
+.qv-object-MGOImageGridv3 span.mgoPicGrid {
+	font-size: 0px;
+	display: inline-block;
+
+}
+
+.qv-object-MGOImageGridv3 div.mgoHeader {	
+	margin:0px;
+	font-size: 12px;
+	font-weight: bold;
+	display:block;
+	background-color: rgba(0,0,0,0.7);
+	color:#fff;
+	position: absolute;
+    bottom: 0px;
+    right:0px;
+    overflow: hidden;
+    width:auto;
+	line-height: 14px;
+	text-align: right;
+}
+.qv-object-MGOImageGridv3 div.mgoHeader a{
+	color:#fff;
+	font-size: 12px;
+	font-weight: bold;
+	text-decoration: none;
+	text-overflow: ellipsis;
+	width:auto;
+	padding:6px;
+	margin:0px;
+	display:block;
+	line-height: 14px;
+}
+
+
+
+.qv-object-MGOImageGridv3 div.mgoSinglePic {
+	padding:0px;
+	margin:0px;
+	font-size: 16px;
+	display:block;
+	text-align: center;
+	height:100%; 
+	width:100%;
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+
+
+.qv-object-MGOImageGridv3 div.mgoSinglePicC {
+	padding:0px;
+	margin:0px;
+	font-size: 16px;
+	display:block;
+	text-align: center;
+	height:100%; 
+	width:100%;
+}
+
+
+/* hover for popups */
+a.mgotooltip {outline:none;}
+a.mgotooltip:hover {text-decoration:none;} 
+a.mgotooltip span.mgoimghoversm {
+    z-index:9999;display:none;
+}
+
+span.mgoPopinEdit span.mgoimghoversm {
+		z-index:9999;display:none;
+	}
+
+ a.mgotooltip:hover span.mgoimghoversm{
+    display:inline; position:absolute; 
+    background: rgba(0,0,0,0.7);
+	padding:2px 2px;
+	text-align: center;
+	line-height: 16px;
+    margin-top:0px; margin-left:-24px;
+    width:20px;
+    height:auto;
+    overflow: hidden;
+    font-size:12px;
+    color:#fff;
+    border-top-left-radius:0px;
+	border-top-right-radius:0;
+	border-bottom-right-radius:0;
+	border-bottom-left-radius:4px;
+}
+
+/* image scaling */
+/* always fit in container */
+.mgoImgScaleFit{
+	background-size: contain; background-position: 50% 50%; background-repeat: no-repeat;
+}
+/* Stretch to fill container */
+.mgoImgScaleStretch{
+	background-size: 100% 100%; background-position: 50% 50%; background-repeat: no-repeat;
+}
+/* Always fit height of container */
+.mgoImgScaleFitHeight{
+	background-size: auto 100%; background-position: 50% 50%; background-repeat: no-repeat;
+}
+
+/* Always fit width of container */
+.mgoImgScaleFitWidth{
+	background-size: 100%; background-position: 50% 50%; background-repeat: no-repeat;
+}
+/* Actual size (clipped by container) */
+.mgoImgScaleActual{
+	background-size: auto; background-position: 50% 50%; background-repeat: no-repeat;
+}
+
+/* Boxed size (clipped by container) */
+.mgoImgScaleBoxed{
+	background-size: 80% 80%; background-position: 50% 50%; background-repeat: no-repeat;
+}
+
+.mgoMeasureSingle{
+	font-size: 12px; 
+	font-weight: bold; 
+	color:#fff; 
+	background-color: rgba(0,0,0,0.6);
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display:inline; position:absolute; 
+	padding:2px;
+	line-height: 13px;
+	}
+.mgoMeasureSingleBar{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display:inline; position:absolute; 
+    padding: 0px 0px 0px 0px;
+	}
+
+.mgoMeasureSinglePic{
+	font-size: 14px; font-weight: bold; color:#fff;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display:block; position:absolute; 
+    margin-top:0px;
+	padding:4px 4px 4px 4px;
+	background-color:  rgba(0,0,0,0.7);
+	text-align: left;
+
+	}
+.mgoMeasureSinglePicBar{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display:inline; position:absolute; 
+    padding: 0px 0px 0px 0px;
+	}
+
+
+.mmControlButs .mmIconButAdjust{
+	padding-left: 4px;
+	padding-right: 4px;
+	margin:0px;
+
+}
+
+.mmControlButs {
+	display:block;
+	width:80%;
+	opacity: 0.2;
+	z-index: 6;
+	text-align: right;
+	position: absolute;
+	right:2px;
+	top:2px;
+	height:auto;
+	padding:0px;
+	margin:0px;
+	font-size:16px; 
+}
+.mmControlButs:hover {
+	opacity: 1.0;
+}
+
+.mmLessMore1upButs{
+	position: absolute; 
+	top: 45%; 
+	font-size:12px; 
+	font-family: LUI icons; 
+	background-color:#fff;
+	opacity: 0.4;
+	margin-bottom: 2px;
+	}
+.mmLessMore1upButs:hover{
+	opacity: 1.0;
+	}
+
+
+span.mmQlikIcons { 
+	font-family: LUI icons; 
+	font-size: 22px;
+	line-height: 18px;
+}
+
+.mmControlButs button {
+	background-color: #fff;
+	margin-right: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
+}
+
+.mmControlButs span.mmHideShowButPlusTxt{
+	vertical-align: 3px;
+}
+
+
+
