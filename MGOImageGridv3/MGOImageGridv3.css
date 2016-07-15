@@ -23,7 +23,7 @@
     bottom: 0px;
     right:0px;
     overflow: hidden;
-    width:auto%;
+    width:auto;
 	line-height: 14px;
 	text-align: right;
 }
@@ -31,10 +31,10 @@
 	color:#fff;
 	font-size: 12px;
 	font-weight: bold;
-	text-decoration: none;¨
+	text-decoration: none;
 	text-overflow: ellipsis;
 	width:auto;
-	padding:2px;
+	padding:6px;
 	margin:0px;
 	display:block;
 	line-height: 14px;
@@ -82,6 +82,8 @@ span.mgoPopinEdit span.mgoimghoversm {
     display:inline; position:absolute; 
     background: rgba(0,0,0,0.7);
 	padding:2px 2px;
+	text-align: center;
+	line-height: 16px;
     margin-top:0px; margin-left:-24px;
     width:20px;
     height:auto;
@@ -141,7 +143,7 @@ span.mgoPopinEdit span.mgoimghoversm {
 	}
 
 .mgoMeasureSinglePic{
-	font-size: 16px; font-weight: bold; color:#fff;
+	font-size: 14px; font-weight: bold; color:#fff;
 	overflow: hidden;
     text-overflow: ellipsis;
     display:block; position:absolute; 
@@ -162,6 +164,7 @@ span.mgoPopinEdit span.mgoimghoversm {
 .mmControlButs .mmIconButAdjust{
 	padding-left: 4px;
 	padding-right: 4px;
+	margin:0px;
 
 }
 
@@ -177,6 +180,7 @@ span.mgoPopinEdit span.mgoimghoversm {
 	height:auto;
 	padding:0px;
 	margin:0px;
+	font-size:16px; 
 }
 .mmControlButs:hover {
 	opacity: 1.0;
@@ -185,12 +189,11 @@ span.mgoPopinEdit span.mgoimghoversm {
 .mmLessMore1upButs{
 	position: absolute; 
 	top: 45%; 
-	margin:4px 4px; 
 	font-size:12px; 
-	font-family: 
-	QlikView Icons; 
+	font-family: LUI icons; 
 	background-color:#fff;
 	opacity: 0.4;
+	margin-bottom: 2px;
 	}
 .mmLessMore1upButs:hover{
 	opacity: 1.0;
@@ -198,7 +201,7 @@ span.mgoPopinEdit span.mgoimghoversm {
 
 
 span.mmQlikIcons { 
-	font-family: QlikView Icons; 
+	font-family: LUI icons; 
 	font-size: 22px;
 	line-height: 18px;
 }
@@ -206,8 +209,8 @@ span.mmQlikIcons {
 .mmControlButs button {
 	background-color: #fff;
 	margin-right: 2px;
-	padding-right: 4px;
-	padding-left: 4px;
+	padding-right: 2px;
+	padding-left: 2px;
 }
 
 .mmControlButs span.mmHideShowButPlusTxt{

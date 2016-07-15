@@ -1205,10 +1205,10 @@ function($, cssContent) {'use strict';
 										//measBarCol2 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
 										if(mymeasureCount==3){
 											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'"style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'"style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
 										} else {
 											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'"style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'"style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
 										};
 									};
 									
@@ -1219,7 +1219,7 @@ function($, cssContent) {'use strict';
 
 
 							//Open in new window overlay
-							html += '<span class="mgoimghoversm" style="margin-left:-'+ (24 + imgBorderSize) +'px;"><span style="font-family: QlikView Icons; font-size: 22px;">w</span></span>';
+							html += '<span class="mgoimghoversm" style="margin-left:-'+ (24 + imgBorderSize) +'px;"> <span class="lui-icon lui-icon--new-tab" style="font-size:12px;"></span> </span>';
 							
 							if(parentscope.editmode){
 								//close element for pop up in edit mode
@@ -1288,10 +1288,10 @@ function($, cssContent) {'use strict';
 										//measBarCol2 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
 										if(mymeasureCount==3){
 											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
 										} else {
 											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 11px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
 										};
 									};
 									html += '</span>';
@@ -1325,11 +1325,10 @@ function($, cssContent) {'use strict';
 						if(layout.qDef.mgoSinglePicControls){
 							if((!killzoomcontrols) & (rowcount == 1)){
 								html+= '<div class="mmControlButs">';
-								html+= '<button class="butZoomout qui-outlinebutton qv-pt-meta-button mmIconButAdjust" alt="Zoom Out" type="button"><span class="mmQlikIcons">Z</span></button> ';
-								html+= '<button class="butZoomin qui-outlinebutton qv-pt-meta-button mmIconButAdjust" alt="Zoom In" type="button"><span class="mmQlikIcons">Y</span></button> ';
-								html+= '<button class="butRotate qui-outlinebutton qv-pt-meta-button mmIconButAdjust" alt="Rotate" type="button"><span class="mmQlikIcons">b</span></button> ';
-								//html+= '<button class="butZoom100 qui-outlinebutton qv-pt-meta-button " type="button">1:1</button> ';
-								html+= '<button class="butReposition qui-outlinebutton qv-pt-meta-button " type="button">Reset</button>';			
+								html+= '<button class="lui-button butZoomout mmIconButAdjust" alt="Zoom Out"><span class="lui-icon lui-icon--zoom-out"></span></button> ';
+								html+= '<button class="lui-button butZoomin mmIconButAdjust" alt="Zoom In"><span class="lui-icon lui-icon--zoom-in"></span></button> ';
+								html+= '<button class="lui-button butRotate mmIconButAdjust" alt="Rotate"><span class="lui-icon lui-icon--sync"></span></button> ';
+								html+= '<button class="lui-button butReposition">Reset</button>';			
 								html+= '</div>';
 							}; 
 
@@ -1399,15 +1398,15 @@ function($, cssContent) {'use strict';
 						if(layout.qDef.SINGLEIMGHEADER){
 
 							if(customSingleImageNameTog){
-							html += '<div class="mgoHeader"><a href="' + customSingleImageLink + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + customSingleImageName + '</a><br>';
+							html += '<div class="mgoHeader"><a href="' + customSingleImageLink + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + customSingleImageName + '</a>';
 							
 							} else {
 								if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d1")){
-									html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + dim.qText + '</a><br>';
+									html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
 								} else if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d2")) {
-									html += '<div class="mgoHeader"><a href="' + dim2.qText + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + dim2.qText + '</a><br>';
+									html += '<div class="mgoHeader"><a href="' + dim2.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim2.qText + '</a>';
 								} else {
-									html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span style="font-family: QlikView Icons; font-size: 20px;">w</span> ' + dim.qText + '</a><br>';
+									html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
 								};
 							}
 							html += '</div>';
@@ -1435,13 +1434,13 @@ function($, cssContent) {'use strict';
 				var imgPagingButtonStyle, imgPagingButtonLStyle, imgPagingButtonMStyle, imgPagingReset;
 				if((grid1upDisplay) & (imgridpage==1)){
 					imgPagingButtonStyle = 'style="position: absolute; top: 0px; right:5px; z-index:100; font-size:10px; color:rgba(255,255,255,0.7); margin:4px 0px"';
-					imgPagingButtonLStyle = ' mmLessMore1upButs" style="left:5px; z-index:101; " >T';
-					imgPagingButtonMStyle = ' mmLessMore1upButs" style="right:5px; z-index:102; " >U';
+					imgPagingButtonLStyle = ' mmLessMore1upButs" style="left:5px; z-index:101; " ><span class="lui-icon lui-icon--triangle-left"></span>';
+					imgPagingButtonMStyle = ' mmLessMore1upButs" style="right:5px; z-index:102; " ><span class="lui-icon lui-icon--triangle-right"></span>';
 					
 				} else {
 					imgPagingButtonStyle = 'style="font-size:12px; color:#AAA; margin:4px 0px"';
-					 imgPagingButtonLStyle = '" style="margin:4px 4px">Less';
-					 imgPagingButtonMStyle = '" style="margin:4px 4px">More';
+					 imgPagingButtonLStyle = '" style="margin-right:2px;margin-bottom:8px;">Less';
+					 imgPagingButtonMStyle = '" style="margin-right:2px;margin-bottom:8px;">More';
 					 imgPagingReset = '';
 				};
 
@@ -1467,15 +1466,15 @@ function($, cssContent) {'use strict';
 				if(morebutpagetotal > 1){
 					if(imgpagedsofar > imgridpage){
 						lessbutton = true;
-						html += '<br>' + '<button id="loadless" class="qui-outlinebutton qv-pt-meta-button ng-scope'+imgPagingButtonLStyle+'</button>';	
+						html += '<br>' + '<button class="lui-button loadless '+imgPagingButtonLStyle+'</button>';	
 					} else {
-						html += '<br>' + '<button id="loadless" disabled class="qui-outlinebutton qv-pt-meta-button ng-scope'+imgPagingButtonLStyle+'</button>';	
+						html += '<br>' + '<button disabled class="lui-button loadless '+imgPagingButtonLStyle+'</button>';	
 					};
 					if((rowcount - imgpagedsofar) > 0){
 						morebutton = true;
-						html += '<button id="loadmore" class="qui-outlinebutton qv-pt-meta-button ng-scope'+imgPagingButtonMStyle+'</button>';	
+						html += '<button class="lui-button loadmore '+imgPagingButtonMStyle+'</button>';	
 					} else {
-						html += '<button id="loadmore" disabled class="qui-outlinebutton qv-pt-meta-button ng-scope'+imgPagingButtonMStyle+'</button>';	
+						html += '<button disabled class="lui-button loadmore '+imgPagingButtonMStyle+'</button>';	
 
 					};
 				};
@@ -1484,9 +1483,10 @@ function($, cssContent) {'use strict';
 
 
 			} else {
-				if(rowcount > 1){
+				if((rowcount-(lastrow + 1))>0){
 					html += '<br>' + '<div style="font-size:12px; color:#AAA; margin:4px 0px">Display limited to first ' + (lastrow + 1) + ' of ' + rowcount + ' images</div>';
 				};
+
 			};
 
 			
@@ -1502,7 +1502,7 @@ function($, cssContent) {'use strict';
 					qHeight : Math.min(imgridpage, rowcount - lastrow)
 				}];
 				
-				$element.find("#loadmore").on("qv-activate", function() {
+				$element.find(".loadmore").on("qv-activate", function() {
 					
 					self.backendApi.getData(requestPage).then(function(dataPages) {
 						self.paint($element, layout);
@@ -1516,7 +1516,7 @@ function($, cssContent) {'use strict';
 			};
 			if(lessbutton) {
 				
-				$element.find("#loadless").on("qv-activate", function() {
+				$element.find(".loadless").on("qv-activate", function() {
 					layout.qHyperCube.qDataPages.splice((layout.qHyperCube.qDataPages.length-1), 1);
 					
 						self.paint($element, layout);
