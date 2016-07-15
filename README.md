@@ -1,10 +1,10 @@
 # qse-mgoimagegrid
-Qlik Sense Extension to display images - for use with Qlik Sense 2.2
+Qlik Sense Extension to display images - for use with Qlik Sense
 
 **DOWNLOAD VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
 
-## Updates in V3 (currently a branch V3 on GITHUB, will be merged after testing with Qlik Sense 3.0)
+## Version 3 - for use in Qlik Sense 3.0
 Version three has added/changed:
 * Up to 3 measures can be used
 * Measures can be used to change BG colour opacity and image opacity of each image in grid view (previous fixed for all)
@@ -33,7 +33,7 @@ V3 Screenshot
 
 
 
-## Details for V2
+## Details for V2 for use in Qlik Sense 2.2
 
 This is version 2 of the MGO Image Grid. Version 1 has been retired. It enables you to display external images referenced via a field in a Qlik Sense datamodel. 
 This is an experimental extension, built for fun and NOT INTENDED FOR PRODUCTION LEVEL DEPLOYMENT.
