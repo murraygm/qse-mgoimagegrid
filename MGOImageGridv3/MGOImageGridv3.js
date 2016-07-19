@@ -685,6 +685,8 @@ function($, cssContent) {'use strict';
 			var mgoSinglePicModeActive;
 			var killzoomcontrols = true;
 
+			//console.log(qData);
+
 			//local or online image source
 				if(layout.qDef.IMGSRCTYPEMGO){
 					imgFolderLocation = layout.qDef.IMGSRCMGO; 
@@ -1162,10 +1164,10 @@ function($, cssContent) {'use strict';
 								if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 									
 									if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol + measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span></span>';
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol + measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span></span>';
 
 									} else {
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol + measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+  meas1.qNum+' ' +meas1Symbol+'</span></span>';
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol + measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+  meas1.qText+' ' +meas1Symbol+'</span></span>';
 
 									};
 									//html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto ; margin-left: -'+(imgCWidth+imgBorderSize)+'px;">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': '+ meas1.qNum+'</span>';
@@ -1187,9 +1189,9 @@ function($, cssContent) {'use strict';
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
 										if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br> <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
+											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br> <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
 										} else {
-											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
+											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
 
 											};
 									} else {
@@ -1246,10 +1248,10 @@ function($, cssContent) {'use strict';
 								if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 									//number
 									if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span></span>';
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span></span>';
 										html += '</span>';
 									} else {
-										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span></span>';
+										html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height:auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span></span>';
 										html += '</span>';
 									}
 								} else {
@@ -1269,10 +1271,10 @@ function($, cssContent) {'use strict';
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
 										if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br> <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
+											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br> <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
 											html += '</span>';
 										} else {
-											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
+											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
 											html += '</span>';
 										}
 									} else {
@@ -1374,21 +1376,21 @@ function($, cssContent) {'use strict';
 								// For 1 measure
 								
 								// render measure
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span></span>';
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span></span>';
 								
 								
 							} else if((mymeasureCount==2) & (layout.qDef.SINGLEIMGMEASURE)){
 								// For 2 measures
 								// render measure
 									
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span></span>';
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
 								
 				
 							} else if((mymeasureCount==3) & (layout.qDef.SINGLEIMGMEASURE)){
 								// For 3 measures
 								// render measure
 									
-								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qNum+' ' +meas1Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qNum+' ' +meas2Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[2].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas3.qNum+' ' +meas3Symbol+'</span></span>';
+								html += '<span class="mgoMeasureSinglePic" style="height:auto; margin-left: 0px; '+ measBGtextCol +measBGtextPanel+'">'+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span><br>'+ layout.qHyperCube.qMeasureInfo[2].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas3.qText+' ' +meas3Symbol+'</span></span>';
 								
 				
 							};
