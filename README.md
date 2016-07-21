@@ -4,6 +4,8 @@ Qlik Sense Extension to display images - for use with Qlik Sense
 **DOWNLOAD VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
 
+*Grab a couple of fun apps on my [Qlik Sense Apps github page](https://github.com/murraygm/qs-mgoqliksenseapps) to try the extension out with, choose from The New York Public Library (190k images), The British Library (1 million images) or The Internet Archive (65K books - 24 million page scans, 5 million images)*
+
 ## Version 3 - for use in Qlik Sense 3.0
 Version three has added/changed:
 * Up to 3 measures can be used
