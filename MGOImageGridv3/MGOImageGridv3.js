@@ -1118,6 +1118,8 @@ function($, cssContent) {'use strict';
 						grid1upDisplay = false;
 					};
 
+					// hover for Dim value
+					var hoverDimText=dim.qText;
 
 					//Check count and choose Grid or Single pic layout
 					if((rowcount > 1) & (!grid1upDisplay)){
@@ -1148,7 +1150,7 @@ function($, cssContent) {'use strict';
 							
 							//render image
 
-							html += '<span class="mgoPicGrid" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+							html += '<span class="mgoPicGrid"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
 							html += '</span></span>';
 						
 							//check if measure added
@@ -1179,7 +1181,7 @@ function($, cssContent) {'use strict';
 									var meas1Factor = (imgCWidth - 10)/meas1Max;
 									var meas1barw = Math.floor(meas1.qNum*meas1Factor);
 									//measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
-									html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+									html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
 									
 								};
 							} else if((mymeasureCount>=2) & (layout.qDef.IMGMEASGRIDDISPLAYTOG)){
@@ -1189,9 +1191,9 @@ function($, cssContent) {'use strict';
 									if(!layout.qDef.IMGMEASDISPLAYSTYLE){
 										//number
 										if(layout.qDef.IMGMEASGRIDDISPLAYTITLES){
-											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br> <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
+											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br> <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
 										} else {
-											html += '<span class="mgoMeasureSingle" data-value="'+meas1.qNum+'" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
+											html += '<span class="mgoMeasureSingle" style="width:' + (imgCWidth-4) + 'px; height: auto; margin-left: -'+(imgCWidth+imgBorderSize)+'px; '+ measBGtextCol +measBGtextPanel+'"> '+ layout.qHyperCube.qMeasureInfo[0].qFallbackTitle +': <span style="'+colFlagTextColInsertM1+'">'+ meas1.qText+' ' +meas1Symbol+'</span><br> '+ layout.qHyperCube.qMeasureInfo[1].qFallbackTitle +': <span style="'+colFlagTextColInsertM2+'">'+ meas2.qText+' ' +meas2Symbol+'</span></span>';
 
 											};
 									} else {
@@ -1206,11 +1208,11 @@ function($, cssContent) {'use strict';
 										var meas2barw = Math.floor(meas2.qNum*meas2Factor);
 										//measBarCol2 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
 										if(mymeasureCount==3){
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'"style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+','+meas2.qText+','+meas3.qText+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+','+meas2.qText+','+meas3.qText+'"style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
 										} else {
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'"style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+','+meas2.qText+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+','+meas2.qText+'"style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
 										};
 									};
 									
@@ -1235,7 +1237,7 @@ function($, cssContent) {'use strict';
 							//render selectable image
 							html += '<span class="selectable" data-value="'+ dim.qElemNumber + '">';
 							// render image 
-								html += '<span class="mgoPicGrid" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+								html += '<span class="mgoPicGrid" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
 								html += '</span></span>';
 							
 
@@ -1261,7 +1263,7 @@ function($, cssContent) {'use strict';
 									var meas1Factor = (imgCWidth - 10)/meas1Max;
 									var meas1barw = Math.floor(meas1.qNum*meas1Factor);
 									//measBarCol1 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL1;
-									html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+									html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
 									
 								};
 							} else if((mymeasureCount>=2) & (layout.qDef.IMGMEASGRIDDISPLAYTOG)){
@@ -1289,11 +1291,11 @@ function($, cssContent) {'use strict';
 										var meas2barw = Math.floor(meas2.qNum*meas2Factor);
 										//measBarCol2 = layout.qDef.IMGMEASDISPLAYSTYLEBARCOL2;
 										if(mymeasureCount==3){
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+','+meas3.qNum+'" style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+','+meas2.qText+','+meas3.qText+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+','+meas2.qText+','+meas3.qText+'" style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
 										} else {
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
-											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qNum+','+meas2.qNum+'" style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+','+meas2.qText+'" style="margin-top: 0px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas1barw+'px; background-color:#'+measBarCol1+';"><br></span>';
+											html += '<span class="mgoMeasureSingleBar" data-value="'+meas1.qText+','+meas2.qText+'" style="margin-top: '+(measBarHeight+1)+'px; margin-left: -'+(imgCWidth+imgBorderSize)+'px; height:'+measBarHeight+'px; width:'+meas2barw+'px; background-color:#'+measBarCol2+';"><br></span>';
 										};
 									};
 									html += '</span>';
@@ -1548,6 +1550,10 @@ function($, cssContent) {'use strict';
 
 			
 
+			//image mouseover
+
+
+
 			//measure mouse over 
 
 			if((layout.qDef.IMGMEASGRIDDISPLAYTOG) & (layout.qDef.IMGMEASDISPLAYSTYLE) & (layout.qDef.IMGMEASGRIDDISPLAYHOVER)){
@@ -1567,11 +1573,12 @@ function($, cssContent) {'use strict';
 						var relYtip = Math.round(h.pageY - 50);
 						var m1DataVal= $(this).attr('data-value').split(',');
 						
+						
 						if(m1DataVal.length == 2){
 							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0] + ' ' +meas1Symbol+'<br>' + layout.qHyperCube.qMeasureInfo[1].qFallbackTitle+ ': ' + m1DataVal[1] +' ' +meas2Symbol);
 						} else if(m1DataVal.length == 3){
 							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0] + ' ' +meas1Symbol+'<br>' + layout.qHyperCube.qMeasureInfo[1].qFallbackTitle+ ': ' + m1DataVal[1] +' ' +meas2Symbol+'<br>' + layout.qHyperCube.qMeasureInfo[2].qFallbackTitle+ ': ' + m1DataVal[2] +' ' +meas3Symbol);
-						} else {
+						} else if (m1DataVal.length == 1){
 							tooltip2Show.html(layout.qHyperCube.qMeasureInfo[0].qFallbackTitle + ': '+ m1DataVal[0]+' ' +meas1Symbol);
 						};
 						tooltip2Show.css({
@@ -1586,7 +1593,8 @@ function($, cssContent) {'use strict';
 							'left':relXtip+'px',
 							'width':'100px',
 							'height':'auto',
-							'z-index':'1000'
+							'z-index':'1000',
+							'overflow':'hidden'
     					});
 	
 
@@ -1600,8 +1608,8 @@ function($, cssContent) {'use strict';
 				
 
 			};
-			
 
+			
 
 			//Single pic controls
 
