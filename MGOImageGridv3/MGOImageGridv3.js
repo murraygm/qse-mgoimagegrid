@@ -156,7 +156,7 @@ function($, cssContent) {'use strict';
 								},
 							singleImageDisplayMeasure : {
 								ref: "qDef.SINGLEIMGMEASURE",
-								label: "Display first 2 measures as values in single image view",
+								label: "Display measures as values in single image view",
 								type: "boolean",
 								defaultValue: true
 								}
