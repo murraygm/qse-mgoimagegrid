@@ -1401,19 +1401,23 @@ function($, cssContent) {'use strict';
 						//Show header
 						if(layout.qDef.SINGLEIMGHEADER){
 
-							if(customSingleImageNameTog){
-							html += '<div class="mgoHeader"><a href="' + customSingleImageLink + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + customSingleImageName + '</a>';
-							
-							} else {
-								if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d1")){
-									html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
-								} else if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d2")) {
-									html += '<div class="mgoHeader"><a href="' + dim2.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim2.qText + '</a>';
+							if(grid1upDisplay){
+								html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a></div>';
+							} else {	
+								if(customSingleImageNameTog){
+								html += '<div class="mgoHeader"><a href="' + customSingleImageLink + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + customSingleImageName + '</a>';
+								
 								} else {
-									html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
-								};
+									if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d1")){
+										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
+									} else if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d2")) {
+										html += '<div class="mgoHeader"><a href="' + dim2.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim2.qText + '</a>';
+									} else {
+										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
+									};
+								}
+								html += '</div>';
 							}
-							html += '</div>';
 						};
 						html += '</div>';
 
