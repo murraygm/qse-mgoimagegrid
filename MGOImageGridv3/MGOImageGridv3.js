@@ -370,7 +370,7 @@ function($, cssContent) {'use strict';
 								},
 							singleImageDifCustomBGVal : {
 								ref: "qDef.SINGLEIMGCUSTBGVAL",
-								label: "Image border colour (HEX)",
+								label: "Background colour (HEX)",
 								type: "string",
 								expression: "optional",
 								defaultValue: "FFF",
