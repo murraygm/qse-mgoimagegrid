@@ -509,6 +509,12 @@ function($, cssContent) {'use strict';
 						type:"items",
 						label:"Limit display and loading",
 						items: {
+							imagePagingDisplay : {
+								ref : "qDef.IMGPAGINGDISPLAY",
+								label : "Hide the image paging count (1 of ####) on grid and 1up views",
+								type : "boolean",
+								defaultValue : false
+								},
 							customImagePaging : {
 								ref : "qDef.IMGPAGING",
 								label : "Use custom limit for maximum number of images to display and optional paging",
@@ -684,6 +690,13 @@ function($, cssContent) {'use strict';
 			var imgridpage = layout.qDef.IMGPAGINGSIZE;
 			var mgoSinglePicModeActive;
 			var killzoomcontrols = true;
+
+			var hideImageCount;
+			if(layout.qDef.IMGPAGINGDISPLAY){
+				hideImageCount = 'display: none;';
+			} else {
+				hideImageCount = '';
+			};
 
 			//console.log(qData);
 
@@ -1441,14 +1454,14 @@ function($, cssContent) {'use strict';
 				// 1 up or standard
 				var imgPagingButtonStyle, imgPagingButtonLStyle, imgPagingButtonMStyle, imgPagingReset;
 				if((grid1upDisplay) & (imgridpage==1)){
-					imgPagingButtonStyle = 'style="position: absolute; top: 0px; right:5px; z-index:100; font-size:10px; color:rgba(255,255,255,0.7); margin:4px 0px"';
+					imgPagingButtonStyle = 'style="'+ hideImageCount +' position: absolute; top: 0px; right:5px; z-index:100; font-size:10px; color:rgba(255,255,255,0.7); margin:4px 0px"';
 					imgPagingButtonLStyle = ' mmLessMore1upButs" style="left:5px; z-index:101; " ><span class="lui-icon lui-icon--triangle-left"></span>';
 					imgPagingButtonMStyle = ' mmLessMore1upButs" style="right:5px; z-index:102; " ><span class="lui-icon lui-icon--triangle-right"></span>';
 					
 				} else {
-					imgPagingButtonStyle = 'style="font-size:12px; color:#AAA; margin:4px 0px"';
-					 imgPagingButtonLStyle = '" style="margin-right:2px;margin-bottom:8px;">Less';
-					 imgPagingButtonMStyle = '" style="margin-right:2px;margin-bottom:8px;">More';
+					imgPagingButtonStyle = 'style="'+ hideImageCount +' font-size:12px; color:#AAA; margin:4px 0px"';
+					 imgPagingButtonLStyle = '" style="margin-right:2px;margin-bottom:8px;margin-top:4px;">Less';
+					 imgPagingButtonMStyle = '" style="margin-right:2px;margin-bottom:8px;margin-top:4px;">More';
 					 imgPagingReset = '';
 				};
 
@@ -1492,7 +1505,7 @@ function($, cssContent) {'use strict';
 
 			} else {
 				if((rowcount-(lastrow + 1))>0){
-					html += '<br>' + '<div style="font-size:12px; color:#AAA; margin:4px 0px">Display limited to first ' + (lastrow + 1) + ' of ' + rowcount + ' images</div>';
+					html += '<br>' + '<div style="font-size:12px; '+ hideImageCount +' color:#AAA; margin:4px 0px">Display limited to first ' + (lastrow + 1) + ' of ' + rowcount + ' images</div>';
 				};
 
 			};
