@@ -1,8 +1,9 @@
 # qse-mgoimagegrid
 Qlik Sense Extension to display images - for use with Qlik Sense
 
-**Download a zip of just the v3 extension, ready to add to server https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/MGOImageGridv3.zip**
-**DOWNLOAD VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
+**Download a zip of just the v3 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/MGOImageGridv3.zip)**
+
+**DOWNLOAD FULL PROJECT VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
 
 *Grab a couple of fun apps on my [Qlik Sense Apps github page](https://github.com/murraygm/qs-mgoqliksenseapps) to try the extension out with, choose from The New York Public Library (190k images), The British Library (1 million images) or The Internet Archive (65K books - 24 million page scans, 5 million images)*
