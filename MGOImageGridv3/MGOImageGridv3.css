@@ -161,14 +161,14 @@ span.mgoPopinEdit span.mgoimghoversm {
 	}
 
 
-.mmControlButs .mmIconButAdjust{
+.mgoControlButs .mgoIconButAdjust{
 	padding-left: 4px;
 	padding-right: 4px;
 	margin:0px;
 
 }
 
-.mmControlButs {
+.mgoControlButs {
 	display:block;
 	width:80%;
 	opacity: 0.2;
@@ -182,11 +182,11 @@ span.mgoPopinEdit span.mgoimghoversm {
 	margin:0px;
 	font-size:16px; 
 }
-.mmControlButs:hover {
+.mgoControlButs:hover {
 	opacity: 1.0;
 }
 
-.mmLessMore1upButs{
+.mgoLessMore1upButs{
 	position: absolute; 
 	top: 45%; 
 	font-size:12px; 
@@ -195,25 +195,25 @@ span.mgoPopinEdit span.mgoimghoversm {
 	opacity: 0.4;
 	margin-bottom: 2px;
 	}
-.mmLessMore1upButs:hover{
+.mgoLessMore1upButs:hover{
 	opacity: 1.0;
 	}
 
 
-span.mmQlikIcons { 
+span.mgoQlikIcons { 
 	font-family: LUI icons; 
 	font-size: 22px;
 	line-height: 18px;
 }
 
-.mmControlButs button {
+.mgoControlButs button {
 	background-color: #fff;
 	margin-right: 2px;
 	padding-right: 2px;
 	padding-left: 2px;
 }
 
-.mmControlButs span.mmHideShowButPlusTxt{
+.mgoControlButs span.mgoHideShowButPlusTxt{
 	vertical-align: 3px;
 }
 

@@ -1341,10 +1341,10 @@ function($, cssContent) {'use strict';
 						
 						if(layout.qDef.mgoSinglePicControls){
 							if((!killzoomcontrols) & (rowcount == 1)){
-								html+= '<div class="mmControlButs">';
-								html+= '<button class="lui-button butZoomout mmIconButAdjust" alt="Zoom Out"><span class="lui-icon lui-icon--zoom-out"></span></button> ';
-								html+= '<button class="lui-button butZoomin mmIconButAdjust" alt="Zoom In"><span class="lui-icon lui-icon--zoom-in"></span></button> ';
-								html+= '<button class="lui-button butRotate mmIconButAdjust" alt="Rotate"><span class="lui-icon lui-icon--sync"></span></button> ';
+								html+= '<div class="mgoControlButs">';
+								html+= '<button class="lui-button butZoomout mgoIconButAdjust" alt="Zoom Out"><span class="lui-icon lui-icon--zoom-out"></span></button> ';
+								html+= '<button class="lui-button butZoomin mgoIconButAdjust" alt="Zoom In"><span class="lui-icon lui-icon--zoom-in"></span></button> ';
+								html+= '<button class="lui-button butRotate mgoIconButAdjust" alt="Rotate"><span class="lui-icon lui-icon--sync"></span></button> ';
 								html+= '<button class="lui-button butReposition">Reset</button>';			
 								html+= '</div>';
 							}; 
@@ -1455,8 +1455,8 @@ function($, cssContent) {'use strict';
 				var imgPagingButtonStyle, imgPagingButtonLStyle, imgPagingButtonMStyle, imgPagingReset;
 				if((grid1upDisplay) & (imgridpage==1)){
 					imgPagingButtonStyle = 'style="'+ hideImageCount +' position: absolute; top: 0px; right:5px; z-index:100; font-size:10px; color:rgba(255,255,255,0.7); margin:4px 0px"';
-					imgPagingButtonLStyle = ' mmLessMore1upButs" style="left:5px; z-index:101; " ><span class="lui-icon lui-icon--triangle-left"></span>';
-					imgPagingButtonMStyle = ' mmLessMore1upButs" style="right:5px; z-index:102; " ><span class="lui-icon lui-icon--triangle-right"></span>';
+					imgPagingButtonLStyle = ' mgoLessMore1upButs" style="left:5px; z-index:101; " ><span class="lui-icon lui-icon--triangle-left"></span>';
+					imgPagingButtonMStyle = ' mgoLessMore1upButs" style="right:5px; z-index:102; " ><span class="lui-icon lui-icon--triangle-right"></span>';
 					
 				} else {
 					imgPagingButtonStyle = 'style="'+ hideImageCount +' font-size:12px; color:#AAA; margin:4px 0px"';
