@@ -1,6 +1,7 @@
 # qse-mgoimagegrid
 Qlik Sense Extension to display images - for use with Qlik Sense
 
+**Download a zip of just the v3 extension, ready to add to server https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/MGOImageGridv3.zip**
 **DOWNLOAD VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
 
