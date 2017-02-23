@@ -17,8 +17,8 @@ or grab just what you need from the project https://github.com/murraygm/qse-mgoi
 ** [Download zip directly](https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridEmo.zip) **
 ![emo1][emo1]
 ![emo2][emo2] 
-[emo1]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/screenshots/emo1.png "emo1"
-[emo2]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/screenshots/emo2.png "emo2"
+[emo1]: https://github.com/murraygm/qse-mgoimagegrid/raw//screenshots/emo1.png "emo1"
+[emo2]: https://github.com/murraygm/qse-mgoimagegrid/raw//screenshots/emo1.png "emo2"
 
 ## Version 3 - for use in Qlik Sense 3.0
 **Recent tweaks (aug 2016):**
