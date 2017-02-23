@@ -15,8 +15,10 @@ or grab just what you need from the project https://github.com/murraygm/qse-mgoi
 * currently works on a manual (button click) request per image, to avoid burning through API limit
 * works with multipl faces, mouseover face to see colour bands and scores for individual face.
 ** Download zip directly - (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridEmo.zip)**
-
-
+![emo1][emo1]
+![emo2][emo2]
+[emo1]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/emo1.png "emo1"
+[emo2]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/emo2.png "emo2"
 
 ## Version 3 - for use in Qlik Sense 3.0
 **Recent tweaks (aug 2016):**
