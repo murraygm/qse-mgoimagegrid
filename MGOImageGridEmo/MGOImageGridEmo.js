@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 1.0,
+			version: 1.2,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -554,7 +554,7 @@ function($, cssContent) {'use strict';
 						},
 					emotions: {
 						type:"items",
-						label:"Facial recogition and emotion scores",
+						label:"Faces & emotion scores",
 						items: {
 							emotionsTog : {
 								ref : "qDef.IMGEMOTOG",
@@ -575,8 +575,84 @@ function($, cssContent) {'use strict';
 								ref : "qDef.IMGEMOAPIKEY",
 								label : "Your MS emotion API key",
 								type : "string",
+								defaultValue : ""
+								}
+							}
+						},
+					descriptions: {
+						type:"items",
+						label:"Auto image descriptions",
+						items: {
+							descriptionsTog : {
+								ref : "qDef.IMGCVTOG",
+								label : "Turn on image content analysis",
+								type : "boolean",
+								defaultValue : false
+								},
+							emotionsText : {
+								label:"This requires a Computer Vision API key from MS cognitive services and for the images to be publically available online",
+								component: "text"
+								},
+							emotionsLink : {
+								label:"Get a Computer Vision Preview API key from the MS Cognitive Services site",
+								component: "link",
+								url:"https://www.microsoft.com/cognitive-services/en-us/computer-vision-api"
+								},
+							emotionsAPIkey : {
+								ref : "qDef.IMGCVAPIKEY",
+								label : "Your MS Computer Vision API key",
+								type : "string",
 								defaultValue : "",
-								show: function(layout) { return layout.qDef.IMGEMOTOG } 
+								show: function(layout) { return layout.qDef.IMGCVTOG } 
+								},
+							descriptionsTxtTog : {
+								ref : "qDef.IMGCVTXTTOG",
+								label : "Display MS image description",
+								type : "boolean",
+								defaultValue : true,
+								show: function(layout) { return layout.qDef.IMGCVTOG } 
+								},
+							descriptionsTxtScoreTog : {
+								ref : "qDef.IMGCVTXTSCORETOG",
+								label : "Display MS's confidence score for the image description",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout) { if(layout.qDef.IMGCVTOG & layout.qDef.IMGCVTXTTOG ){ return true } else { return false } } 
+								},
+							descriptionsCatsTog : {
+								ref : "qDef.IMGCVCATSTOG",
+								label : "Display MS image categories",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout) { return layout.qDef.IMGCVTOG } 
+								},
+							descriptionsTagsTog : {
+								ref : "qDef.IMGCVTAGSTOG",
+								label : "Display top  MS tags for image",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout) { return layout.qDef.IMGCVTOG } 
+								},
+							descriptionsTagsGuessesTog : {
+								ref : "qDef.IMGCVALLTAGSTOG",
+								label : "Display all MS tags associated with image",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout) { return layout.qDef.IMGCVTOG } 
+								},
+							descriptionsColorsTog : {
+								ref : "qDef.IMGCVCOLSTOG",
+								label : "Display the 3 colors MS pulls from image (foreground, background, accent)",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout) { return layout.qDef.IMGCVTOG } 
+								},
+							descriptionsFacesTog : {
+								ref : "qDef.IMGCVFACESTOG",
+								label : "Display MS face recognition (gender/age)",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout) { return layout.qDef.IMGCVTOG } 
 								}
 							}
 						},
@@ -1392,9 +1468,18 @@ function($, cssContent) {'use strict';
 						};
 
 						
-						if((layout.qDef.IMGEMOTOG) & (rowcount == 1) & (!layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG)){
+						if((layout.qDef.IMGEMOTOG) & (!layout.qDef.IMGCVTOG) & (rowcount == 1) & (!layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG)){
 							html+= '<div class="mgoControlButs" style="z-index: 70;">';
 							html+= '<button class="lui-button butEmoRequest">Analyse emotions</button>';			
+							html+= '</div>';
+						} else if((!layout.qDef.IMGEMOTOG) & (layout.qDef.IMGCVTOG) & (rowcount == 1) & (!layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG)){
+							html+= '<div class="mgoControlButs" style="z-index: 70;">';
+							html+= '<button class="lui-button butCVRequest">Analyse content</button>';			
+							html+= '</div>';
+						} else if((layout.qDef.IMGEMOTOG) & (layout.qDef.IMGCVTOG) & (rowcount == 1) & (!layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG)){
+							html+= '<div class="mgoControlButs" style="z-index: 70;">';
+							html+= '<button class="lui-button butEmoRequest">Analyse emotions</button>';
+							html+= '<button class="lui-button butCVRequest">Analyse content</button>';			
 							html+= '</div>';
 						}; 
 	
@@ -1446,9 +1531,15 @@ function($, cssContent) {'use strict';
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + ');background-color: #' + imgBGCol +';">';
 									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';">';
 									html+='</div>';
+									if((layout.qDef.IMGEMOTOG) || (layout.qDef.IMGCVTOG)){
+										html+='<div class="emotionError" style="display:none; position:absolute; z-index:70; top:10px; left:20%; right:20%; width:auto; margin:0;padding:10px; font-size:16px; text-align:center; overflow:auto; color:#CC0000; font-weight:bold; background-color: rgba(255, 255, 255, 0.8)"></div>';
+										html+='<div class="emotionFaces" style="display:none; position:relative; color:#ffffff; z-index:55; text-align:left; top:0px; left:0px; width:0px; height:0px; overflow:hidden; margin: 0 0 0 0; padding: 0 0 0 0; text-transform:uppercase;">'
+
+										html+='</div>';
+									};
+
 									if(layout.qDef.IMGEMOTOG){
 										 emoThisPic = imgFolderLocation + dim.qText;
-										 html+='<div class="emotionError" style="display:none; position:absolute; z-index:56; top:10px; left:20%; right:20%; width:auto; margin:0;padding:10px; font-size:16px; text-align:center; overflow:auto; color:#CC0000; font-weight:bold; background-color: rgba(255, 255, 255, 0.8)"></div>';
 										 html+='<div class="emotionBox" style="position:absolute; z-index:50; top:0px; width:100%; height:0%; mix-blend-mode: multiply; overflow:hidden">';
 										 	$.each(emoList, function ( key, emo  ) {
 
@@ -1465,9 +1556,11 @@ function($, cssContent) {'use strict';
 										 	});
 										 	
 										 html+='</div>';
-										 html+='<div class="emotionFaces" style="position:relative; color:#ffffff; z-index:55; text-align:left; top:0px; left:0px; width:0px; height:0px; overflow:hidden; margin: 0 0 0 0; padding: 0 0 0 0; text-transform:uppercase;">'
-
-										 html+='</div>';
+										 
+									};
+									if(layout.qDef.IMGCVTOG){
+										emoThisPic = imgFolderLocation + dim.qText;
+										html+='<div class="emotionCVText" style="position:absolute; color:#ffffff; background-color: rgba(0, 0, 0, 0.7); z-index:57; text-align:left; left:0px ;top:0px; width:80%; height:0%; overflow:auto; padding: 30px 4px 4px 4px; margin:0px 0px 0px 0px; line-height: auto; font-size:12px; display:none;"></div>';
 									};
 
 									
@@ -2141,7 +2234,7 @@ function($, cssContent) {'use strict';
 
 
 			if((mgoSinglePicModeActive) &(layout.qDef.IMGEMOTOG)){
-
+				var emoAnalysisRun=0;
 				var mmContainerTarg = $element.find(('.mgoSinglePic'));
 
 				var mmContainerTargContainer = $element.find(('.mgoSinglePicC'));
@@ -2153,6 +2246,31 @@ function($, cssContent) {'use strict';
 
 				//Use MS cognitive services Emotions API
 				$element.find('.butEmoRequest').on('click', function() {
+					if (emoAnalysisRun) {
+						var emotionCVText=$element.find(('.emotionCVText'));
+    					emotionCVText.css('display', 'none');
+    					//reset it or hide it at least
+							mmContainerTarg.css('-webkit-filter', 'grayscale(100%)');
+						    mmContainerTarg.css('filter', 'grayscale(100%)');
+						    mmContainerTarg.css('opacity', '0.7');
+							var targEmotionBox = $element.find(('.emotionBox'));
+							var targEmotionTxt = $element.find(('.emotionText'));
+							
+
+							targEmotionBox.css('height', '100%');
+						    targEmotionTxt.css('height', '95%');
+						    if (cvAnalysisRun) {
+    							var emotionCVText=$element.find(('.emotionCVText'));
+    							emotionCVText.css('display', 'none');
+							};
+
+
+    					return;
+					};
+					if (cvAnalysisRun) {
+    					var emotionCVText=$element.find(('.emotionCVText'));
+    					emotionCVText.css('display', 'none');
+					};
 
 					var togMeasureifon = $element.find(('.mgoMeasureSinglePic'));
 					togMeasureifon.css('display', 'none');
@@ -2393,15 +2511,17 @@ function($, cssContent) {'use strict';
 									});
 
 									targEmotionFaces.html(targEmotionFacesBoxes);
-									
+									targEmotionFaces.css('display', 'block'); 
 
 						            mmContainerTarg.css('-webkit-filter', 'grayscale(100%)');
 						            mmContainerTarg.css('filter', 'grayscale(100%)');
 						            mmContainerTarg.css('opacity', '0.7');
 
-						            analysisEMObut.html('Complete');
+						            analysisEMObut.html('Emotions');
 						            analysisEMObut.css('background-color', '#FFFFFF');
 						            analysisEMObut.prop('disabled', false);
+
+						            emoAnalysisRun=1;
 					        	
 					        	} else {
 					        		var emotionErrorBox = $element.find((".emotionError"));
@@ -2410,6 +2530,7 @@ function($, cssContent) {'use strict';
 					            	analysisEMObut.css('background-color', '#CC0000');
 					            	analysisEMObut.html('Failed');
 					            	analysisEMObut.prop('disabled', false);
+					            	emoAnalysisRun=0;
 					        	};
 
 					        })
@@ -2424,6 +2545,7 @@ function($, cssContent) {'use strict';
 					            analysisEMObut.html('Failed');
 					            analysisEMObut.prop('disabled', false);
 					            targEmotionBox.css('height', '0%');
+					            emoAnalysisRun=0;
 					        });
 
 					    });
@@ -2473,6 +2595,422 @@ function($, cssContent) {'use strict';
 					
 
 				});
+			};
+
+			if((mgoSinglePicModeActive) &(layout.qDef.IMGCVTOG)){
+
+				
+
+				var cvAnalysisRun=0;
+				var cvAnalysisRunHidden=0;
+
+				var emoCVDescriptionOn=false, emoCVDescriptionScoreOn=false, emoCVCatsOn=false, emoCVTagsOn=false, emoCVAllTagsOn=false, emoCVColsOn=false, emoCVFacesOn=false;
+
+				//Use MS cognitive services Emotions API
+				$element.find('.butCVRequest').on('click', function() {
+					if (cvAnalysisRun) {
+
+						var emotionCVText=$element.find(('.emotionCVText'));
+    					emotionCVText.css('display', 'block');
+    					var targEmotionFaces =$element.find(('.emotionFaces'));
+    					targEmotionFaces.css('display', 'block');
+    					var emotionErrorBox = $element.find((".emotionError"));
+    					emotionErrorBox.css('display', 'none');
+
+    					if(emoAnalysisRun){
+							//reset it or hide it at least
+							mmContainerTarg.css('-webkit-filter', 'none');
+							mmContainerTarg.css('filter', 'none');
+							mmContainerTarg.css('opacity', '1.0');
+							var targEmotionBox = $element.find(('.emotionBox'));
+							var targEmotionTxt = $element.find(('.emotionText'));
+							
+
+							targEmotionBox.css('height', '0%');
+							targEmotionTxt.css('height', '0%');
+
+							emotionErrorBox.css('display', 'none');
+
+						};
+
+    					return;
+					};
+					if(emoAnalysisRun){
+						//reset it or hide it at least
+						mmContainerTarg.css('-webkit-filter', 'none');
+						mmContainerTarg.css('filter', 'none');
+						mmContainerTarg.css('opacity', '1.0');
+						var targEmotionBox = $element.find(('.emotionBox'));
+						var targEmotionTxt = $element.find(('.emotionText'));
+						
+
+						targEmotionBox.css('height', '0%');
+						targEmotionTxt.css('height', '0%');
+
+						var targEmotionFaces =$element.find(('.emotionFaces'));
+    					targEmotionFaces.css('display', 'none');
+
+    					var emotionErrorBox = $element.find((".emotionError"));
+    					emotionErrorBox.css('display', 'none');
+
+					};
+
+
+					var targEmotionFaces =$element.find(('.emotionFaces'));
+
+
+					var curZoomLevelArr = mmContainerTarg.css('background-size');
+					var curZoomLevelArrParts = curZoomLevelArr.split(" ");
+
+					var img = new Image;
+					img.src = emoThisPic;
+					var bgImgWidth = img.width;
+					var bgImgHeight = img.height;
+					var containerHeight = mmContainerTargContainer.innerHeight();
+					var containerWidth = mmContainerTargContainer.innerWidth();
+
+					
+				
+					var emoImgScaled;
+					var emoBandtargFaceOffsetT,emoBandtargFaceOffsetL, emoImgScaledW, emoImgScaledH;
+
+					
+
+					var faceSquares;
+
+					targEmotionFaces.css('width',bgImgWidth+'px');
+					targEmotionFaces.css('height',bgImgHeight+'px');
+					//targEmotionFaces.css('background-color','#ff0000');
+
+
+					if(curZoomLevelArrParts[0]=='contain'){
+						if(bgImgWidth/containerWidth >= bgImgHeight/containerHeight){
+							emoImgScaled= 1/(bgImgWidth/containerWidth);
+							emoBandtargFaceOffsetL=0+'px';
+							emoBandtargFaceOffsetT=((containerHeight-(bgImgHeight*emoImgScaled))/2)+'px';
+							emoImgScaledW=emoImgScaled;
+							emoImgScaledH=emoImgScaled;
+//console.log('contain - w > h | scales ' + emoImgScaled +  ' | ' + emoBandtargFaceOffsetL + ' , ' +emoBandtargFaceOffsetT);
+
+
+						} else {
+							emoImgScaled= 1/(bgImgHeight/containerHeight);
+							emoBandtargFaceOffsetL=((containerWidth-(bgImgWidth*emoImgScaled))/2)+'px';
+							emoBandtargFaceOffsetT=0+'px';
+							emoImgScaledW=emoImgScaled;
+							emoImgScaledH=emoImgScaled;
+//console.log('contain - w < h | scales ' + emoImgScaled + ' | ' + emoBandtargFaceOffsetL + ' , ' +emoBandtargFaceOffsetT);						
+							
+						};
+
+						
+					} else if ((curZoomLevelArrParts[0]=='100%') & (curZoomLevelArrParts[1]=='100%')){
+
+						emoImgScaledW= 1/(bgImgWidth/containerWidth);
+						emoImgScaledH= 1/(bgImgHeight/containerHeight);
+						
+						emoBandtargFaceOffsetL=0+'px';
+						emoBandtargFaceOffsetT=0+'px';
+						mmContainerTargContainer.css('overflow', 'hidden');
+						mmContainerTarg.css('overflow', 'hidden');
+//console.log('stretch | scales ' + emoImgScaled + ' | ' + emoBandtargFaceOffsetL + ' , ' +emoBandtargFaceOffsetT);						
+
+
+					} else if ((curZoomLevelArrParts[0]=='auto') & (curZoomLevelArrParts[1]=='100%')){
+						
+						emoImgScaled= 1/(bgImgHeight/containerHeight);
+						emoBandtargFaceOffsetL=((containerWidth-(bgImgWidth*emoImgScaled))/2)+'px';
+						emoBandtargFaceOffsetT=0+'px';
+						emoImgScaledW=emoImgScaled;
+						emoImgScaledH=emoImgScaled;
+
+						mmContainerTargContainer.css('overflow', 'hidden');
+						mmContainerTarg.css('overflow', 'hidden');
+//console.log('fit height | scales ' + emoImgScaled + ' | ' + emoBandtargFaceOffsetL + ' , ' +emoBandtargFaceOffsetT);						
+
+
+					} else if ((curZoomLevelArrParts[0]=='auto')){
+						emoImgScaled= 1;
+						emoBandtargFaceOffsetL=(containerWidth - bgImgWidth)/2;
+						emoBandtargFaceOffsetT=(containerHeight - bgImgHeight)/2;
+						emoImgScaledW=emoImgScaled;
+						emoImgScaledH=emoImgScaled;
+
+						mmContainerTargContainer.css('overflow', 'hidden');
+						mmContainerTarg.css('overflow', 'hidden');
+//console.log('1:1 | scales ' + emoImgScaled +  ' | ' + emoBandtargFaceOffsetL + ' , ' +emoBandtargFaceOffsetT);
+						
+
+
+					} else if ((curZoomLevelArrParts[0]=='100%')){
+						emoImgScaled= 1/(bgImgWidth/containerWidth);
+
+						emoBandtargFaceOffsetL=0+'px';
+						emoBandtargFaceOffsetT=((containerHeight-(bgImgHeight*emoImgScaled))/2)+'px';
+						emoImgScaledW=emoImgScaled;
+						emoImgScaledH=emoImgScaled;
+
+						mmContainerTargContainer.css('overflow', 'hidden');
+						mmContainerTarg.css('overflow', 'hidden');
+//console.log('width | scales ' + emoImgScaled + ' | ' + emoBandtargFaceOffsetL + ' , ' +emoBandtargFaceOffsetT);						
+
+					};
+					
+					targEmotionFaces.css('left', emoBandtargFaceOffsetL);
+					targEmotionFaces.css('top', emoBandtargFaceOffsetT);
+
+					targEmotionFaces.css('-moz-transform-origin', '0px 0px 0px');
+					targEmotionFaces.css('-webkit-transform-origin', '0px 0px 0px');
+					targEmotionFaces.css('transform-origin', '0px 0px 0px');
+
+					targEmotionFaces.css('-moz-transform', 'scale('+emoImgScaledW+','+emoImgScaledH+')');
+					targEmotionFaces.css('-webkit-transform', 'scale('+emoImgScaledW+','+emoImgScaledH+')');
+					targEmotionFaces.css('transform', 'scale('+emoImgScaledW+','+emoImgScaledH+')');
+
+
+
+					//set up display options
+					emoCVDescriptionOn=layout.qDef.IMGCVTXTTOG;
+					emoCVDescriptionScoreOn=layout.qDef.IMGCVTXTSCORETOG;
+					emoCVCatsOn=layout.qDef.IMGCVCATSTOG;
+					emoCVTagsOn=layout.qDef.IMGCVTAGSTOG;
+					emoCVAllTagsOn=layout.qDef.IMGCVALLTAGSTOG;
+					emoCVColsOn=layout.qDef.IMGCVCOLSTOG;
+					emoCVFacesOn=layout.qDef.IMGCVFACESTOG;
+					
+
+
+					var togMeasureifon = $element.find(('.mgoMeasureSinglePic'));
+					togMeasureifon.css('display', 'none');
+					var emotionCVText = $element.find(('.emotionCVText'));
+
+					var analysisCVbut = $element.find(('.butCVRequest'));
+					analysisCVbut.html('ANALYSING...');
+					analysisCVbut.css('background-color', '#CCCCCC');
+					analysisCVbut.prop('disabled', true);
+
+					var MSCVAPIKEY = "", MSCVparams="Categories,Tags,Description,Faces,ImageType,Color";
+					
+
+					MSCVAPIKEY= layout.qDef.IMGCVAPIKEY;
+					
+
+					if(MSCVAPIKEY.length > 4){
+						$(function() {
+					        var params = {
+					            // Request parameters
+					            "visualFeatures": MSCVparams,
+					            "language": "en",
+					        };
+					      
+					        $.ajax({
+					            url: "https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze?" + $.param(params),
+					            beforeSend: function(xhrObj){
+					                // Request headers
+					                xhrObj.setRequestHeader("Content-Type","application/json");
+					                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key",MSCVAPIKEY);
+					            },
+					            type: "POST",
+					            // Request body
+					            data: '{"url": "'+emoThisPic+'" }',
+					        })
+					        .done(function(data) {
+					        	var dataExists = "description" in data;
+console.log("CV success");
+console.log(data);
+					            
+					            if(dataExists){
+					            	//add description
+					            	if(emoCVDescriptionOn){
+					            		var CVdescription = data.description.captions[0].text;
+					            		var CVdescriptionScore = parseFloat(data.description.captions[0].confidence);
+					            		var cvConfidenceWord = "";
+					            		var CVdescriptionScoreTxt="";
+					            		var cvConfidencetxtOut="";
+					            		if(CVdescriptionScore > 0.98){
+					            			cvConfidenceWord='is almost certain this is';
+					            		} else if(CVdescriptionScore < 0.5){
+					            			cvConfidenceWord='thinks this may or may not be';
+					            		} else {
+					            			cvConfidenceWord='thinks this is likely to be';
+					            		};
+					            		if(emoCVDescriptionScoreOn){
+					            			CVdescriptionScoreTxt= '(confidence:'+ Math.round(CVdescriptionScore*100)+'%)';
+					            			cvConfidencetxtOut= 'MS computer vision '+cvConfidenceWord+' '+CVdescriptionScoreTxt+':<br>';
+					            		};
+					            		emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">'+cvConfidencetxtOut+'<span style="font-size:16px; font-style: italic; font-weight:bold;">"'+CVdescription+'"</span></span>');
+					            		
+					            	};
+					            	//add cats
+						            if(emoCVCatsOn){
+						            	var CVcategories="";
+						            	
+							            $.each(data.categories, function ( key, cat  ) {
+							            	var CVcategoriesName = data.categories[key].name;
+							            	if(key>0){
+							            		CVcategories+=(', ' +CVcategoriesName);
+							            	} else {
+							            		CVcategories+=(CVcategoriesName);
+							            	};
+							            	
+							            });
+							            emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">MS categories: '+CVcategories+'</span>');
+						            };
+						            //add tags
+						            if(emoCVTagsOn){
+						            	var CVtags = "";
+						            	$.each(data.tags, function ( key, tag  ) {
+							            	var CVtagName = data.tags[key].name;
+							            	//var CVtagScore = data.tags[key].confidence;
+							            	
+							            	if(key>0){
+							            		CVtags+=(', ' +CVtagName);
+							            	} else {
+							            		CVtags+=(CVtagName);
+							            	};
+							            	
+							            });
+						            	emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">MS top tags: '+CVtags+'</span>');
+						            };
+						            //add all tags
+						            if(emoCVAllTagsOn){
+						            	var CValltags = "";
+						            	$.each(data.description.tags, function ( key, tag  ) {
+							            	var CVatagName = data.description.tags[key];
+							            	//var CVtagScore = data.tags[key].confidence;
+							            	if(key>0){
+							            		CValltags+=(', ' +CVatagName);
+							            	} else {
+							            		CValltags+=(CVatagName);
+							            	};
+							            	
+							            });
+							            
+						            	emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">MS all tags: '+CValltags+'</span>');
+						            
+
+						            };
+						            //add colors
+						            if(emoCVColsOn){
+						            	var CVisbw = data.color.isBWImg;
+						            	var CVisClipart = data.imageType.clipArtType;
+						            	var CVisLinedrawing = data.imageType.lineDrawingType;
+						            	var CVImageType = "";
+						            	if(CVisbw){
+						            		CVImageType = "A black and white photo containing these colors:";
+						            	} else if((CVisClipart) || (CVisLinedrawing)){
+						            		CVImageType = "A drawing or clipart containing these colors:";
+						            	} else {
+						            		CVImageType = "A photo containing these colors:";
+						            	};
+						            	var CVcolourAccent = data.color.accentColor;
+						            	var CVcolourBG = data.color.dominantColorBackground;
+						            	var CVcolourFor = data.color.dominantColorForeground;
+						            	emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">'+CVImageType+' <span style="display:inline-block; width: 20px; height: 20px; background-color:'+CVcolourBG+';"></span><span style="display:inline-block; width: 20px; height: 20px; background-color:'+CVcolourFor+';"></span><span style="display:inline-block; width: 20px; height: 20px; background-color:#'+CVcolourAccent+';"></span></span>');
+
+						            };
+						            //add faces
+						            if(emoCVFacesOn){
+						            	var CVfaceCount=data.faces.length;
+						            	var CVfaceCountTxt="";
+						            	var CVgenderCountTxt="";
+						            	var CVAgeRangeTxt="";
+						            	var CVFacesDes = ""
+
+						            	if(CVfaceCount < 1){
+						            		CVfaceCountTxt = "no human faces in the image";
+						            	} else {
+						            		if(CVfaceCount > 1){
+						            			CVfaceCountTxt = CVfaceCount + " faces. ";
+						            			var targEmotionFacesBoxes = "";
+						            			$.each(data.faces, function ( key, face  ) {
+						            				CVFacesDes += "<br>Face "+ (key+1) + " is probably a " + data.faces[key].gender.toLowerCase() + ' aged ' + data.faces[key].age+' years.';
+	
+													var targFaceL= data.faces[key].faceRectangle['left'];
+													var targFaceT= data.faces[key].faceRectangle['top'];
+													var targFaceW= data.faces[key].faceRectangle['width'];
+													var targFaceH= data.faces[key].faceRectangle['height'];
+													var targFaceID = key;
+													targEmotionFacesBoxes += '<span class="emoCVID '+ targFaceID +'" style="position:absolute; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;">Face '+(key+1)+'</span>';
+
+												});
+
+												targEmotionFaces.html(targEmotionFacesBoxes);
+												
+
+
+						            		} else {
+						            			CVfaceCountTxt = CVfaceCount + " face. ";
+						            			CVFacesDes = "<br>Probably a " + data.faces[0].gender.toLowerCase() + ' aged ' + data.faces[0].age+' years.';
+						            			var targFaceL= data.faces[0].faceRectangle['left'];
+												var targFaceT= data.faces[0].faceRectangle['top'];
+												var targFaceW= data.faces[0].faceRectangle['width'];
+												var targFaceH= data.faces[0].faceRectangle['height'];
+												var targFaceID = 0;
+												targEmotionFacesBoxes += '<span class="emoCVID '+ targFaceID +'" style="position:absolute; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;"></span>';
+												targEmotionFaces.html(targEmotionFacesBoxes);
+
+						            		};	
+
+						            	};
+
+
+										emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">MS spotted '+CVfaceCountTxt+CVFacesDes+'</span>');
+						            };
+
+						            
+						         
+						            
+						            //var CVimageH="";
+						            //var CVimageW="";
+						            
+
+						           
+
+						            emotionCVText.css('height', 'auto');
+						            emotionCVText.css('display', 'block');
+									targEmotionFaces.css('display', 'block'); 
+						            
+						            analysisCVbut.html('Description');
+							        analysisCVbut.css('background-color', '#FFFFFF');
+							        analysisCVbut.prop('disabled', false);
+
+							        cvAnalysisRun=1;
+							    } else {
+							    	emotionCVText.css('height', '0%');
+							    	emotionCVText.css('display', 'none');
+							    	var emotionErrorBox = $element.find((".emotionError"));
+					        		emotionErrorBox.html('Sorry, did not understand that image');
+					            	emotionErrorBox.css('display', 'block');
+
+						            analysisCVbut.css('background-color', '#CC0000');
+						            analysisCVbut.html('Failed');
+						            analysisCVbut.prop('disabled', false);
+						            cvAnalysisRun=0;
+
+							    };
+
+					        })
+					        .fail(function() {
+					            console.log("CV error");
+					            emotionCVText.css('height', '0%');
+					            emotionCVText.css('display', 'none');
+					            var emotionErrorBox = $element.find((".emotionError"));
+					        		emotionErrorBox.html('Sorry there was an error, It may be your API key or call limits');
+					            	emotionErrorBox.css('display', 'block');
+
+					            analysisCVbut.css('background-color', '#CC0000');
+					            analysisCVbut.html('Failed');
+					            analysisCVbut.prop('disabled', false);
+					            //targEmotionBox.css('height', '0%');
+					            cvAnalysisRun=0;
+
+					        });
+					    });
+					};
+
+				});
+
 			};
 			
 		}
