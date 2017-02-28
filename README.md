@@ -8,7 +8,7 @@ or grab just what you need from the project https://github.com/murraygm/qse-mgoi
 
 *Grab a couple of fun apps on my [Qlik Sense Apps github page](https://github.com/murraygm/qs-mgoqliksenseapps) to try the extension out with, choose from The New York Public Library (190k images), The British Library (1 million images) or The Internet Archive (65K books - 24 million page scans, 5 million images)*
 
-## New parallel version MGO Image Grid Emo - with content, facial and emotion recognition
+## New parallel version to V3 - MGO Image Grid Emo, with content, facial and emotion recognition
 **Uses Microsoft's Cognitive Services APIs (key required)**
 * Different name and ID for Emo or standard Image Grid, so you can have both running
 * Needs Emotion API key and the referenced image to be of a publically accessable server
