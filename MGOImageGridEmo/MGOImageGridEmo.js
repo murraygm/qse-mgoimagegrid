@@ -1467,21 +1467,26 @@ function($, cssContent) {'use strict';
 		
 						};
 
-						
-						if((layout.qDef.IMGEMOTOG) & (!layout.qDef.IMGCVTOG) & (rowcount == 1) & (!layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG)){
-							html+= '<div class="mgoControlButs" style="z-index: 70;">';
-							html+= '<button class="lui-button butEmoRequest">Analyse emotions</button>';			
-							html+= '</div>';
-						} else if((!layout.qDef.IMGEMOTOG) & (layout.qDef.IMGCVTOG) & (rowcount == 1) & (!layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG)){
-							html+= '<div class="mgoControlButs" style="z-index: 70;">';
-							html+= '<button class="lui-button butCVRequest">Analyse content</button>';			
-							html+= '</div>';
-						} else if((layout.qDef.IMGEMOTOG) & (layout.qDef.IMGCVTOG) & (rowcount == 1) & (!layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG)){
-							html+= '<div class="mgoControlButs" style="z-index: 70;">';
-							html+= '<button class="lui-button butEmoRequest">Analyse emotions</button>';
-							html+= '<button class="lui-button butCVRequest">Analyse content</button>';			
-							html+= '</div>';
-						}; 
+						if((layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG) & (!layout.qDef.SINGLEIMGLINKCUSTOMSOURCETYPE)){
+							
+						} else {
+							if((layout.qDef.IMGEMOTOG) & (!layout.qDef.IMGCVTOG) & (rowcount == 1) ){
+
+								html+= '<div class="mgoControlButs" style="z-index: 71;">';
+								html+= '<button class="lui-button butEmoRequest">Analyse emotions</button>';			
+								html+= '</div>';
+							} else if((!layout.qDef.IMGEMOTOG) & (layout.qDef.IMGCVTOG) & (rowcount == 1)){
+								html+= '<div class="mgoControlButs" style="z-index: 71;">';
+								html+= '<button class="lui-button butCVRequest">Analyse content</button>';			
+								html+= '</div>';
+							} else if((layout.qDef.IMGEMOTOG) & (layout.qDef.IMGCVTOG) & (rowcount == 1) ){
+								html+= '<div class="mgoControlButs" style="z-index: 71;">';
+								html+= '<button class="lui-button butEmoRequest">Analyse emotions</button>';
+								html+= '<button class="lui-button butCVRequest">Analyse content</button>';			
+								html+= '</div>';
+							}; 
+
+						};
 	
 						
 						
@@ -1495,6 +1500,38 @@ function($, cssContent) {'use strict';
 									if(layout.qDef.IMGEMOTOG){
 										 emoThisPic = customSingleImageSourceURL;
 									};
+									if((layout.qDef.IMGEMOTOG) || (layout.qDef.IMGCVTOG)){
+										html+='<div class="emotionError" style="display:none; position:absolute; z-index:70; top:10px; left:20%; right:20%; width:auto; margin:0;padding:10px; font-size:16px; text-align:center; overflow:auto; color:#CC0000; font-weight:bold; background-color: rgba(255, 255, 255, 0.8)"></div>';
+										html+='<div class="emotionFaces" style="display:none; position:relative; color:#ffffff; z-index:55; text-align:left; top:0px; left:0px; width:0px; height:0px; overflow:hidden; margin: 0 0 0 0; padding: 0 0 0 0; text-transform:uppercase;">'
+
+										html+='</div>';
+									};
+
+									if(layout.qDef.IMGEMOTOG){
+										 emoThisPic = imgFolderLocation + dim.qText;
+										 html+='<div class="emotionBox" style="position:absolute; z-index:50; top:0px; width:100%; height:0%; mix-blend-mode: multiply; overflow:hidden">';
+										 	$.each(emoList, function ( key, emo  ) {
+
+										 		html+='<span class="emo'+emo+'" style="display:inline-block; height:100%; padding: 0px 0px 0px 0px; margin:0px 0px 0px 0px; background-color:'+emoColPal[key]+'; width:10%;"></span>';
+										 	});
+
+										 html+='</div>';
+
+										 html+='<div class="emotionText" style="position:absolute; color:#ffffff; z-index:54; text-align:left; top:4px; width:100%; height:0%; overflow:hidden; text-transform:uppercase;">';
+										 	html+='<span class="emotxtface" style="display:block; padding: 0px 0px 0px 4px; margin:0px 0px 0px 0px; font-size:16px;"></span>';
+										 	$.each(emoList, function ( key, emo  ) {
+
+										 		html+='<span class="emo'+emo+'txt" style="display:block; padding: 0px 0px 0px 4px; margin:0px 0px 0px 0px; font-size:10px;"></span>';
+										 	});
+										 	
+										 html+='</div>';
+										 
+									};
+									if(layout.qDef.IMGCVTOG){
+										emoThisPic = imgFolderLocation + dim.qText;
+										html+='<div class="emotionCVText" style="position:absolute; color:#ffffff; background-color: rgba(0, 0, 0, 0.7); z-index:57; text-align:left; left:0px ;top:0px; width:80%; height:0%; overflow:auto; padding: 30px 4px 4px 4px; margin:0px 0px 0px 0px; line-height: auto; font-size:12px; display:none;"></div>';
+									};
+
 								} else {
 									
 									html += customSingleImageSourceHTML;
@@ -2816,8 +2853,8 @@ function($, cssContent) {'use strict';
 					        })
 					        .done(function(data) {
 					        	var dataExists = "description" in data;
-console.log("CV success");
-console.log(data);
+//console.log("CV success");
+//console.log(data);
 					            
 					            if(dataExists){
 					            	//add description
