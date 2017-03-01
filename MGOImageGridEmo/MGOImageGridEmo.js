@@ -575,7 +575,8 @@ function($, cssContent) {'use strict';
 								ref : "qDef.IMGEMOAPIKEY",
 								label : "Your MS emotion API key",
 								type : "string",
-								defaultValue : ""
+								defaultValue : "",
+								show: function(layout) { return layout.qDef.IMGEMOTOG } 
 								}
 							}
 						},
@@ -607,53 +608,61 @@ function($, cssContent) {'use strict';
 								},
 							descriptionsTxtTog : {
 								ref : "qDef.IMGCVTXTTOG",
-								label : "Display MS image description",
+								label : "Display description",
 								type : "boolean",
 								defaultValue : true,
 								show: function(layout) { return layout.qDef.IMGCVTOG } 
 								},
 							descriptionsTxtScoreTog : {
 								ref : "qDef.IMGCVTXTSCORETOG",
-								label : "Display MS's confidence score for the image description",
+								label : "Display confidence score for description",
 								type : "boolean",
 								defaultValue : false,
 								show: function(layout) { if(layout.qDef.IMGCVTOG & layout.qDef.IMGCVTXTTOG ){ return true } else { return false } } 
 								},
 							descriptionsCatsTog : {
 								ref : "qDef.IMGCVCATSTOG",
-								label : "Display MS image categories",
+								label : "Display categories",
 								type : "boolean",
 								defaultValue : false,
 								show: function(layout) { return layout.qDef.IMGCVTOG } 
 								},
 							descriptionsTagsTog : {
 								ref : "qDef.IMGCVTAGSTOG",
-								label : "Display top  MS tags for image",
+								label : "Display top tags",
 								type : "boolean",
 								defaultValue : false,
 								show: function(layout) { return layout.qDef.IMGCVTOG } 
 								},
 							descriptionsTagsGuessesTog : {
 								ref : "qDef.IMGCVALLTAGSTOG",
-								label : "Display all MS tags associated with image",
+								label : "Display all tags",
 								type : "boolean",
 								defaultValue : false,
 								show: function(layout) { return layout.qDef.IMGCVTOG } 
 								},
 							descriptionsColorsTog : {
 								ref : "qDef.IMGCVCOLSTOG",
-								label : "Display the 3 colors MS pulls from image (foreground, background, accent)",
+								label : "Display the 3 colors (foreground, background, accent)",
 								type : "boolean",
 								defaultValue : false,
 								show: function(layout) { return layout.qDef.IMGCVTOG } 
 								},
 							descriptionsFacesTog : {
 								ref : "qDef.IMGCVFACESTOG",
-								label : "Display MS face recognition (gender/age)",
+								label : "Display face recognition (gender/age)",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout) { return layout.qDef.IMGCVTOG } 
+								},
+							descriptionsOCRTog : {
+								ref : "qDef.IMGCVOCRTOG",
+								label : "If any TEXT, OCR it",
 								type : "boolean",
 								defaultValue : false,
 								show: function(layout) { return layout.qDef.IMGCVTOG } 
 								}
+
 							}
 						},
 					colourFlag: {
@@ -2510,7 +2519,7 @@ function($, cssContent) {'use strict';
 						            	var emoScore = parseFloat(data[0].scores[emo]);
 						            	emoBand.css('width', (emoScore * 99.9)+'%');
 						            	emoBandText.css('font-size', (Math.round(emoScore * 50)+10)+'px');
-						            	emoBandText.text((emoScore.toFixed(2) * 100) + '% '+emo);
+						            	emoBandText.text(Math.round(emoScore.toFixed(2) * 100) + '% '+emo);
 
 									
 									});
@@ -2640,6 +2649,10 @@ function($, cssContent) {'use strict';
 
 				var cvAnalysisRun=0;
 				var cvAnalysisRunHidden=0;
+
+				var mmContainerTarg = $element.find(('.mgoSinglePic'));
+
+				var mmContainerTargContainer = $element.find(('.mgoSinglePicC'));
 
 				var emoCVDescriptionOn=false, emoCVDescriptionScoreOn=false, emoCVCatsOn=false, emoCVTagsOn=false, emoCVAllTagsOn=false, emoCVColsOn=false, emoCVFacesOn=false;
 
@@ -2977,6 +2990,7 @@ function($, cssContent) {'use strict';
 
 
 						            		} else {
+						            			var targEmotionFacesBoxes = "";
 						            			CVfaceCountTxt = CVfaceCount + " face. ";
 						            			CVFacesDes = "<br>Probably a " + data.faces[0].gender.toLowerCase() + ' aged ' + data.faces[0].age+' years.';
 						            			var targFaceL= data.faces[0].faceRectangle['left'];
@@ -2984,7 +2998,7 @@ function($, cssContent) {'use strict';
 												var targFaceW= data.faces[0].faceRectangle['width'];
 												var targFaceH= data.faces[0].faceRectangle['height'];
 												var targFaceID = 0;
-												targEmotionFacesBoxes += '<span class="emoCVID '+ targFaceID +'" style="position:absolute; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;"></span>';
+												targEmotionFacesBoxes += '<span class="emoCVID '+ targFaceID +'" style="position:absolute; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;">Face 1</span>';
 												targEmotionFaces.html(targEmotionFacesBoxes);
 
 						            		};	
@@ -3013,6 +3027,84 @@ function($, cssContent) {'use strict';
 							        analysisCVbut.prop('disabled', false);
 
 							        cvAnalysisRun=1;
+
+							        //OCR - text reading
+							        
+									if((CVcategories.indexOf("text") != -1) & (layout.qDef.IMGCVOCRTOG)){
+										console.log('Text OCR');
+										analysisCVbut.html('OCR...');
+										analysisCVbut.css('background-color', '#CCCCCC');
+										analysisCVbut.prop('disabled', true);
+										$(function() {
+									        var params = {
+									            // Request parameters
+									            "language": "unk",
+									            "detectOrientation ": "true",
+									        };
+									      
+									        $.ajax({
+									            url: "https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr?" + $.param(params),
+									            beforeSend: function(xhrObj){
+									                // Request headers
+									                xhrObj.setRequestHeader("Content-Type","application/json");
+									                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key",MSCVAPIKEY);
+									            },
+									            type: "POST",
+									            // Request body
+									            data: '{"url": "'+emoThisPic+'" }',
+									        })
+									        .done(function(data) {
+									            console.log("ORC success");
+									            console.log(data);
+									            //var OCRLanguage =data.language;
+									            var OCRtextOutput ="";
+
+									            if(data.regions.length > 0){
+									            	$.each(data.regions, function ( r  ) {
+									            		var curRegion = data.regions[r];
+									            		
+									            		$.each(curRegion.lines, function ( l  ) {
+									            			var curline = curRegion.lines[l];
+									            			
+									            			OCRtextOutput+='<br>';
+									            			$.each(curline.words, function ( w  ) {
+									            				var curword = curline.words[w].text;
+									            				
+									            				OCRtextOutput+= curword+" ";
+									            			});
+
+									            		});
+
+									            	});
+
+									            	 
+
+									            } else {
+									            	OCRtextOutput = "no text could be read";
+									            };
+
+									            emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">OCR text: '+OCRtextOutput+'</span>');
+									            analysisCVbut.html('Description');
+							        			analysisCVbut.css('background-color', '#FFFFFF');
+							        			analysisCVbut.prop('disabled', false);
+
+									        })
+									        .fail(function() {
+									            console.log("OCR error");
+									            analysisCVbut.html('Description');
+							        			analysisCVbut.css('background-color', '#FFFFFF');
+							        			analysisCVbut.prop('disabled', false);
+									        });
+									    });
+
+
+
+									} else if (layout.qDef.IMGCVOCRTOG){
+										emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">No OCR-able text found</span>');
+									};
+
+
+
 							    } else {
 							    	emotionCVText.css('height', '0%');
 							    	emotionCVText.css('display', 'none');
