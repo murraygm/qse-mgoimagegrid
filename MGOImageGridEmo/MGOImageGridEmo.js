@@ -2892,7 +2892,7 @@ function($, cssContent) {'use strict';
 					            		
 					            	};
 					            	//add cats
-						            if(emoCVCatsOn){
+						            
 						            	var CVcategories="";
 						            	
 							            $.each(data.categories, function ( key, cat  ) {
@@ -2904,8 +2904,10 @@ function($, cssContent) {'use strict';
 							            	};
 							            	
 							            });
+							        if(emoCVCatsOn){
 							            emotionCVText.append('<span style="font-size:12px; padding:2px 4px; display:block; text-align:left;">MS categories: '+CVcategories+'</span>');
 						            };
+
 						            //add tags
 						            if(emoCVTagsOn){
 						            	var CVtags = "";
