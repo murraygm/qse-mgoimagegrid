@@ -2552,7 +2552,7 @@ function($, cssContent) {'use strict';
 										var targFaceW= data[key].faceRectangle['width'];
 										var targFaceH= data[key].faceRectangle['height'];
 										var targFaceID = 'emoFacetoID' + key;
-										targEmotionFacesBoxes += '<span class="emoFaceID '+ targFaceID +'" data-value="'+ key+'" style="position:absolute; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;">Face '+(key+1)+'</span>';
+										targEmotionFacesBoxes += '<span class="emoFaceID '+ targFaceID +'" data-value="'+ key+'" style="position:absolute; opacity:0.6; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;">Face '+(key+1)+'</span>';
 
 									});
 
@@ -2983,7 +2983,7 @@ function($, cssContent) {'use strict';
 													var targFaceW= data.faces[key].faceRectangle['width'];
 													var targFaceH= data.faces[key].faceRectangle['height'];
 													var targFaceID = key;
-													targEmotionFacesBoxes += '<span class="emoCVID '+ targFaceID +'" style="position:absolute; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;">Face '+(key+1)+'</span>';
+													targEmotionFacesBoxes += '<span class="emoCVID '+ targFaceID +'" style="position:absolute; opacity:0.9; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;">Face '+(key+1)+'</span>';
 
 												});
 
@@ -3000,7 +3000,7 @@ function($, cssContent) {'use strict';
 												var targFaceW= data.faces[0].faceRectangle['width'];
 												var targFaceH= data.faces[0].faceRectangle['height'];
 												var targFaceID = 0;
-												targEmotionFacesBoxes += '<span class="emoCVID '+ targFaceID +'" style="position:absolute; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;">Face 1</span>';
+												targEmotionFacesBoxes += '<span class="emoCVID '+ targFaceID +'" style="position:absolute; opacity:0.9; display:block; border:2px solid #FFFFFF; background:transparent;left:'+targFaceL+'px;top:'+targFaceT+'px;width:'+targFaceW+'px;height:'+targFaceH+'px;">Face 1</span>';
 												targEmotionFaces.html(targEmotionFacesBoxes);
 
 						            		};	
