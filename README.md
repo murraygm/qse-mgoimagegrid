@@ -18,12 +18,18 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 * can also add API key for MS computer vision and bring back suggestion on the content of image.
 * option to OCR any text found in the image (needs flat big type for MS cog services to work well).
 
+Also:
+* Changed the Qlik selection style, so that it now displays ticks for selected in active selection mode and the other images available for selection no longer appear knocked back 
+
 ** [Download zip directly mgoimagegridemo.zip](https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridEmo.zip) **
 
 ![emo1][emo1]
 [emo1]: https://github.com/murraygm/qse-mgoimagegrid/raw/master/screenshots/cognitive.png "emo1"
 
-## Version 3 - for use in Qlik Sense 3.0
+## Version 3 - for use in Qlik Sense 3.#
+**Recent tweaks (mar 2017):**
+* Changed the Qlik selection style, so that it now displays ticks for selected in active selection mode and the other images available for selection no longer appear knocked back 
+
 **Recent tweaks (aug 2016):**
 * option to hide the image count (on grid and 1up views)
 * Minor formatting and text changes
