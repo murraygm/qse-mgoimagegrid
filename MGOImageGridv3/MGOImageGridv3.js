@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.0,
+			version: 3.1,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -306,16 +306,16 @@ function($, cssContent) {'use strict';
 									tooltip: "Set a fixed colour for the grid"
 								},{
 									value: "m1",
-									label: "Measure 1 for colour opacity",
-									tooltip: "Use the first measure to set ccustom colour saturation per image"
+									label: "Measure 1",
+									tooltip: "Use the first measure to set custom colour per image"
 								}, {
 									value: "m2",
-									label: "Measure 2 for colour opacity",
-									tooltip: "Use the second measure to set ccustom colour saturation per image"
+									label: "Measure 2",
+									tooltip: "Use the second measure to set custom colour per image"
 								},{
 									value: "m3",
-									label: "Measure 3 for colour opacity",
-									tooltip: "Use the third measure to set ccustom colour saturation per image"
+									label: "Measure 3",
+									tooltip: "Use the third measure to set custom colour per image"
 								}],
 								defaultValue: "n",
 								show: function(layout) { return layout.qDef.IMGOBGCOL } 
@@ -1558,11 +1558,42 @@ function($, cssContent) {'use strict';
 			
 			// selections
 			$element.find('.selectable').on('qv-activate', function() {
+				var targSelectedPicCont = $(this).find('>:first-child');
+				var targSelectedPic = $(this).find('.mgoPicGrid > .mgoPicGrid');
+
 				if(this.hasAttribute("data-value")) {
 					var value = parseInt(this.getAttribute("data-value"), 10), dim = 0;
-						self.selectValues(dim, [value], true);
+						self.selectValues(dim, [value], true);						
 						$(this).toggleClass("selected");
-				}
+
+				};
+				if($(this).parents('.qv-selections-active').length > 0){
+
+                    if( $(this).hasClass("selected")){
+                    	var origPicContBG = targSelectedPicCont.css('background-color');
+						var origPicOpacity = targSelectedPic.css('opacity');
+						var insertOrigBGOP = origPicContBG +'|'+origPicOpacity;
+
+                        targSelectedPicCont.css('background-color', '#4ccd4a');
+                        targSelectedPic.css('opacity', '0.7');
+                        var createTickrefH=Math.round(targSelectedPicCont.css('height').replace('px',''));
+                        var createTickrefW=Math.round(targSelectedPicCont.css('width').replace('px',''));
+                        $(this).append('<span data-value="'+insertOrigBGOP+'" class="tickID'+value+' mgoSelectiontick" style="height:'+createTickrefH+'px;width:'+createTickrefW+'px; margin-left:-'+createTickrefW+'px;"></span>');           
+                        
+                    } else {
+                    	var removeTick = $element.find('.tickID'+value);
+                    	if(removeTick.attr("data-value")) {
+                    		var origSelectvalues = removeTick.attr("data-value").split('|');
+                    		targSelectedPicCont.css('background-color', origSelectvalues[0]);
+                        	targSelectedPic.css('opacity', origSelectvalues[1]); 
+
+                    	};
+                        removeTick.remove();
+
+                    }
+                }
+
+
 			});
 
 			
