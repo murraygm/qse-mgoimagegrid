@@ -1517,7 +1517,7 @@ function($, cssContent) {'use strict';
 									};
 
 									if(layout.qDef.IMGEMOTOG){
-										 emoThisPic = imgFolderLocation + dim.qText;
+										 emoThisPic = customSingleImageSourceURL;
 										 html+='<div class="emotionBox" style="position:absolute; z-index:50; top:0px; width:100%; height:0%; mix-blend-mode: multiply; overflow:hidden">';
 										 	$.each(emoList, function ( key, emo  ) {
 
@@ -1537,7 +1537,7 @@ function($, cssContent) {'use strict';
 										 
 									};
 									if(layout.qDef.IMGCVTOG){
-										emoThisPic = imgFolderLocation + dim.qText;
+										emoThisPic = customSingleImageSourceURL;
 										html+='<div class="emotionCVText" style="position:absolute; color:#ffffff; background-color: rgba(0, 0, 0, 0.7); z-index:57; text-align:left; left:0px ;top:0px; width:80%; height:0%; overflow:auto; padding: 30px 4px 4px 4px; margin:0px 0px 0px 0px; line-height: auto; font-size:12px; display:none;"></div>';
 									};
 
