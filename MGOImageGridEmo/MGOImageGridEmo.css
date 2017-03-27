@@ -222,6 +222,6 @@ span.mgoQlikIcons {
 
 .qv-object-MGOImageGridEmo span.mgoSelectiontick{
 	position:relative; z-index: 100; left:0px; top:0px;
-	display:inline-block; padding: 0px 0px 0px 0px; margin: 0px 0px 0px -30px; height:30px; width:30px; background-position: 50% 50%; background-repeat: no-repeat; background-image: url(../Extensions/MGOImageGridEmo/greentick.png); background-size:50%; 
+	display:inline-block; padding: 0px 0px 0px 0px; margin: 0px 0px 0px -30px; height:30px; width:30px; background-position: 50% 50%; background-repeat: no-repeat; background-image: url(../Extensions/MGOImageGridv3/greentick.png),url(../MGOImageGridv3/greentick.png); background-size:50%; 
 	}
 
