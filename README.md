@@ -24,7 +24,8 @@ Also:
 ** [Download zip directly mgoimagegridemo.zip](https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridEmo.zip) **
 
 ![emo1][emo1]
-[emo1]: https://github.com/murraygm/qse-mgoimagegrid/raw/master/screenshots/cognitive.png "emo1"
+
+[emo1]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/cognitive.png "emo1"
 
 ## Version 3 - for use in Qlik Sense 3.#
 **Recent tweaks (mar 2017):**
