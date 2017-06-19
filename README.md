@@ -1,7 +1,7 @@
 # qse-mgoimagegrid
 Qlik Sense Extension to display images - for use with Qlik Sense
 
-**Download a zip of just the v3 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
+**Download a zip of just the v3.2 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
 
 **DOWNLOAD FULL PROJECT VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
@@ -28,6 +28,9 @@ Also:
 [emo1]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/cognitive.png "emo1"
 
 ## Version 3 - for use in Qlik Sense 3.#
+**Recent tweaks (June 2017):**
+* Added printing capability to main Image Grid Extension (not to the Emo version)
+
 **Recent tweaks (mar 2017):**
 * Changed the Qlik selection style, so that it now displays ticks for selected in active selection mode and the other images available for selection no longer appear knocked back 
 
