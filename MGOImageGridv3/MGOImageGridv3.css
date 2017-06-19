@@ -2,6 +2,47 @@
 	overflow: auto;
 }
 
+@media print{
+	.forceShow{
+		overflow: visible !important;
+	}
+	.mmPrintMessage{
+		display:none;
+
+	}
+	.mgoGridImgCount{
+		display:none;
+
+	}
+
+
+
+}
+
+
+.qv-object-MGOImageGridv3 #mmIComtainer button{
+		display:none;
+	}
+.qv-object-MGOImageGridv3 #mmIComtainer .mgoGridImgCount{
+		display:none;
+	}	
+
+.qv-object-MGOImageGridv3 .mmPrintMessage{
+	 position: absolute;
+	 right:20px;
+	 top:20px;
+	 width:350px;
+	 height:auto;
+	 background-color: rgba(255, 255, 255, 0.9);
+	 color: #606060;
+	 font-size: 16px;
+	 line-height: 18px;
+	 font-weight: bold;
+	 z-index:2000;
+	 padding:10px;
+	 border-radius: 5px;
+	 border: 1px solid #cc0000;
+	}
 
 .qv-object-MGOImageGridv3 {
 	font-size: 0px;

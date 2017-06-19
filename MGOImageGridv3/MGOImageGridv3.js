@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.1,
+			version: 3.2,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -507,7 +507,7 @@ function($, cssContent) {'use strict';
 						},
 					imageDisplayLimit: {
 						type:"items",
-						label:"Limit display and loading",
+						label:"Limit grid display and loading",
 						items: {
 							imagePagingDisplay : {
 								ref : "qDef.IMGPAGINGDISPLAY",
@@ -544,12 +544,33 @@ function($, cssContent) {'use strict';
 								},
 							IMGPAGING1UP : {
 								ref : "qDef.IMGPAGING1UP",
-								label : "Use a 1 up single image paging display instead of a grid (for best results set above options to 1)",
+								label : "Use a 1 up single image paging display instead of a grid ",
 								type : "boolean",
 								defaultValue : false,
 								show: function(layout) { return layout.qDef.IMGPAGING } 
+								},
+							IMGPAGING1UPNOTE : {
+								label : "For best results in 1 up mode, set 'Maximum number of images to initially load' and 'Number of images per page' to 1",
+								component : "text",
+								show: function(layout) {return layout.qDef.IMGPAGING1UP } 
 								}
 
+							}
+						},
+					imagePrinting: {
+						type:"items",
+						label:"Printing options",
+						items: {
+							IMGPRINTTEXT : {
+								label:"This extension uses a custom approach to printing which allows you to print the images currently displayed (either in the grid or in single image mode).",
+								component: "text"
+							},
+							IMGPRINTGRIDTOG : {
+								ref : "qDef.IMGPRINTGRIDTOG",
+								label : "Enable image printing",
+								type : "boolean",
+								defaultValue : true
+								}
 							}
 						},
 					colourFlag: {
@@ -684,8 +705,9 @@ function($, cssContent) {'use strict';
 		
 
 		paint: function ( $element,layout ) {
-			var html = "", self = this, lastrow = 0, firstrow = 0, morebutton = false, lessbutton = false, imgSelectType = layout.qDef.IMGLINK, rowcount = this.backendApi.getRowCount(), imgFolderLocation = "", qData = layout.qHyperCube.qDataPages[(layout.qHyperCube.qDataPages.length - 1)], mymeasureCount = layout.qHyperCube.qMeasureInfo.length, mydimensionCount = layout.qHyperCube.qDimensionInfo.length, measBarCol1 = "FFF", measBarCol2="FFF", measBarHeight=10,  imgScaleSingle = "mgoImgScaleFit", imgBGCol = "FFF", imgBorderCol = "FFF", imgBorderSize = 0, imgCHeight = 100, imgCWidth = 100, imgScaleGrid = "mgoImgScaleFit";
+			var self = this, lastrow = 0, firstrow = 0, morebutton = false, lessbutton = false, imgSelectType = layout.qDef.IMGLINK, rowcount = this.backendApi.getRowCount(), imgFolderLocation = "", qData = layout.qHyperCube.qDataPages[(layout.qHyperCube.qDataPages.length - 1)], mymeasureCount = layout.qHyperCube.qMeasureInfo.length, mydimensionCount = layout.qHyperCube.qDimensionInfo.length, measBarCol1 = "FFF", measBarCol2="FFF", measBarHeight=10,  imgScaleSingle = "mgoImgScaleFit", imgBGCol = "FFF", imgBorderCol = "FFF", imgBorderSize = 0, imgCHeight = 100, imgCWidth = 100, imgScaleGrid = "mgoImgScaleFit";
 			var imgriduniqueID = layout.qInfo.qId;
+			var html = '<div id="mmI'+imgriduniqueID+'">';
 			
 			var imgridpage = layout.qDef.IMGPAGINGSIZE;
 			var mgoSinglePicModeActive;
@@ -1345,13 +1367,26 @@ function($, cssContent) {'use strict';
 								html+= '<button class="lui-button butZoomout mgoIconButAdjust" alt="Zoom Out"><span class="lui-icon lui-icon--zoom-out"></span></button> ';
 								html+= '<button class="lui-button butZoomin mgoIconButAdjust" alt="Zoom In"><span class="lui-icon lui-icon--zoom-in"></span></button> ';
 								html+= '<button class="lui-button butRotate mgoIconButAdjust" alt="Rotate"><span class="lui-icon lui-icon--sync"></span></button> ';
-								html+= '<button class="lui-button butReposition">Reset</button>';			
+								html+= '<button class="lui-button butReposition">Reset</button>';
+								if(layout.qDef.IMGPRINTGRIDTOG){
+								//single print
+									html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';	
+								};			
 								html+= '</div>';
+
 							}; 
 
 		
+						} else {
+							if(layout.qDef.IMGPRINTGRIDTOG){
+								//single print
+								html+= '<div class="mgoControlButs">';
+								html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';	
+								html+= '</div>';
+							};	
 						};
-
+						
+							
 						// render image 
 						if(customSingleImageNSourceTog){
 							if(rowcount == 1){
@@ -1452,6 +1487,8 @@ function($, cssContent) {'use strict';
 				//add more button
 				//console.log(layout.qHyperCube.qDataPages);
 				// 1 up or standard
+				
+
 				var imgPagingButtonStyle, imgPagingButtonLStyle, imgPagingButtonMStyle, imgPagingReset;
 				if((grid1upDisplay) & (imgridpage==1)){
 					imgPagingButtonStyle = 'style="'+ hideImageCount +' position: absolute; top: 0px; right:5px; z-index:100; font-size:10px; color:rgba(255,255,255,0.7); margin:4px 0px"';
@@ -1475,7 +1512,7 @@ function($, cssContent) {'use strict';
 							html += ' of ' + rowcount + ' images</div>';
 						};
 					} else {
-						html += '<div '+imgPagingButtonStyle+'>'+ ((imgpagedsofar-imgridpage)+1) + ' to ';
+						html += '<div class="mgoGridImgCount" '+imgPagingButtonStyle+'>'+ ((imgpagedsofar-imgridpage)+1) + ' to ';
 						if(imgpagedsofar > rowcount){
 							html += rowcount + ' of ' + rowcount + ' images</div>';
 						} else {
@@ -1510,7 +1547,15 @@ function($, cssContent) {'use strict';
 
 			};
 
-			
+			if(layout.qDef.IMGPRINTGRIDTOG){
+				//grid print
+				if(!mgoSinglePicModeActive){
+					html+= '<button class="butPrint lui-button" style="margin-right:2px;margin-bottom:8px;margin-top:4px;" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';
+				};
+				//single print
+
+			};
+			html+= '</div>';
 			$element.html( html );
 
 			
@@ -1569,6 +1614,8 @@ function($, cssContent) {'use strict';
 				};
 				if($(this).parents('.qv-selections-active').length > 0){
 
+					
+
                     if( $(this).hasClass("selected")){
                     	var origPicContBG = targSelectedPicCont.css('background-color');
 						var origPicOpacity = targSelectedPic.css('opacity');
@@ -1578,7 +1625,7 @@ function($, cssContent) {'use strict';
                         targSelectedPic.css('opacity', '0.7');
                         var createTickrefH=Math.round(targSelectedPicCont.css('height').replace('px',''));
                         var createTickrefW=Math.round(targSelectedPicCont.css('width').replace('px',''));
-                        $(this).append('<span data-value="'+insertOrigBGOP+'" class="tickID'+value+' mgoSelectiontick" style="height:'+createTickrefH+'px;width:'+createTickrefW+'px; margin-left:-'+createTickrefW+'px;"></span>');           
+                        $(this).append('<span data-value="'+insertOrigBGOP+'" class="tickID'+value+' mgoSelectiontick" style="height:'+createTickrefH+'px;width:'+createTickrefW+'px; margin-left:-'+createTickrefW+'px; "></span>');           
                         
                     } else {
                     	var removeTick = $element.find('.tickID'+value);
@@ -2094,8 +2141,41 @@ function($, cssContent) {'use strict';
 					rotateImgTurns= 0;
 
 				});
+				
 			};
 			
+			$element.find('.butPrint').on('click', function() {
+				 var mmToPrint = 'mmI'+imgriduniqueID;
+			     var printContents = document.getElementById(mmToPrint).innerHTML;
+			     //var originalContents = document.body.innerHTML;
+
+			     if(mgoSinglePicModeActive){
+				     document.body.innerHTML = '<div class="mmPrintMessage">Print using the browser or button below<br><br>'
+				     +'<br><br><button class="lui-button lui-button--success mmIconButAdjust" alt="Fit Height" onclick="window.print();" type="button"><span class="lui-icon lui-icon--print"></span> Print</button> <button class="lui-button" onclick="location.reload();">Return to sheet</button></div><div id="mmIComtainer" style="background-color:#ffffff">'+printContents+'</div>';
+			 	} else {
+			 		document.body.innerHTML = '<div class="mmPrintMessage">Print using the browser or button below, then choose a large format (best from a PDF writer) to output to, eg A0 as this will help tiling other wise the images will page.<br><br>'
+				     +'If your print dialogue does not allow for large pages, you can scale the grid using these controls.<br><br>'
+				     + 'Size:<br><span class="lui-buttongroup">'
+				     + ' <button class="lui-button" onclick="var tg=document.getElementById(\'mmIComtainer\'); tg.style.transformOrigin=\'0 0\'; tg.style.transform=\'scale(0.25)\'; tg.style.width=\'400%\';">25%</button>'
+				     + ' <button class="lui-button" onclick="var tg=document.getElementById(\'mmIComtainer\'); tg.style.transformOrigin=\'0 0\'; tg.style.transform=\'scale(0.5)\'; tg.style.width=\'200%\';">50%</button>'
+				     + ' <button class="lui-button" onclick="var tg=document.getElementById(\'mmIComtainer\'); tg.style.transformOrigin=\'50% 50%\'; tg.style.transform=\'scale(1.0)\'; tg.style.width=\'100%\';"">100%</button>'
+				     + ' <button class="lui-button" onclick="var tg=document.getElementById(\'mmIComtainer\'); tg.style.transformOrigin=\'0 0\'; tg.style.transform=\'scale(2.0)\'; tg.style.width=\'50%\';">200%</button>'
+				     + ' <button class="lui-button" onclick="var tg=document.getElementById(\'mmIComtainer\'); tg.style.transformOrigin=\'0 0\'; tg.style.transform=\'scale(4.0)\'; tg.style.width=\'25%\';">400%</button>'
+				     + ' </span>'
+				     +'<br><br><button class="lui-button lui-button--success mmIconButAdjust" alt="Fit Height" onclick="window.print();" type="button"><span class="lui-icon lui-icon--print"></span> Print</button> <button class="lui-button" onclick="location.reload();">Return to sheet</button></div><div id="mmIComtainer" style="background-color:#ffffff">'+printContents+'</div>';
+			 	};
+			     
+
+			     document.body.className = "";
+			     document.body.className = 'qv-object-MGOImageGridv3 forceShow';
+			     document.body.style.overflow = 'scroll';
+
+			     
+			});
+
+			
+			return Promise.resolve();
+
 		}
 		
 	};
