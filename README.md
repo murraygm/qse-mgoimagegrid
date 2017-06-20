@@ -4,7 +4,7 @@ Qlik Sense Extension to display images - for use with Qlik Sense
 **Download a zip of just the v3.2 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
 
 **Recent tweaks (June 2017):**
-* Added printing capability to main Image Grid Extension (not to the Emo version) - Possible issue printing from desktop client (background image printing needs to be on). Option available when printing through the browser but not in all Win dialogs.
+* Added printing capability to main Image Grid Extension (not to the Emo version) - Possible issue printing from desktop client (background image printing needs to be on). Option available when printing through the browser but not in all Win dialogs. FOR BEST RESULTS PRINT TO PDF FIRST
 
 
 **DOWNLOAD FULL PROJECT VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
