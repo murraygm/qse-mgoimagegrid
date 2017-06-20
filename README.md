@@ -13,24 +13,6 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 *Grab a couple of fun apps on my [Qlik Sense Apps github page](https://github.com/murraygm/qs-mgoqliksenseapps) to try the extension out with, choose from The New York Public Library (190k images), The British Library (1 million images) or The Internet Archive (65K books - 24 million page scans, 5 million images)*
 
-## New parallel version to V3 - MGO Image Grid Emo, with content, facial and emotion recognition
-**Uses Microsoft's Cognitive Services APIs (keys required - Computer Vision and Emotion)**
-* Different name and ID for Emo or standard Image Grid, so you can have both running
-* Needs Emotion API key and the referenced image to be of a publically accessable server
-* currently works on a manual (button click) request per image, to avoid burning through API limit
-* works with multipl faces, mouseover face to see colour bands and scores for individual face.
-* can also add API key for MS computer vision and bring back suggestion on the content of image.
-* option to OCR any text found in the image (needs flat big type for MS cog services to work well).
-
-Also:
-* Changed the Qlik selection style, so that it now displays ticks for selected in active selection mode and the other images available for selection no longer appear knocked back 
-
-** [Download zip directly mgoimagegridemo.zip](https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridEmo.zip) **
-
-![emo1][emo1]
-
-[emo1]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/cognitive.png "emo1"
-
 ## Version 3 - for use in Qlik Sense 3.#
 **Recent tweaks (June 2017):**
 * Added printing capability to main Image Grid Extension (not to the Emo version)
@@ -60,13 +42,30 @@ See new example app "MGO Image Grid v3 example.qvf" for more details
 ![Propertiesv3][Propsv3]
 ![Screenshotv3][Examplev3]
 
-V3 properties
 
 [Propsv3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/imagegrid_props_v3.png "Propertiesv3"
 
-V3 Screenshot
 
 [Examplev3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/Screen%20Shot%20v3.png "Properties" 
+
+
+## New parallel version to V3 - MGO Image Grid Emo, with content, facial and emotion recognition
+**Uses Microsoft's Cognitive Services APIs (keys required - Computer Vision and Emotion)**
+* Different name and ID for Emo or standard Image Grid, so you can have both running
+* Needs Emotion API key and the referenced image to be of a publically accessable server
+* currently works on a manual (button click) request per image, to avoid burning through API limit
+* works with multipl faces, mouseover face to see colour bands and scores for individual face.
+* can also add API key for MS computer vision and bring back suggestion on the content of image.
+* option to OCR any text found in the image (needs flat big type for MS cog services to work well).
+
+Also:
+* Changed the Qlik selection style, so that it now displays ticks for selected in active selection mode and the other images available for selection no longer appear knocked back 
+
+** [Download zip directly mgoimagegridemo.zip](https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridEmo.zip) **
+
+![emo1][emo1]
+
+[emo1]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/cognitive.png "emo1"
 
 
 
