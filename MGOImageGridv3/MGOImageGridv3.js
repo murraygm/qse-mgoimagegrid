@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.2,
+			version: 3.4,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -183,6 +183,13 @@ function($, cssContent) {'use strict';
 								}],
 								defaultValue: true
 								},
+							imageClickFastselect: {
+								ref : "qDef.IMGGRIDFASTSELECT",
+								label : "Use instant selection (remove multi-select on grid)",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout)  { return layout.qDef.IMGLINK } 
+							}, 
 							imagePopSourceLinkType : {
 								type: "string",
 								component: "dropdown",
@@ -712,6 +719,7 @@ function($, cssContent) {'use strict';
 			var imgridpage = layout.qDef.IMGPAGINGSIZE;
 			var mgoSinglePicModeActive;
 			var killzoomcontrols = true;
+
 
 			var hideImageCount;
 			if(layout.qDef.IMGPAGINGDISPLAY){
@@ -1371,7 +1379,8 @@ function($, cssContent) {'use strict';
 								if(layout.qDef.IMGPRINTGRIDTOG){
 								//single print
 									html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';	
-								};			
+								};
+								html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';			
 								html+= '</div>';
 
 							}; 
@@ -1381,7 +1390,12 @@ function($, cssContent) {'use strict';
 							if(layout.qDef.IMGPRINTGRIDTOG){
 								//single print
 								html+= '<div class="mgoControlButs">';
-								html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';	
+								html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';
+								html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';	
+								html+= '</div>';
+							} else {
+								html+= '<div class="mgoControlButs">';
+								html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';	
 								html+= '</div>';
 							};	
 						};
@@ -1482,6 +1496,7 @@ function($, cssContent) {'use strict';
 			
 			var morebutpagetotal = Math.ceil(rowcount / imgridpage);
 			var imgpagedsofar = imgridpage*layout.qHyperCube.qDataPages.length;
+
 			//paging controls
 			if(layout.qDef.IMGPAGINGTOG){ 
 				//add more button
@@ -1558,7 +1573,6 @@ function($, cssContent) {'use strict';
 			html+= '</div>';
 			$element.html( html );
 
-			
 
 			if(morebutton) {
 				var requestPage = [{
@@ -1603,13 +1617,18 @@ function($, cssContent) {'use strict';
 			
 			// selections
 			$element.find('.selectable').on('qv-activate', function() {
+				
 				var targSelectedPicCont = $(this).find('>:first-child');
 				var targSelectedPic = $(this).find('.mgoPicGrid > .mgoPicGrid');
 
 				if(this.hasAttribute("data-value")) {
 					var value = parseInt(this.getAttribute("data-value"), 10), dim = 0;
+					if(layout.qDef.IMGGRIDFASTSELECT || grid1upDisplay){
+						self.backendApi.selectValues(dim, [value], true);	
+					} else {
 						self.selectValues(dim, [value], true);						
 						$(this).toggleClass("selected");
+					};
 
 				};
 				if($(this).parents('.qv-selections-active').length > 0){
@@ -1643,11 +1662,29 @@ function($, cssContent) {'use strict';
 
 			});
 
-			
+			$element.find('.butClose').on('click', function(e) {
+
+				
+				var dim = 0;
+										
+				require(["js/qlik"], function(qlik) {
+					// open the app
+					var app = qlik.openApp(qlik.currApp().id);
+					var targNameFieldtoClear = layout.qHyperCube.qDimensionInfo[dim].qGroupFieldDefs[dim];
+
+					var lastNameField = app.field(targNameFieldtoClear);
+					lastNameField.clear();
+				});
+
+				
+					
+
+				
+			});
 
 			//image mouseover
 
-
+			
 
 			//measure mouse over 
 
