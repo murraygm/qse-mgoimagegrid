@@ -3,6 +3,9 @@ Qlik Sense Extension to display images - for use with Qlik Sense
 
 **Download a zip of just the v3.2 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
 
+**Recent tweaks (Aug 2017):**
+* Added a fast select option under the grid properties - means that click on image gets instantly selected with no selections modal. Also added a clear button (x) to top right of image when in single image view, to clear that image selection. Useful for mashups etc.
+
 **Recent tweaks (June 2017):**
 * Added printing capability to main Image Grid Extension (not to the Emo version) - Possible issue printing from desktop client (background image printing needs to be on). Option available when printing through the browser but not in all Win dialogs. FOR BEST RESULTS PRINT TO PDF FIRST
 
