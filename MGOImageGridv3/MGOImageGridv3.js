@@ -1556,7 +1556,7 @@ function($, cssContent) {'use strict';
 
 
 			} else {
-				if((rowcount-(lastrow + 1))>0){
+				if((rowcount-imgridpage)==0){
 					html += '<br>' + '<div style="font-size:12px; '+ hideImageCount +' color:#AAA; margin:4px 0px">Display limited to first ' + (lastrow + 1) + ' of ' + rowcount + ' images</div>';
 				};
 
@@ -1565,7 +1565,11 @@ function($, cssContent) {'use strict';
 			if(layout.qDef.IMGPRINTGRIDTOG){
 				//grid print
 				if(!mgoSinglePicModeActive){
+					if(((rowcount - imgpagedsofar) < 1) || (!layout.qDef.IMGPAGINGTOG)){
+						html+= '<br>';
+					}; 
 					html+= '<button class="butPrint lui-button" style="margin-right:2px;margin-bottom:8px;margin-top:4px;" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';
+					
 				};
 				//single print
 
