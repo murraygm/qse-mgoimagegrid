@@ -52,7 +52,7 @@ See new example app "MGO Image Grid v3 example.qvf" for more details
 [Examplev3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/Screen%20Shot%20v3.png "Properties" 
 
 
-## New parallel version to V3 - MGO Image Grid Emo, with content, facial and emotion recognition
+## New side version to V3 (cut from 3.1 - for fun only) - MGO Image Grid Emo, with content, facial and emotion recognition
 **Uses Microsoft's Cognitive Services APIs (keys required - Computer Vision and Emotion)**
 * Different name and ID for Emo or standard Image Grid, so you can have both running
 * Needs Emotion API key and the referenced image to be of a publically accessable server
