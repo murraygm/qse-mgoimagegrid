@@ -267,4 +267,24 @@ span.mgoQlikIcons {
 	display:inline-block; padding: 0px 0px 0px 0px; margin: 0px 0px 0px -30px; height:30px; width:30px; background-position: 50% 50%; background-repeat: no-repeat; background-image: url(../Extensions/MGOImageGridv3/greentick.png),url(../MGOImageGridv3/greentick.png); background-size:50%; 
 	}
 
+.mgoImgEffectBW {
+	filter: grayscale(100%);
+	webkit-filter: grayscale(100%);
+	
+}
+.mgoImgEffectBWMultiply {
+	filter: grayscale(100%) brightness(150%);
+	webkit-filter: grayscale(100%) brightness(150%);
+	mix-blend-mode: multiply;
+}
+.mgoImgEffectBWScreen {
+	filter: grayscale(100%) contrast(150%);
+	webkit-filter: grayscale(100%) contrast(150%);
+	mix-blend-mode: screen;
+}
+.mgoImgEffectBlur {
+	filter: blur(5px);
+	webkit-filter: blur(5px);
+	
+}
 

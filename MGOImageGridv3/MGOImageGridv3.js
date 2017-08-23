@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.4,
+			version: 3.5,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -335,7 +335,30 @@ function($, cssContent) {'use strict';
 								defaultValue: "FFF",
 								show: function(layout) { return layout.qDef.IMGOBGCOL } 
 								},
-
+							customImageEffect : {
+								type: "string",
+								component: "dropdown",
+								label: "Image effect",
+								ref: "qDef.IMGEFFECTTYPE",
+								options: [{
+									value: "n",
+									label: "No effect",
+									tooltip: "No effect"
+								},{
+									value: "b",
+									label: "Black and white",
+									tooltip: "Convert to black and white"
+								}, {
+									value: "m",
+									label: "Multiply colour blend",
+									tooltip: "Make black mono and blend with background colour"
+								}, {
+									value: "s",
+									label: "Screen colour blend",
+									tooltip: "Make white mono and blend with background colour"
+								}],
+								defaultValue: "n"
+								},
 							imageBorder : {
 								ref: "qDef.IMGBORDER",
 								label: "Custom image border",
@@ -677,6 +700,10 @@ function($, cssContent) {'use strict';
 									label: "Background colour",
 									tooltip: "Overide background colour"
 								},{
+									value: "e",
+									label: "Overide effect",
+									tooltip: "Overide image effect (eg turn of black and white)"
+								},{
 									value: "t1",
 									label: "Colour for measure 1",
 									tooltip: "Overide colour on measure 1"
@@ -694,7 +721,7 @@ function($, cssContent) {'use strict';
 								label : "To this colour (HEX)",
 								defaultValue : "F00",
 								ref: "qDef.IMGCOLORFLAGDTARGCOL",
-								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0)){ return true } else { return false } } 
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0) & (layout.qDef.IMGCOLORFLAGTARG != "e")){ return true } else { return false } } 
 								}
 
 							}
@@ -1015,6 +1042,21 @@ function($, cssContent) {'use strict';
 						//console.log(imgBGColInsert);
 					};
 				
+					//SETUP IMAGE EFFECT
+					var custImgEffectClass="";
+					if(layout.qDef.IMGEFFECTTYPE=="n"){
+						custImgEffectClass="";
+					} else if (layout.qDef.IMGEFFECTTYPE=="b"){
+						custImgEffectClass="mgoImgEffectBW";
+					} else if (layout.qDef.IMGEFFECTTYPE=="m"){
+						custImgEffectClass="mgoImgEffectBWMultiply";
+					} else if (layout.qDef.IMGEFFECTTYPE=="s"){
+						custImgEffectClass="mgoImgEffectBWScreen";
+					} else {
+						custImgEffectClass="";
+					};
+
+
 					//Colour flag overide
 					if(colFlagToggle){
 						//BG color 
@@ -1053,6 +1095,44 @@ function($, cssContent) {'use strict';
 								//assess 
 								if(colFlagDimTarg == colFlagTargValue){
 									imgBGColInsert = 'background-color: #' + colFlagTargColValue;
+								}
+
+							};	
+						} else if(colFlagTargProperty=="e"){
+							if(colFlagTargDataType=="meas"){
+								// chose target measure
+								var colFlagMeasTarg;
+								if((colFlagTargData == 3) & (mymeasureCount>0)) {
+									colFlagMeasTarg= meas1.qNum;
+								} else if ((colFlagTargData == 4) & (mymeasureCount>1)) {
+									colFlagMeasTarg= meas2.qNum;
+								} else if ((colFlagTargData == 5) & (mymeasureCount>2)) {
+									colFlagMeasTarg= meas3.qNum;
+								};
+								//assess type of operator equal
+
+
+								if((colFlagTargDataOP=="e") & (colFlagMeasTarg == colFlagTargValue)){
+									custImgEffectClass="";
+								} else if((colFlagTargDataOP=="g") & (colFlagMeasTarg > colFlagTargValue)){
+									custImgEffectClass="";
+								} else if((colFlagTargDataOP=="l") & (colFlagMeasTarg < colFlagTargValue)){
+									custImgEffectClass="";
+								} else if((colFlagTargDataOP=="b") & (colFlagMeasTarg > colFlagTargValue) & (colFlagMeasTarg < colFlagTargValue2)){
+									custImgEffectClass="";
+								};
+
+							} else {
+								// chose target dim
+								var colFlagDimTarg;
+								if((colFlagTargData == 1) & (mydimensionCount>0)) {
+									colFlagDimTarg = dim.qText;
+								} else if ((colFlagTargData == 2) & (mydimensionCount>1)) {
+									colFlagDimTarg = dim2.qText;
+								} ;
+								//assess 
+								if(colFlagDimTarg == colFlagTargValue){
+									custImgEffectClass="";
 								}
 
 							};	
@@ -1193,7 +1273,7 @@ function($, cssContent) {'use strict';
 							
 							//render image
 
-							html += '<span class="mgoPicGrid"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+							html += '<span class="mgoPicGrid"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
 							html += '</span></span>';
 						
 							//check if measure added
@@ -1280,7 +1360,7 @@ function($, cssContent) {'use strict';
 							//render selectable image
 							html += '<span class="selectable" data-value="'+ dim.qElemNumber + '">';
 							// render image 
-								html += '<span class="mgoPicGrid" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+								html += '<span class="mgoPicGrid" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
 								html += '</span></span>';
 							
 
