@@ -11,7 +11,7 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 ## Version 3 - for use in Qlik Sense 3.#
 **Recent tweaks (Aug 2017 - v3.5):**
-* Added image effects to grid; black and white, mono colour multiply on background (black), mono colour screen on background (white). Also added the ability to use the 'colour indicator' property to override the effect.
+* Added image effects to grid; black and white, mono colour multiply on background (black), mono colour screen on background (white). Also added the ability to use the 'colour indicator' property to override the effect. NB: some issues displaying in desktop client, works in browser.
 * Added a fast select option under the grid properties - means that click on image gets instantly selected with no selections modal. Also added a clear button (x) to top right of image when in single image view, to clear that image selection. Useful for mashups etc.
 ![effects][effects]
 
