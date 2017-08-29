@@ -16,7 +16,7 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 ![multicoloured][multicoloured]
 
-[effects]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/multicoloured.png "multicoloured"
+[multicoloured]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/multicoloured.png "multicoloured"
 
 
 **Recent tweaks (Aug 2017 - v3.5):**
