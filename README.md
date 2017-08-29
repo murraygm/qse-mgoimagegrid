@@ -15,6 +15,7 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 * Image background colour on grid can now be driven by a dimension or measure for multiple bg colours
 
 ![multicoloured][multicoloured]
+
 [effects]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/multicoloured.png "multicoloured"
 
 
@@ -23,6 +24,7 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 * Added a fast select option under the grid properties - means that click on image gets instantly selected with no selections modal. Also added a clear button (x) to top right of image when in single image view, to clear that image selection. Useful for mashups etc.
 
 ![effects][effects]
+
 [effects]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/imageeffects.png "effects"
 
 
