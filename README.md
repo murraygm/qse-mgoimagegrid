@@ -13,6 +13,9 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 **Recent tweaks (Aug 2017 - v3.6):**
 * Image effects now carry over to single image view (override option added)
 * Image background colour on grid can now be driven by a dimension or measure for multiple bg colours
+![multicoloured][multicoloured]
+
+[effects]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/multicoloured.png "multicoloured"
 
 **Recent tweaks (Aug 2017 - v3.5):**
 * Added image effects to grid; black and white, mono colour multiply on background (black), mono colour screen on background (white). Also added the ability to use the 'colour indicator' property to override the effect. NB: some issues displaying in desktop client, works in browser.
