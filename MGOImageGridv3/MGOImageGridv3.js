@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.5,
+			version: 3.6,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -312,17 +312,21 @@ function($, cssContent) {'use strict';
 									label: "Single colour",
 									tooltip: "Set a fixed colour for the grid"
 								},{
+									value: "d2",
+									label: "Dimension 2",
+									tooltip: "Use the 2nd dimension to set custom bg colour per image"
+								}, {
 									value: "m1",
 									label: "Measure 1",
-									tooltip: "Use the first measure to set custom colour per image"
+									tooltip: "Use the first measure to set custom bg colour per image"
 								}, {
 									value: "m2",
 									label: "Measure 2",
-									tooltip: "Use the second measure to set custom colour per image"
+									tooltip: "Use the second measure to set custom bg colour per image"
 								},{
 									value: "m3",
 									label: "Measure 3",
-									tooltip: "Use the third measure to set custom colour per image"
+									tooltip: "Use the third measure to set custom bg colour per image"
 								}],
 								defaultValue: "n",
 								show: function(layout) { return layout.qDef.IMGOBGCOL } 
@@ -333,7 +337,7 @@ function($, cssContent) {'use strict';
 								type: "string",
 								expression: "optional",
 								defaultValue: "FFF",
-								show: function(layout) { return layout.qDef.IMGOBGCOL } 
+								show: function(layout) { if(layout.qDef.IMGOBGCOL & layout.qDef.IMGBGCOLTYPE == "n"){ return true } else { return false }  } 
 								},
 							customImageEffect : {
 								type: "string",
@@ -395,6 +399,12 @@ function($, cssContent) {'use strict';
 							singleImageDifCustomBG : {
 								ref: "qDef.SINGLEIMGCUSTBGTOG",
 								label: "Use a different background colour (separate from grid view)",
+								type: "boolean",
+								defaultValue: false
+								},
+							singleImageDifEffect : {
+								ref: "qDef.SINGLEIMGEFFECTTOG",
+								label: "Override image effect if applied",
 								type: "boolean",
 								defaultValue: false
 								},
@@ -807,12 +817,14 @@ function($, cssContent) {'use strict';
 			if(layout.qDef.IMGBORDER){
 				imgBorderSize = layout.qDef.IMGBORDERDEFSIZE;
 				imgBorderCol = layout.qDef.IMGBORDERDEFCOL;
+				imgBorderCol = imgBorderCol.replace(/#/g, '');
 			} else {
 				imgBorderSize = 0;
 				imgBorderCol = "FFF";
 			};
 			if(layout.qDef.IMGOBGCOL){
 				imgBGCol = layout.qDef.IMGOBGCOLVAL;
+				imgBGCol = imgBGCol.replace(/#/g, '');
 			} else {
 				imgBGCol = "FFF";
 			};
@@ -903,7 +915,7 @@ function($, cssContent) {'use strict';
 					colFlagTargValue = layout.qDef.IMGCOLORFLAGDIMVAL;
 					colFlagTargProperty = layout.qDef.IMGCOLORFLAGTARG;
 					colFlagTargColValue = layout.qDef.IMGCOLORFLAGDTARGCOL;
-
+					colFlagTargColValue = colFlagTargColValue.replace(/#/g, '');
 
 				} else {
 					colFlagTargDataType = "meas";
@@ -917,6 +929,7 @@ function($, cssContent) {'use strict';
 					
 					colFlagTargProperty = layout.qDef.IMGCOLORFLAGTARG;
 					colFlagTargColValue = layout.qDef.IMGCOLORFLAGDTARGCOL;
+					colFlagTargColValue = colFlagTargColValue.replace(/#/g, '');
 				};
 				/**
 				console.log(
@@ -1004,35 +1017,42 @@ function($, cssContent) {'use strict';
 					if(layout.qDef.IMGOBGCOL){
 						//check setting
 						if (layout.qDef.IMGBGCOLTYPE == "n"){
-							imgBGCol = layout.qDef.IMGOBGCOLVAL;
+							//imgBGCol = layout.qDef.IMGOBGCOLVAL;
 							imgBGColInsert = 'background-color: #' + imgBGCol;
+						} else if(layout.qDef.IMGBGCOLTYPE == "d2"){
+							//get hex calc percent tint and switch to rgba
+							if(mydimensionCount>1){
+								imgBGCol = dim2.qText;
+								imgBGCol =imgBGCol.replace(/#/g, '');
+								imgBGColInsert = 'background-color: #' + imgBGCol;
+							} else {
+								imgBGColInsert = 'background-color: #' + imgBGCol;
+							};
+
 						} else if(layout.qDef.IMGBGCOLTYPE == "m1"){
 							//get hex calc percent tint and switch to rgba
 							if(mymeasureCount>0){
-								imgBGColRGB = mgohexToRgb(layout.qDef.IMGOBGCOLVAL);
-								imgBGColRGBAlpha = Math.round((meas1.qNum/layout.qHyperCube.qMeasureInfo[0].qMax) * 100) / 100;
-								imgBGColInsert = 'background-color: rgba('+imgBGColRGB.r + ', '+imgBGColRGB.g + ', '+imgBGColRGB.g + ', '+imgBGColRGBAlpha+ ')' ;
-								
+								imgBGCol = meas1.qText;
+								imgBGCol =imgBGCol.replace(/#/g, '');
+								imgBGColInsert = 'background-color: #' + imgBGCol;
 							} else {
 								imgBGColInsert = 'background-color: #' + imgBGCol;
 							};
 
 						} else if (layout.qDef.IMGBGCOLTYPE == "m2"){
 							if(mymeasureCount>1){
-								imgBGColRGB = mgohexToRgb(layout.qDef.IMGOBGCOLVAL);
-								imgBGColRGBAlpha = Math.round((meas2.qNum/layout.qHyperCube.qMeasureInfo[1].qMax) * 100) / 100;
-								imgBGColInsert = 'background-color: rgba('+imgBGColRGB.r + ', '+imgBGColRGB.g + ', '+imgBGColRGB.b + ', '+imgBGColRGBAlpha+ ')' ;
-								
+								imgBGCol = meas2.qText;
+								imgBGCol =imgBGCol.replace(/#/g, '');
+								imgBGColInsert = 'background-color: #' + imgBGCol;
 
 							} else {
 								imgBGColInsert = 'background-color: #' + imgBGCol;
 							};
 						} else if (layout.qDef.IMGBGCOLTYPE == "m3"){
 							if(mymeasureCount>2){
-								imgBGColRGB = mgohexToRgb(layout.qDef.IMGOBGCOLVAL);
-								imgBGColRGBAlpha = Math.round((meas3.qNum/layout.qHyperCube.qMeasureInfo[2].qMax) * 100) / 100;
-								imgBGColInsert = 'background-color: rgba('+imgBGColRGB.r + ', '+imgBGColRGB.g + ', '+imgBGColRGB.b + ', '+imgBGColRGBAlpha+ ')' ;
-								
+								imgBGCol = meas3.qText;
+								imgBGCol =imgBGCol.replace(/#/g, '');
+								imgBGColInsert = 'background-color: #' + imgBGCol;
 
 							} else {
 								imgBGColInsert = 'background-color: #' + imgBGCol;
@@ -1437,7 +1457,12 @@ function($, cssContent) {'use strict';
 						//check for custom single image
 
 						if(layout.qDef.SINGLEIMGCUSTBGTOG){
-							imgBGColInsert= 'background-color: #' + layout.qDef.SINGLEIMGCUSTBGVAL;
+							var singleimgBGCol = layout.qDef.SINGLEIMGCUSTBGVAL;
+							singleimgBGCol= singleimgBGCol.replace(/#/g, '');
+							imgBGColInsert= 'background-color: #' + singleimgBGCol;
+						};
+						if(layout.qDef.SINGLEIMGEFFECTTOG){
+							custImgEffectClass = "";
 						};
 
 						
@@ -1507,10 +1532,13 @@ function($, cssContent) {'use strict';
 							//if 1 up make it selectable
 								if(grid1upDisplay){
 									
-									html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';">';
+									//html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';">';
+									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+' selectable" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + dim.qText + ');"></div></div>';
 								} else {
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + ');background-color: #' + imgBGCol +';">';
-									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';"></div>';
+									//html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';"></div>';
+									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+'" style="background-image: url(' + imgFolderLocation + dim.qText + ');"></div></div>';
+
 								};
 							//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + ');background-color: #' + imgBGCol +';">';
 						};
