@@ -12,19 +12,23 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 ## Version 3 - for use in Qlik Sense 3.#
 
 **Tips and Tricks:**
-FILE PATHS
+*FILE PATHS*
+
 When using local files on the server it can be a bit tricky knowing where to store them and what the path is if you can't use a URL ref, below works for up to 3.2, and should work for June and Sept but I haven’t confirmed.
 
 ../resources/assets/external/mgo/IMGs/IG
 
-That resolves to 
+That resolves to:
 https://[server]/resources/assets/external/mgo/IMGs/IG
+
 if you can see an image placed there via the browser then they should be accessible.
-Also if you set the property to use 'online' instead then the URL would work:
+Also if you set the property to use 'online' instead then the URL would work: 
+
 https://[server]/resources/assets/external/mgo/IMGs/IG/
 
 this is the key folder to serving assets via Sense:
 https://[server]/resources/assets/external/
+
 You should be able to serve any resource from here. If you are still having issues, create a new mashup project. That registers a folder that is accessible via a browser with the Sense server. Then add the images in that folder structure.
 
 
