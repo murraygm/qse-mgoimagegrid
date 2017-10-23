@@ -10,6 +10,24 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 *Grab a couple of fun apps on my [Qlik Sense Apps github page](https://github.com/murraygm/qs-mgoqliksenseapps) to try the extension out with, choose from The New York Public Library (190k images), The British Library (1 million images) or The Internet Archive (65K books - 24 million page scans, 5 million images) - remember to update the existing extension in the app*
 
 ## Version 3 - for use in Qlik Sense 3.#
+
+**Tips and Tricks:**
+FILE PATHS
+When using local files on the server it can be a bit tricky knowing where to store them and what the path is if you can't use a URL ref, below works for up to 3.2, and should work for June and Sept but I haven’t confirmed.
+
+../resources/assets/external/mgo/IMGs/IG
+
+That resolves to 
+https://[server]/resources/assets/external/mgo/IMGs/IG
+if you can see an image placed there via the browser then they should be accessible.
+Also if you set the property to use 'online' instead then the URL would work:
+https://[server]/resources/assets/external/mgo/IMGs/IG/
+
+this is the key folder to serving assets via Sense:
+https://[server]/resources/assets/external/
+You should be able to serve any resource from here. If you are still having issues, create a new mashup project. That registers a folder that is accessible via a browser with the Sense server. Then add the images in that folder structure.
+
+
 **Recent tweaks (Aug 2017 - v3.6):**
 * Image effects now carry over to single image view (override option added)
 * Image background colour on grid can now be driven by a dimension or measure for multiple bg colours
