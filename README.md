@@ -14,6 +14,8 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 **Tips and Tricks:**
 *FILE PATHS*
 
+**Local images issue Nov 2017** - recently discovered that if you use 'local' as image source and the file names have spaces they may not show. Investigating and will fix for next point release. (shortterm workaround: ensure filenames are URL encoded, if it's only spaces then a replace("imagefilefield", ' ', '%20') as "imagefilefield" will do it in the load script.
+
 When using local files on the server it can be a bit tricky knowing where to store them and what the path is if you can't use a URL ref, below works for up to 3.2, and should work for June and Sept but I haven’t confirmed.
 
 ../resources/assets/external/mgo/IMGs/IG
