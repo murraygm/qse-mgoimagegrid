@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.6,
+			version: 3.7,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -609,7 +609,7 @@ function($, cssContent) {'use strict';
 								ref : "qDef.IMGPRINTGRIDTOG",
 								label : "Enable image printing",
 								type : "boolean",
-								defaultValue : true
+								defaultValue : false
 								}
 							}
 						},
@@ -772,7 +772,8 @@ function($, cssContent) {'use strict';
 					imgFolderLocation = layout.qDef.IMGSRCMGO; 
 				} else {
 					
-					imgFolderLocation = "/Extensions/" + layout.qDef.IMGSRCLOCALMGO + "/";
+					var imgFolderLocationURI = "/Extensions/" + layout.qDef.IMGSRCLOCALMGO + "/";
+					imgFolderLocation= encodeURI(imgFolderLocationURI);
 				};
 
 			//Set up grid image scale
@@ -1287,13 +1288,13 @@ function($, cssContent) {'use strict';
 																	
 
 								} else {
-									html += '<a href="' + imgFolderLocation + dim.qText + '" target="blank" class="mgotooltip">';
+									html += '<a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank" class="mgotooltip">';
 								}; 
 							};
 							
 							//render image
 
-							html += '<span class="mgoPicGrid"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+							html += '<span class="mgoPicGrid"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); background-color: transparent; opacity: '+ imageOpacity +';">';
 							html += '</span></span>';
 						
 							//check if measure added
@@ -1380,7 +1381,7 @@ function($, cssContent) {'use strict';
 							//render selectable image
 							html += '<span class="selectable" data-value="'+ dim.qElemNumber + '">';
 							// render image 
-								html += '<span class="mgoPicGrid" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + dim.qText + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+								html += '<span class="mgoPicGrid" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); background-color: transparent; opacity: '+ imageOpacity +';">';
 								html += '</span></span>';
 							
 
@@ -1521,10 +1522,10 @@ function($, cssContent) {'use strict';
 								//if 1 up make it selectable
 								if(grid1upDisplay){
 									
-									html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';">';
+									html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
 								} else {
-									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + ');background-color: #' + imgBGCol +';">';
-									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';"></div>';
+									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');background-color: #' + imgBGCol +';">';
+									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';"></div>';
 								
 								};
 							};
@@ -1532,15 +1533,15 @@ function($, cssContent) {'use strict';
 							//if 1 up make it selectable
 								if(grid1upDisplay){
 									
-									//html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';">';
-									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+' selectable" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + dim.qText + ');"></div></div>';
+									//html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
+									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+' selectable" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');"></div></div>';
 								} else {
-									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + ');background-color: #' + imgBGCol +';">';
-									//html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + '); ' + imgBGColInsert +';"></div>';
-									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+'" style="background-image: url(' + imgFolderLocation + dim.qText + ');"></div></div>';
+									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');background-color: #' + imgBGCol +';">';
+									//html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';"></div>';
+									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');"></div></div>';
 
 								};
-							//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + dim.qText + ');background-color: #' + imgBGCol +';">';
+							//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');background-color: #' + imgBGCol +';">';
 						};
 
 						//check if measure added
@@ -1572,18 +1573,18 @@ function($, cssContent) {'use strict';
 						if(layout.qDef.SINGLEIMGHEADER){
 
 							if(grid1upDisplay){
-								html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a></div>';
+								html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a></div>';
 							} else {	
 								if(customSingleImageNameTog){
 								html += '<div class="mgoHeader"><a href="' + customSingleImageLink + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + customSingleImageName + '</a>';
 								
 								} else {
 									if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d1")){
-										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
+										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
 									} else if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d2")) {
 										html += '<div class="mgoHeader"><a href="' + dim2.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim2.qText + '</a>';
 									} else {
-										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + dim.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
+										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
 									};
 								}
 								html += '</div>';
