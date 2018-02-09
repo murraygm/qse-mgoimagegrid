@@ -9,7 +9,7 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 *Grab a couple of fun apps on my [Qlik Sense Apps github page](https://github.com/murraygm/qs-mgoqliksenseapps) to try the extension out with, choose from The New York Public Library (190k images), The British Library (1 million images) or The Internet Archive (65K books - 24 million page scans, 5 million images) - remember to update the existing extension in the app*
 
-## Version 3 - for use in Qlik Sense 3.#
+## Version 3 - for use in Qlik Sense 3 and later
 
 **Tips and Tricks:**
 *FILE PATHS*
