@@ -81,13 +81,11 @@ See new example app "MGO Image Grid v3 example.qvf" for more details
 ![Screenshotv3][Examplev3]
 
 
-[Propsv3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/imagegrid_props_v3.png "Propertiesv3"
+[Propsv3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/imagegrid_props_v3.png "Propertiesv3"
 
+[Examplev3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/Screen%20Shot%20v3.png "Properties"
 
-[Examplev3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/v3/screenshots/Screen%20Shot%20v3.png "Properties" 
-
-
-## OLDER and Discontinued versions
+### OLDER and Discontinued versions
 * MGO Image Grid Emo, with content, facial and emotion recognition (Uses Microsoft's Cognitive Services APIs, keys required - Computer Vision and Emotion)
 * V2 for use in Qlik Sense 2.2 - still in repository but aging and superceded by V3.x
 
