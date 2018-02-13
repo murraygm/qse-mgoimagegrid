@@ -14,7 +14,8 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 ## Version 3 - for use in Qlik Sense 3 and later
 
-**Version 3.8 (FEB 2018) - tweaks:** - Tested in Qlik Sense Desktop Feb 2018 release
+**Version 3.8 (FEB 2018) - tweaks:** - Tested in Qlik Sense Desktop Feb 2018 release.
+
 Added ability to turn off all grid selection. Changed the properties panel for "Limit grid display and loading" to be clearer around use and 1up mode. Also paging is now on by default and printing is off by default. 
 
 **FIXED in 3.7: Local images issue FEB 2018** - image path for 'local' and the image field data (the filename) are now URI encoded.
@@ -40,7 +41,7 @@ https://[server]/resources/assets/external/
 You should be able to serve any resource from here. If you are still having issues, create a new mashup project. That registers a folder that is accessible via a browser with the Sense server. Then add the images in that folder structure.
 
 
-**Recent tweaks (Aug 2017 - v3.6):**
+**Tweaks (Aug 2017 - v3.6):**
 * Image effects now carry over to single image view (override option added)
 * Image background colour on grid can now be driven by a dimension or measure for multiple bg colours
 
