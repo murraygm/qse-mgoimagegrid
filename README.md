@@ -14,7 +14,8 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 ## Version 3 - for use in Qlik Sense 3 and later
 
-**Version 3.8 (FEB 2018) - tweaks:** - Added ability to turn off all grid selection. Changed the properties panel for "Limit grid display and loading" to be clearer around use and 1up mode. Also paging is now on by default and printing is off by default. 
+**Version 3.8 (FEB 2018) - tweaks:** - Tested in Qlik Sense Desktop Feb 2018 release
+Added ability to turn off all grid selection. Changed the properties panel for "Limit grid display and loading" to be clearer around use and 1up mode. Also paging is now on by default and printing is off by default. 
 
 **FIXED in 3.7: Local images issue FEB 2018** - image path for 'local' and the image field data (the filename) are now URI encoded.
 
