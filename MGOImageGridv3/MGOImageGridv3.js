@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.7,
+			version: 3.8,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -167,6 +167,12 @@ function($, cssContent) {'use strict';
 						type:"items",
 						label:"Image grid options",
 						items: {
+							imageClickNoselect: {
+								ref : "qDef.IMGGRIDNOSELECT",
+								label : "Disable selection on the grid",
+								type : "boolean",
+								defaultValue : false
+							}, 
 							imageClickAction : {
 								ref: "qDef.IMGLINK",
 								type: "boolean",
@@ -181,14 +187,15 @@ function($, cssContent) {'use strict';
 									label: "Popup",
 									tooltip: "Pop up the image in a new window"
 								}],
-								defaultValue: true
+								defaultValue: true,
+								show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true ){ return true } else { return false } }
 								},
 							imageClickFastselect: {
 								ref : "qDef.IMGGRIDFASTSELECT",
 								label : "Use instant selection (remove multi-select on grid)",
 								type : "boolean",
 								defaultValue : false,
-								show: function(layout)  { return layout.qDef.IMGLINK } 
+								show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK== true ){ return true } else { return false } }
 							}, 
 							imagePopSourceLinkType : {
 								type: "string",
@@ -206,14 +213,14 @@ function($, cssContent) {'use strict';
 									label: "Custom"
 								}],
 								defaultValue: "d1",
-								show: function(layout) { if( layout.qDef.IMGLINK == false ){ return true } else { return false } }
+								show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK == false ){ return true } else { return false } }
 								},
 							imagePopCustomLink : {
 								ref: "qDef.IMGLINKPOPLINK",
 								label: "URL or path for popup link",
 								type: "string",
 								defaultValue: "",
-								show: function(layout) { if( layout.qDef.IMGLINKPOPLINKSOURCE == "c" & layout.qDef.IMGLINK == false ){ return true } else { return false }  } 
+								show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINKPOPLINKSOURCE == "c" & layout.qDef.IMGLINK == false ){ return true } else { return false }  } 
 								},
 							imageScalingGrid : {
 								type: "string",
@@ -549,11 +556,9 @@ function($, cssContent) {'use strict';
 						type:"items",
 						label:"Limit grid display and loading",
 						items: {
-							imagePagingDisplay : {
-								ref : "qDef.IMGPAGINGDISPLAY",
-								label : "Hide the image paging count (1 of ####) on grid and 1up views",
-								type : "boolean",
-								defaultValue : false
+							IMGPAGINGNOTE : {
+								label : "Here you can adjust the number of images displayed on the grid and whether the user can page through them. The default is 100.",
+								component : "text"
 								},
 							customImagePaging : {
 								ref : "qDef.IMGPAGING",
@@ -572,7 +577,7 @@ function($, cssContent) {'use strict';
 								ref : "qDef.IMGPAGINGTOG",
 								label : "Allow users to load more images if available",
 								type : "boolean",
-								defaultValue : false,
+								defaultValue : true,
 								show: function(layout) { return layout.qDef.IMGPAGING } 
 								},
 							IMGPAGESIZE : {
@@ -582,18 +587,26 @@ function($, cssContent) {'use strict';
 								defaultValue : 100,
 								show: function(layout) { if(layout.qDef.IMGPAGING & layout.qDef.IMGPAGINGTOG ){ return true } else { return false } } 
 								},
+							imagePagingDisplay : {
+								ref : "qDef.IMGPAGINGDISPLAY",
+								label : "Hide the image paging count (1 of ####) on grid and 1up views",
+								type : "boolean",
+								defaultValue : false,
+								show: function(layout) { return layout.qDef.IMGPAGING } 
+								},
+							IMGPAGING1UPNOTE : {
+								label : "1 up single image paging. For best results in 1 up mode, set 'Maximum number of images to initially load' and 'Number of images per page' to 1 before selecting the below option.",
+								component : "text",
+								show: function(layout) {return layout.qDef.IMGPAGING } 
+								},
 							IMGPAGING1UP : {
 								ref : "qDef.IMGPAGING1UP",
 								label : "Use a 1 up single image paging display instead of a grid ",
 								type : "boolean",
 								defaultValue : false,
 								show: function(layout) { return layout.qDef.IMGPAGING } 
-								},
-							IMGPAGING1UPNOTE : {
-								label : "For best results in 1 up mode, set 'Maximum number of images to initially load' and 'Number of images per page' to 1",
-								component : "text",
-								show: function(layout) {return layout.qDef.IMGPAGING1UP } 
 								}
+							
 
 							}
 						},
@@ -1379,7 +1392,11 @@ function($, cssContent) {'use strict';
 						
 						} else {
 							//render selectable image
-							html += '<span class="selectable" data-value="'+ dim.qElemNumber + '">';
+							if(layout.qDef.IMGGRIDNOSELECT !=true){
+								html += '<span class="selectable" data-value="'+ dim.qElemNumber + '">';
+							} else {
+								html += '<span data-value="'+ dim.qElemNumber + '">';
+							};
 							// render image 
 								html += '<span class="mgoPicGrid" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); background-color: transparent; opacity: '+ imageOpacity +';">';
 								html += '</span></span>';
@@ -1486,7 +1503,9 @@ function($, cssContent) {'use strict';
 								//single print
 									html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';	
 								};
-								html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';			
+								if(layout.qDef.IMGGRIDNOSELECT !=true){
+									html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';			
+								};
 								html+= '</div>';
 
 							}; 
@@ -1501,7 +1520,9 @@ function($, cssContent) {'use strict';
 								html+= '</div>';
 							} else {
 								html+= '<div class="mgoControlButs">';
-								html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';	
+								if(layout.qDef.IMGGRIDNOSELECT !=true){
+									html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';	
+								};
 								html+= '</div>';
 							};	
 						};
@@ -1521,8 +1542,12 @@ function($, cssContent) {'use strict';
 							} else {
 								//if 1 up make it selectable
 								if(grid1upDisplay){
+									if(layout.qDef.IMGGRIDNOSELECT !=true){
+										html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
+									} else {
+										html += '<div class="mgoSinglePic '+imgScaleSingle+'" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
+									};
 									
-									html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
 								} else {
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');background-color: #' + imgBGCol +';">';
 									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';"></div>';
@@ -1534,7 +1559,12 @@ function($, cssContent) {'use strict';
 								if(grid1upDisplay){
 									
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
+									if(layout.qDef.IMGGRIDNOSELECT !=true){
 									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+' selectable" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');"></div></div>';
+									} else {
+									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+'" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');"></div></div>';
+
+									};
 								} else {
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');background-color: #' + imgBGCol +';">';
 									//html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';"></div>';
@@ -1615,7 +1645,7 @@ function($, cssContent) {'use strict';
 
 				var imgPagingButtonStyle, imgPagingButtonLStyle, imgPagingButtonMStyle, imgPagingReset;
 				if((grid1upDisplay) & (imgridpage==1)){
-					imgPagingButtonStyle = 'style="'+ hideImageCount +' position: absolute; top: 0px; right:5px; z-index:100; font-size:10px; color:rgba(255,255,255,0.7); margin:4px 0px"';
+					imgPagingButtonStyle = 'style="'+ hideImageCount +' position: absolute; top: 0px; right:0px; z-index:100; font-size:10px; background-color:rgba(1,1,1,0.4); color:rgba(255,255,255,1); margin:0px 0px; padding: 4px;"';
 					imgPagingButtonLStyle = ' mgoLessMore1upButs" style="left:5px; z-index:101; " ><span class="lui-icon lui-icon--triangle-left"></span>';
 					imgPagingButtonMStyle = ' mgoLessMore1upButs" style="right:5px; z-index:102; " ><span class="lui-icon lui-icon--triangle-right"></span>';
 					
