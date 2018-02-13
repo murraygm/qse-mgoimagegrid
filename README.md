@@ -1,21 +1,26 @@
 # qse-mgoimagegrid
 Qlik Sense Extension to display images - for use with Qlik Sense
 
-**Download a zip of just the v3.7 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
+**Download a zip of just the v3.8 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
 
 **DOWNLOAD FULL PROJECT VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
 or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project/56e8f64ee37930b98cf9dea4)
 
-*Grab a couple of fun apps on my [Qlik Sense Apps github page](https://github.com/murraygm/qs-mgoqliksenseapps) to try the extension out with, choose from The New York Public Library (190k images), The British Library (1 million images) or The Internet Archive (65K books - 24 million page scans, 5 million images) - remember to update the existing extension in the app*
+![hero][hero]
+
+[hero]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/version3_8.png "hero"
+
 
 ## Version 3 - for use in Qlik Sense 3 and later
 
-**Tips and Tricks:**
-*FILE PATHS*
+**Version 3.8 (FEB 2018) - tweaks:** - Added ability to turn off all grid selection. Changed the properties panel for "Limit grid display and loading" to be cleared around use and 1up mode. 
 
 **FIXED in 3.7: Local images issue FEB 2018** - image path for 'local' and the image field data (the filename) are now URI encoded.
 
+**Tips and Tricks:**
+
+*FILE PATHS*
 When using local files on the server it can be a bit tricky knowing where to store them and what the path is if you can't use a URL ref.
 
 ../resources/assets/external/mgo/IMGs/IG
@@ -43,7 +48,9 @@ You should be able to serve any resource from here. If you are still having issu
 [multicoloured]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/multicoloured.png "multicoloured"
 
 
-**Recent tweaks (Aug 2017 - v3.5):**
+**History**
+
+**Tweaks (Aug 2017 - v3.5):**
 * Added image effects to grid; black and white, mono colour multiply on background (black), mono colour screen on background (white). Also added the ability to use the 'colour indicator' property to override the effect. NB: some issues displaying in desktop client, works in browser.
 * Added a fast select option under the grid properties - means that click on image gets instantly selected with no selections modal. Also added a clear button (x) to top right of image when in single image view, to clear that image selection. Useful for mashups etc.
 
@@ -52,13 +59,13 @@ You should be able to serve any resource from here. If you are still having issu
 [effects]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/imageeffects.png "effects"
 
 
-**Recent tweaks (June 2017):**
+**Tweaks (June 2017):**
 * Added printing capability to main Image Grid Extension (not to the Emo version) - Possible issue printing from desktop client (background image printing needs to be on). Option available when printing through the browser but not in all Win dialogs. FOR BEST RESULTS PRINT TO PDF FIRST
 
-**Recent tweaks (mar 2017):**
+**Tweaks (mar 2017):**
 * Changed the Qlik selection style, so that it now displays ticks for selected in active selection mode and the other images available for selection no longer appear knocked back 
 
-**Recent tweaks (aug 2016):**
+**Tweaks (aug 2016):**
 * option to hide the image count (on grid and 1up views)
 * Minor formatting and text changes
 
