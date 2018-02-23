@@ -9,7 +9,7 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 ![hero][hero]
 
-[hero]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/version3_8.png "hero"
+[hero]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/hero.png "hero"
 
 
 ## Version 3 - for use in Qlik Sense 3 and later
@@ -45,6 +45,36 @@ https://[server]/resources/assets/external/
 
 You should be able to serve any resource from here. If you are still having issues, create a new mashup project. That registers a folder that is accessible via a browser with the Sense server. Then add the images in that folder structure.
 
+### Screenshots and possibilities
+
+
+![s1][s1]
+
+[s1]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/mgoImageGridv311_6.png "s1"
+
+![s2][s2]
+
+[s2]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/mgoImageGridv311_5.png "s2"
+
+![s3][s3]
+
+[s3]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/mgoImageGridv311_4.png "s3"
+
+![s4][s4]
+
+[s4]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/mgoImageGridv311_3.png "s4"
+
+![s5][s5]
+
+[s5]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/mgoImageGridv311_2.png "s5"
+
+![s6][s6]
+
+[s6]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/mgoImageGridv311_1.png "s6"
+
+
+## History
+
 
 **Tweaks (Aug 2017 - v3.6):**
 * Image effects now carry over to single image view (override option added)
@@ -54,8 +84,6 @@ You should be able to serve any resource from here. If you are still having issu
 
 [multicoloured]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/multicoloured.png "multicoloured"
 
-
-**History**
 
 **Tweaks (Aug 2017 - v3.5):**
 * Added image effects to grid; black and white, mono colour multiply on background (black), mono colour screen on background (white). Also added the ability to use the 'colour indicator' property to override the effect. NB: some issues displaying in desktop client, works in browser.
