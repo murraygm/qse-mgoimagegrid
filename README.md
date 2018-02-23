@@ -1,7 +1,7 @@
 # qse-mgoimagegrid
 Qlik Sense Extension to display images - for use with Qlik Sense
 
-**Download a zip of just the v3.8 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
+**Download a zip of just the v3.11 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
 
 **DOWNLOAD FULL PROJECT VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
@@ -14,9 +14,14 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 ## Version 3 - for use in Qlik Sense 3 and later
 
-**Version 3.8 (FEB 2018) - tweaks:** - Tested in Qlik Sense Desktop Feb 2018 release.
+**Version 3.11 (FEB 2018) - Tested in Qlik Sense Desktop Feb 2018 release.**
 
-Added ability to turn off all grid selection. Changed the properties panel for "Limit grid display and loading" to be clearer around use and 1up mode. Also paging is now on by default and printing is off by default. 
+Added possibility to make the selection in 2nd dimension
+Fixed - clearing bug on single image
+Changed 1up to include zoom
+Changed selection to include popup and select option
+Reorganised properties - all loading and selection interaction under "Image source & Selecting"
+Paging is now on by default and printing is off by default. 
 
 **FIXED in 3.7: Local images issue FEB 2018** - image path for 'local' and the image field data (the filename) are now URI encoded.
 
