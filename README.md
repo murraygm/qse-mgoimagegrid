@@ -16,12 +16,13 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 **Version 3.11 (FEB 2018) - Tested in Qlik Sense Desktop Feb 2018 release.**
 
-Added possibility to make the selection in 2nd dimension
-Fixed - clearing bug on single image
-Changed 1up to include zoom
-Changed selection to include popup and select option
-Reorganised properties - all loading and selection interaction under "Image source & Selecting"
-Paging is now on by default and printing is off by default. 
+* Added possibility to make the selection in 2nd dimension
+* Fixed - clearing bug on single image
+* Changed 1up to include zoom
+* Changed selection to include popup and select option
+* Reorganised properties - all loading and selection interaction under "Image source & Selecting"
+* Paging is now on by default and printing is off by default. 
+
 
 **FIXED in 3.7: Local images issue FEB 2018** - image path for 'local' and the image field data (the filename) are now URI encoded.
 
