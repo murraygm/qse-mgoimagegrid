@@ -210,8 +210,8 @@ span.mgoPopinEdit span.mgoimghoversm {
 }
 
 .mgoControlButs {
-	display:block;
-	width:80%;
+	display:inline-block;
+	width:auto;
 	opacity: 0.2;
 	z-index: 6;
 	text-align: right;

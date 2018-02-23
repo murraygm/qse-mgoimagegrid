@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.8,
+			version: 3.11,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -34,45 +34,287 @@ function($, cssContent) {'use strict';
 					uses: "sorting"
 				},
 				externalimages: {
-					label:"MGO Image Grid V3",
+					label:"MGO Image Grid V3.11",
 					component: "expandable-items",
 					items: {
 					imageSource: {
 						type:"items",
-						label:"Image source",
+						label:"Image source & selecting",
+						grouped:true,
 						items: {
-							imgSourceType : {
-								ref: "qDef.IMGSRCTYPEMGO",
-								type: "boolean",
-								component: "buttongroup",
-								label: "Location of image folder",
-								options: [{
-									value: true,
-									label: "ONLINE",
-									tooltip: "Use a web based folder"
-								}, {
-									value: false,
-									label: "LOCAL",
-									tooltip: "Use the predefined local folder"
-								}],
-								defaultValue: true
+							IMGLOADSET:{
+								type: "items",
+               					label: "Grid Source",
+								items: {
+									imgSourceType : {
+										ref: "qDef.IMGSRCTYPEMGO",
+										type: "boolean",
+										component: "buttongroup",
+										label: "Location of image folder",
+										options: [{
+											value: true,
+											label: "ONLINE",
+											tooltip: "Use a web based folder"
+										}, {
+											value: false,
+											label: "LOCAL",
+											tooltip: "Use the predefined local folder"
+										}],
+										defaultValue: true
+										},
+									imgSourceFolder : {
+										ref: "qDef.IMGSRCMGO",
+										label: "Full URL to online image folder",
+										type: "string",
+										expression: "optional",
+										defaultValue: "",
+										show: function(layout) { return layout.qDef.IMGSRCTYPEMGO} 
+										},
+									imgSourceFolderLocal : {
+										ref: "qDef.IMGSRCLOCALMGO",
+										label: "Place your images folder here: >Qlik >Sense >Extensions",
+										type: "string",
+										expression: "optional",
+										defaultValue: "folder name",
+										show: function(layout) { if(layout.qDef.IMGSRCTYPEMGO == false){ return true } else { return false }} 
+										}
+									}
 								},
-							imgSourceFolder : {
-								ref: "qDef.IMGSRCMGO",
-								label: "Full URL to online image folder",
-								type: "string",
-								expression: "optional",
-								defaultValue: "",
-								show: function(layout) { return layout.qDef.IMGSRCTYPEMGO} 
+							IMGGRIDSET:{
+								type: "items",
+               					label: "Grid",
+								items: {
+									imgSelectGridTxt : {
+										label:"Below you can set how selections and interactions work on the GRID",
+										component: "text"
+									},
+									imageClickNoselect: {
+										ref : "qDef.IMGGRIDNOSELECT",
+										label : "Disable selection on the grid",
+										type : "boolean",
+										defaultValue : false
+									}, 
+									imageClickAction : {
+										ref: "qDef.IMGLINK",
+										type: "number",
+										component: "buttongroup",
+										label: "Image action, select data or popup image in new window",
+										options: [{
+											value: 1,
+											label: "Select",
+											tooltip: "Make selections on the field"
+										}, {
+											value: 0,
+											label: "Popup",
+											tooltip: "Pop up the image in a new window"
+										}, {
+											value: 2,
+											label: "Both",
+											tooltip: "Make select and Pop up the image in a new window"
+										}],
+										defaultValue: true,
+										show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true ){ return true } else { return false } }
+										},
+									imageClickFastselect: {
+										ref : "qDef.IMGGRIDFASTSELECT",
+										label : "Use instant selection (remove multi-select on grid)",
+										type : "boolean",
+										defaultValue : false,
+										show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK> 0 ){ return true } else { return false } }
+									}, 
+									imageDimToSelect: {
+										ref : "qDef.IMGDIMTOSELECT",
+										label : "Set which Dimension selections are made in",
+										type: "string",
+										component: "dropdown",
+										options: [{
+											value: "d1",
+											label: "Selection 1st dimension"
+										}, {
+											value: "d2",
+											label: "Selection 2nd dimension"
+										}],
+										defaultValue: "d1",
+										show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK> 0 ){ return true } else { return false } }
+									}, 
+									imgPopupEditTxt : {
+										label:"Note - popups are disabled in edit mode",
+										component: "text",
+										show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK !=1 ){ return true } else { return false } }
+									},
+									imagePopSourceLinkType : {
+										type: "string",
+										component: "dropdown",
+										label: "Popup URL source",
+										ref: "qDef.IMGLINKPOPLINKSOURCE",
+										options: [{
+											value: "d1",
+											label: "URL 1st dimension"
+										}, {
+											value: "d2",
+											label: "URL 2nd dimension"
+										}, {
+											value: "c",
+											label: "Custom URL"
+										}],
+										defaultValue: "d1",
+										show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK !=1 ){ return true } else { return false } }
+										},
+									imagePopCustomLink : {
+										ref: "qDef.IMGLINKPOPLINK",
+										label: "URL or path for popup link",
+										type: "string",
+										expression: "optional",
+										defaultValue: "",
+										show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINKPOPLINKSOURCE == "c" & layout.qDef.IMGLINK !=1 ){ return true } else { return false }  } 
+										}
+									}
 								},
-							imgSourceFolderLocal : {
-								ref: "qDef.IMGSRCLOCALMGO",
-								label: "Place your images folder here: >Qlik >Sense >Extensions",
-								type: "string",
-								expression: "optional",
-								defaultValue: "folder name",
-								show: function(layout) { if(layout.qDef.IMGSRCTYPEMGO == false){ return true } else { return false }} 
-								}
+							IMGSINGLESET:{
+								type: "items",
+               					label: "Single image",
+								items: {
+									imgSelectSingleTxt : {
+										label:"Below you can change source and interactions for the single image view",
+										component: "text"
+										},
+									singleImageDisplayHeader : {
+										ref: "qDef.SINGLEIMGHEADER",
+										label: "Display image name and link",
+										type: "boolean",
+										defaultValue: true
+										},
+									singleImagePopSourceLinkType : {
+										type: "string",
+										component: "dropdown",
+										label: "Image link (URL) and label source",
+										ref: "qDef.SINGLEIMGLINKPOPLINKSOURCE",
+										options: [{
+											value: "d1",
+											label: "Link 1st dimension"
+										}, {
+											value: "d2",
+											label: "Link 2nd dimension"
+										}, {
+											value: "c",
+											label: "Custom link & label"
+										}],
+										defaultValue: "d1",
+										show: function(layout) { return layout.qDef.SINGLEIMGHEADER }
+										},
+									singleImageLinkCustomName : {
+										ref: "qDef.SINGLEIMGLINKCUSTOMNAME",
+										label: "Text for image name",
+										type: "string",
+										expression: "optional",
+										defaultValue: "",
+										show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
+										},
+									singleImageLinkCustomLink : {
+										ref: "qDef.SINGLEIMGLINKCUSTOMLINK",
+										label: "URL or local folder path for image link",
+										type: "string",
+										expression: "optional",
+										defaultValue: "",
+										show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
+										},
+									singleImageLinkCustomSourceTog : {
+										ref: "qDef.SINGLEIMGLINKCUSTOMSOURCETOG",
+										label: "Use a different image source",
+										type: "boolean",
+										defaultValue: false
+										},
+									singleImageLinkCustomSourceType : {
+										ref: "qDef.SINGLEIMGLINKCUSTOMSOURCETYPE",
+										type: "boolean",
+										component: "dropdown",
+										label: "Use a URL or insert HTML",
+										options: [{
+											value: true,
+											label: "IMG URL",
+											tooltip: "URL for image"
+										}, {
+											value: false,
+											label: "HTML",
+											tooltip: "iFrame or HTML snippet"
+										}],
+										defaultValue: true,
+										show: function(layout) { return layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG }
+										},
+									singleImageLinkCustomSourceURL : {
+										ref: "qDef.SINGLEIMGLINKCUSTOMSOURCEURL",
+										label: "URL or local folder path for single image",
+										type: "string",
+										expression: "optional",
+										defaultValue: "",
+										show: function(layout) { if(layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG & layout.qDef.SINGLEIMGLINKCUSTOMSOURCETYPE){ return true } else { return false } }
+										},
+									singleImageLinkCustomSourceHTML : {
+										ref: "qDef.SINGLEIMGLINKCUSTOMSOURCEHTML",
+										label: "HTML to insert",
+										type: "string",
+										expression: "optional",
+										defaultValue: "",
+										show: function(layout) { if(layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG & layout.qDef.SINGLEIMGLINKCUSTOMSOURCETYPE == false){ return true } else { return false } }
+										}
+									}
+								},
+							IMGPAGINGSET:{
+								type: "items",
+               					label: "Paging and grid amount",
+								items: {
+									IMGPAGINGNOTE : {
+										label : "Below you can adjust the number of images displayed on the grid and whether the user can page through them. The default is 100.",
+										component : "text"
+										},
+									customImagePaging : {
+										ref : "qDef.IMGPAGING",
+										label : "Use custom limit for maximum number of images to display and optional paging",
+										type : "boolean",
+										defaultValue : false
+										},
+									initFetchRows : {
+										ref : "qHyperCubeDef.qInitialDataFetch.0.qHeight",
+										label : "Maximum number of images to initially display",
+										type : "number",
+										defaultValue : 100,
+										show: function(layout) { return layout.qDef.IMGPAGING } 
+										},
+									IMGPAGINGTOG : {
+										ref : "qDef.IMGPAGINGTOG",
+										label : "Allow users to load more images if available",
+										type : "boolean",
+										defaultValue : true,
+										show: function(layout) { return layout.qDef.IMGPAGING } 
+										},
+									IMGPAGESIZE : {
+										ref : "qDef.IMGPAGINGSIZE",
+										label : "Number of images per page (use same value as initial load)",
+										type : "number",
+										defaultValue : 100,
+										show: function(layout) { if(layout.qDef.IMGPAGING & layout.qDef.IMGPAGINGTOG ){ return true } else { return false } } 
+										},
+									imagePagingDisplay : {
+										ref : "qDef.IMGPAGINGDISPLAY",
+										label : "Hide the image paging count (1 of ####) on grid and 1up views",
+										type : "boolean",
+										defaultValue : false,
+										show: function(layout) { return layout.qDef.IMGPAGING } 
+										},
+									IMGPAGING1UPNOTE : {
+										label : "1 up single image paging. For best results in 1 up mode, set 'Maximum number of images to initially load' and 'Number of images per page' to 1 before selecting the below option.",
+										component : "text",
+										show: function(layout) {return layout.qDef.IMGPAGING } 
+										},
+									IMGPAGING1UP : {
+										ref : "qDef.IMGPAGING1UP",
+										label : "Use a 1 up single image paging display instead of a grid ",
+										type : "boolean",
+										defaultValue : false,
+										show: function(layout) { return layout.qDef.IMGPAGING } 
+										}
+									}
+								}	
 							}
 						},
 					measureDisplay: {
@@ -165,67 +407,14 @@ function($, cssContent) {'use strict';
 
 					imageStyling: {
 						type:"items",
-						label:"Image grid options",
+						label:"Image grid display options",
+						grouped: true,
 						items: {
-							imageClickNoselect: {
-								ref : "qDef.IMGGRIDNOSELECT",
-								label : "Disable selection on the grid",
-								type : "boolean",
-								defaultValue : false
-							}, 
-							imageClickAction : {
-								ref: "qDef.IMGLINK",
-								type: "boolean",
-								component: "buttongroup",
-								label: "Image action, select data or popup image in new window",
-								options: [{
-									value: true,
-									label: "Select",
-									tooltip: "Make selections on the field"
-								}, {
-									value: false,
-									label: "Popup",
-									tooltip: "Pop up the image in a new window"
-								}],
-								defaultValue: true,
-								show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true ){ return true } else { return false } }
-								},
-							imageClickFastselect: {
-								ref : "qDef.IMGGRIDFASTSELECT",
-								label : "Use instant selection (remove multi-select on grid)",
-								type : "boolean",
-								defaultValue : false,
-								show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK== true ){ return true } else { return false } }
-							}, 
-							imagePopSourceLinkType : {
-								type: "string",
-								component: "dropdown",
-								label: "Popup URL source",
-								ref: "qDef.IMGLINKPOPLINKSOURCE",
-								options: [{
-									value: "d1",
-									label: "1st dimension"
-								}, {
-									value: "d2",
-									label: "2nd dimension"
-								}, {
-									value: "c",
-									label: "Custom"
-								}],
-								defaultValue: "d1",
-								show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK == false ){ return true } else { return false } }
-								},
-							imagePopCustomLink : {
-								ref: "qDef.IMGLINKPOPLINK",
-								label: "URL or path for popup link",
-								type: "string",
-								defaultValue: "",
-								show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINKPOPLINKSOURCE == "c" & layout.qDef.IMGLINK == false ){ return true } else { return false }  } 
-								},
+							
 							imageScalingGrid : {
 								type: "string",
 								component: "buttongroup",
-								label: "Custom scaling options",
+								label: "Custom scaling (all items)",
 								ref: "qDef.IMGSCALEGRIDOPT",
 								options: [{
 									value: "a",
@@ -242,109 +431,159 @@ function($, cssContent) {'use strict';
 								}],
 								defaultValue: "a",
 								},
-							customImageSize : {
-								ref : "qDef.IMGSIZING",
-								label : "Custom image size",
-								type : "boolean",
-								defaultValue : false
+							sizeDisplay: {
+								type:"items",
+								label:"Size",
+								items: {
+									customImageSize : {
+										ref : "qDef.IMGSIZING",
+										label : "Custom image size (all items)",
+										type : "boolean",
+										defaultValue : false
+										},
+									customImageWidth : {
+										ref: "qDef.IMGWIDTH",
+										label: "Image width (px)",
+										type: "number",
+										expression: "optional",
+										defaultValue: 100,
+										show: function(layout) { return layout.qDef.IMGSIZING} 
+										},
+									customImageHeight : {
+										ref: "qDef.IMGHEIGHT",
+										label: "Image height (px)",
+										type: "number",
+										expression: "optional",
+										defaultValue: 100,
+										show: function(layout) { return layout.qDef.IMGSIZING } 
+										}
+									}
 								},
-							customImageWidth : {
-								ref: "qDef.IMGWIDTH",
-								label: "Image width (px)",
-								type: "number",
-								expression: "optional",
-								defaultValue: 100,
-								show: function(layout) { return layout.qDef.IMGSIZING} 
+							opacityDisplay: {
+								type:"items",
+								label:"Opacity",
+								items: {
+									customImageOpacity : {
+										ref : "qDef.IMGOPACITY",
+										label : "Custom opacity for each image",
+										type : "boolean",
+										defaultValue : false
+										},
+									customImageOpacityType : {
+										type: "string",
+										component: "dropdown",
+										label: "Set the opacity using a measure or a fixed amount",
+										ref: "qDef.IMGOPACITYTYPE",
+										options: [{
+											value: "m1",
+											label: "Opacity Measure 1",
+											tooltip: "Use the first measure to set opacity per image"
+										}, {
+											value: "m2",
+											label: "Opacity Measure 2",
+											tooltip: "Use the second measure to set opacity per image"
+										}, {
+											value: "m3",
+											label: "Opacity Measure 3",
+											tooltip: "Use the third measure to set opacity per image"
+										}, {
+											value: "n",
+											label: "Opacity Fixed amount",
+											tooltip: "Set a fixed opacity for the grid"
+										}],
+										defaultValue: "n",
+										show: function(layout) { return layout.qDef.IMGOPACITY } 
+										},
+									customImageOpacityVal : {
+										ref: "qDef.IMGOPACITYVAL",
+										label: "Image opacity (range 1-100) %",
+										type: "number",
+										expression: "optional",
+										defaultValue: 100,
+										show: function(layout) { if( layout.qDef.IMGOPACITY & layout.qDef.IMGOPACITYTYPE == "n"){ return true } else { return false } }
+										}
+									}
 								},
-							customImageHeight : {
-								ref: "qDef.IMGHEIGHT",
-								label: "Image height (px)",
-								type: "number",
-								expression: "optional",
-								defaultValue: 100,
-								show: function(layout) { return layout.qDef.IMGSIZING } 
+							bgcolDisplay: {
+								type:"items",
+								label:"Backgroup colour",
+								items: {
+									customImageBGCol : {
+										ref : "qDef.IMGOBGCOL",
+										label : "Custom background colour for each image",
+										type : "boolean",
+										defaultValue : false
+										},
+									customImageBGColType : {
+										type: "string",
+										component: "dropdown",
+										label: "Set the background colour using a measure or a fixed value",
+										ref: "qDef.IMGBGCOLTYPE",
+										options: [{
+											value: "n",
+											label: "Single colour",
+											tooltip: "Set a fixed colour for the grid"
+										},{
+											value: "d2",
+											label: "Colour Dimension 2",
+											tooltip: "Use the 2nd dimension to set custom bg colour per image"
+										}, {
+											value: "m1",
+											label: "Colour Measure 1",
+											tooltip: "Use the first measure to set custom bg colour per image"
+										}, {
+											value: "m2",
+											label: "Colour Measure 2",
+											tooltip: "Use the second measure to set custom bg colour per image"
+										},{
+											value: "m3",
+											label: "Colour Measure 3",
+											tooltip: "Use the third measure to set custom bg colour per image"
+										}],
+										defaultValue: "n",
+										show: function(layout) { return layout.qDef.IMGOBGCOL } 
+										},
+									customImageBGColvalue : {
+										ref: "qDef.IMGOBGCOLVAL",
+										label: "Image background colour (HEX)",
+										type: "string",
+										expression: "optional",
+										defaultValue: "FFF",
+										show: function(layout) { if(layout.qDef.IMGOBGCOL & layout.qDef.IMGBGCOLTYPE == "n"){ return true } else { return false }  } 
+										}
+									}
 								},
-							customImageOpacity : {
-								ref : "qDef.IMGOPACITY",
-								label : "Custom opacity for each image",
-								type : "boolean",
-								defaultValue : false
-								},
-							customImageOpacityType : {
-								type: "string",
-								component: "dropdown",
-								label: "Set the opacity using a measure or a fixed amount",
-								ref: "qDef.IMGOPACITYTYPE",
-								options: [{
-									value: "m1",
-									label: "Measure 1",
-									tooltip: "Use the first measure to set opacity per image"
-								}, {
-									value: "m2",
-									label: "Measure 2",
-									tooltip: "Use the second measure to set opacity per image"
-								}, {
-									value: "m3",
-									label: "Measure 3",
-									tooltip: "Use the third measure to set opacity per image"
-								}, {
-									value: "n",
-									label: "Fixed amount",
-									tooltip: "Set a fixed opacity for the grid"
-								}],
-								defaultValue: "n",
-								show: function(layout) { return layout.qDef.IMGOPACITY } 
-								},
-							customImageOpacityVal : {
-								ref: "qDef.IMGOPACITYVAL",
-								label: "Image opacity (range 1-100) %",
-								type: "number",
-								expression: "optional",
-								defaultValue: 100,
-								show: function(layout) { if( layout.qDef.IMGOPACITY & layout.qDef.IMGOPACITYTYPE == "n"){ return true } else { return false } }
-								},
-							customImageBGCol : {
-								ref : "qDef.IMGOBGCOL",
-								label : "Custom background colour for each image",
-								type : "boolean",
-								defaultValue : false
-								},
-							customImageBGColType : {
-								type: "string",
-								component: "dropdown",
-								label: "Set the background colour using a measure or a fixed value",
-								ref: "qDef.IMGBGCOLTYPE",
-								options: [{
-									value: "n",
-									label: "Single colour",
-									tooltip: "Set a fixed colour for the grid"
-								},{
-									value: "d2",
-									label: "Dimension 2",
-									tooltip: "Use the 2nd dimension to set custom bg colour per image"
-								}, {
-									value: "m1",
-									label: "Measure 1",
-									tooltip: "Use the first measure to set custom bg colour per image"
-								}, {
-									value: "m2",
-									label: "Measure 2",
-									tooltip: "Use the second measure to set custom bg colour per image"
-								},{
-									value: "m3",
-									label: "Measure 3",
-									tooltip: "Use the third measure to set custom bg colour per image"
-								}],
-								defaultValue: "n",
-								show: function(layout) { return layout.qDef.IMGOBGCOL } 
-								},
-							customImageBGColvalue : {
-								ref: "qDef.IMGOBGCOLVAL",
-								label: "Image background colour (HEX)",
-								type: "string",
-								expression: "optional",
-								defaultValue: "FFF",
-								show: function(layout) { if(layout.qDef.IMGOBGCOL & layout.qDef.IMGBGCOLTYPE == "n"){ return true } else { return false }  } 
+							borderDisplay: {
+								type:"items",
+								label:"Border",
+								items: {
+									imageBorder : {
+										ref: "qDef.IMGBORDER",
+										label: "Custom image border (all items)",
+										type: "boolean",
+										expression: "optional",
+										defaultValue: 0
+										},
+									customImageBorderSize: {
+										type: "number",
+										component: "slider",
+										label: "Image border",
+										ref: "qDef.IMGBORDERDEFSIZE",
+										min: 0,
+										max: 20,
+										step: 1,
+										defaultValue: 0,
+										show: function(layout) { return layout.qDef.IMGBORDER} 
+										},
+									customImageBorderCol : {
+										ref: "qDef.IMGBORDERDEFCOL",
+										label: "Image border colour (HEX)",
+										type: "string",
+										expression: "optional",
+										defaultValue: "FFF",
+										show: function(layout) { return layout.qDef.IMGBORDER } 
+										}
+									}
 								},
 							customImageEffect : {
 								type: "string",
@@ -369,39 +608,13 @@ function($, cssContent) {'use strict';
 									tooltip: "Make white mono and blend with background colour"
 								}],
 								defaultValue: "n"
-								},
-							imageBorder : {
-								ref: "qDef.IMGBORDER",
-								label: "Custom image border",
-								type: "boolean",
-								expression: "optional",
-								defaultValue: 0
-								},
-							customImageBorderSize: {
-								type: "number",
-								component: "slider",
-								label: "Image border",
-								ref: "qDef.IMGBORDERDEFSIZE",
-								min: 0,
-								max: 20,
-								step: 1,
-								defaultValue: 0,
-								show: function(layout) { return layout.qDef.IMGBORDER} 
-								},
-							customImageBorderCol : {
-								ref: "qDef.IMGBORDERDEFCOL",
-								label: "Image border colour (HEX)",
-								type: "string",
-								expression: "optional",
-								defaultValue: "FFF",
-								show: function(layout) { return layout.qDef.IMGBORDER } 
 								}	
 
 							}
 						},
 					singleimages: {
 						type:"items",
-						label:"Single image options",
+						label:"Single image display options",
 						items: {
 							singleImageDifCustomBG : {
 								ref: "qDef.SINGLEIMGCUSTBGTOG",
@@ -429,85 +642,7 @@ function($, cssContent) {'use strict';
 								type: "boolean",
 								defaultValue: false
 								},
-							singleImageDisplayHeader : {
-								ref: "qDef.SINGLEIMGHEADER",
-								label: "Display image name and link",
-								type: "boolean",
-								defaultValue: true
-								},
-							singleImagePopSourceLinkType : {
-								type: "string",
-								component: "dropdown",
-								label: "Popup URL source",
-								ref: "qDef.SINGLEIMGLINKPOPLINKSOURCE",
-								options: [{
-									value: "d1",
-									label: "1st dimension"
-								}, {
-									value: "d2",
-									label: "2nd dimension"
-								}, {
-									value: "c",
-									label: "Custom"
-								}],
-								defaultValue: "d1",
-								show: function(layout) { return layout.qDef.SINGLEIMGHEADER }
-								},
-							singleImageLinkCustomName : {
-								ref: "qDef.SINGLEIMGLINKCUSTOMNAME",
-								label: "Text for image name",
-								type: "string",
-								expression: "optional",
-								defaultValue: "",
-								show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
-								},
-							singleImageLinkCustomLink : {
-								ref: "qDef.SINGLEIMGLINKCUSTOMLINK",
-								label: "URL or local folder path for popup",
-								type: "string",
-								expression: "optional",
-								defaultValue: "",
-								show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
-								},
-							singleImageLinkCustomSourceTog : {
-								ref: "qDef.SINGLEIMGLINKCUSTOMSOURCETOG",
-								label: "Use a different image source",
-								type: "boolean",
-								defaultValue: false
-								},
-							singleImageLinkCustomSourceType : {
-								ref: "qDef.SINGLEIMGLINKCUSTOMSOURCETYPE",
-								type: "boolean",
-								component: "dropdown",
-								label: "Use a URL or insert HTML",
-								options: [{
-									value: true,
-									label: "IMG URL",
-									tooltip: "URL for image"
-								}, {
-									value: false,
-									label: "HTML",
-									tooltip: "iFrame or HTML snippet"
-								}],
-								defaultValue: true,
-								show: function(layout) { return layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG }
-								},
-							singleImageLinkCustomSourceURL : {
-								ref: "qDef.SINGLEIMGLINKCUSTOMSOURCEURL",
-								label: "URL or local folder path for single image",
-								type: "string",
-								expression: "optional",
-								defaultValue: "",
-								show: function(layout) { if(layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG & layout.qDef.SINGLEIMGLINKCUSTOMSOURCETYPE){ return true } else { return false } }
-								},
-							singleImageLinkCustomSourceHTML : {
-								ref: "qDef.SINGLEIMGLINKCUSTOMSOURCEHTML",
-								label: "HTML to insert",
-								type: "string",
-								expression: "optional",
-								defaultValue: "",
-								show: function(layout) { if(layout.qDef.SINGLEIMGLINKCUSTOMSOURCETOG & layout.qDef.SINGLEIMGLINKCUSTOMSOURCETYPE == false){ return true } else { return false } }
-								},
+							
 							singleImageDisplay : {
 								ref : "qDef.SINGLEIMGDISPLAY",
 								label : "Scaling of image:",
@@ -550,64 +685,6 @@ function($, cssContent) {'use strict';
 								defaultValue: "w",
 								show: function(layout) { if((layout.qDef.SINGLEIMGDISPLAY == false)&(layout.qDef.SINGLEIMGDISPLAYOPT121 == false)){ return true } else { return false } } 
 								}
-							}
-						},
-					imageDisplayLimit: {
-						type:"items",
-						label:"Limit grid display and loading",
-						items: {
-							IMGPAGINGNOTE : {
-								label : "Here you can adjust the number of images displayed on the grid and whether the user can page through them. The default is 100.",
-								component : "text"
-								},
-							customImagePaging : {
-								ref : "qDef.IMGPAGING",
-								label : "Use custom limit for maximum number of images to display and optional paging",
-								type : "boolean",
-								defaultValue : false
-								},
-							initFetchRows : {
-								ref : "qHyperCubeDef.qInitialDataFetch.0.qHeight",
-								label : "Maximum number of images to initially display",
-								type : "number",
-								defaultValue : 100,
-								show: function(layout) { return layout.qDef.IMGPAGING } 
-								},
-							IMGPAGINGTOG : {
-								ref : "qDef.IMGPAGINGTOG",
-								label : "Allow users to load more images if available",
-								type : "boolean",
-								defaultValue : true,
-								show: function(layout) { return layout.qDef.IMGPAGING } 
-								},
-							IMGPAGESIZE : {
-								ref : "qDef.IMGPAGINGSIZE",
-								label : "Number of images per page (use same value as initial load)",
-								type : "number",
-								defaultValue : 100,
-								show: function(layout) { if(layout.qDef.IMGPAGING & layout.qDef.IMGPAGINGTOG ){ return true } else { return false } } 
-								},
-							imagePagingDisplay : {
-								ref : "qDef.IMGPAGINGDISPLAY",
-								label : "Hide the image paging count (1 of ####) on grid and 1up views",
-								type : "boolean",
-								defaultValue : false,
-								show: function(layout) { return layout.qDef.IMGPAGING } 
-								},
-							IMGPAGING1UPNOTE : {
-								label : "1 up single image paging. For best results in 1 up mode, set 'Maximum number of images to initially load' and 'Number of images per page' to 1 before selecting the below option.",
-								component : "text",
-								show: function(layout) {return layout.qDef.IMGPAGING } 
-								},
-							IMGPAGING1UP : {
-								ref : "qDef.IMGPAGING1UP",
-								label : "Use a 1 up single image paging display instead of a grid ",
-								type : "boolean",
-								defaultValue : false,
-								show: function(layout) { return layout.qDef.IMGPAGING } 
-								}
-							
-
 							}
 						},
 					imagePrinting: {
@@ -777,6 +854,8 @@ function($, cssContent) {'use strict';
 			} else {
 				hideImageCount = '';
 			};
+
+
 
 			//console.log(qData);
 
@@ -973,8 +1052,15 @@ function($, cssContent) {'use strict';
 
 						var dim = row[0], dim2 = row[1], meas1 = row[2], meas2 = row[3], meas3 = row[4];
 
+						if(layout.qDef.IMGDIMTOSELECT != "d2"){
+							var dimToSelect = dim;
+						} else {
+							var dimToSelect = dim2;
+						};
+
 					} else if (mydimensionCount == 1){
 						var dim = row[0], meas1 = row[1], meas2 = row[2], meas3 = row[3];
+						var dimToSelect = dim;
 					};
 					
 					
@@ -1284,7 +1370,7 @@ function($, cssContent) {'use strict';
 
 						mgoSinglePicModeActive = 0;
 						//Check if popup or selectable
-						if(!layout.qDef.IMGLINK){
+						if(layout.qDef.IMGLINK==0){
 							//if pop up add link
 							if(parentscope.editmode){
 								//disable pop up in edit mode
@@ -1307,7 +1393,11 @@ function($, cssContent) {'use strict';
 							
 							//render image
 
-							html += '<span class="mgoPicGrid"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+						
+							
+							html += '<span class="mgoPicGrid"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; ';
+							html += "background-image: url('"+imgFolderLocation + (encodeURI(dim.qText))+"'); ";
+							html += 'background-color: transparent; opacity: '+ imageOpacity +';">';
 							html += '</span></span>';
 						
 							//check if measure added
@@ -1392,8 +1482,31 @@ function($, cssContent) {'use strict';
 						
 						} else {
 							//render selectable image
+
+							//IF both select and pop add
+							if(layout.qDef.IMGLINK==2 & layout.qDef.IMGGRIDNOSELECT !=true){
+								if(parentscope.editmode){
+									//disable pop up in edit mode
+									html += '<span class="mgoPopinEdit">';
+								} else {
+									if(layout.qDef.IMGLINKPOPLINKSOURCE == "c"){
+										
+										html += '<a href="' + layout.qDef.IMGLINKPOPLINK + '" target="blank" class="mgotooltip">';
+
+									} else if((layout.qDef.IMGLINKPOPLINKSOURCE == "d2") & (mydimensionCount == 2)){
+										
+
+										html += '<a href="' + dim2.qText + '" target="blank" class="mgotooltip">';
+																		
+
+									} else {
+										html += '<a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank" class="mgotooltip">';
+									}; 
+								};
+							};	
+
 							if(layout.qDef.IMGGRIDNOSELECT !=true){
-								html += '<span class="selectable" data-value="'+ dim.qElemNumber + '">';
+								html += '<span class="selectable" data-value="'+ dimToSelect.qElemNumber + '">';
 							} else {
 								html += '<span data-value="'+ dim.qElemNumber + '">';
 							};
@@ -1464,7 +1577,14 @@ function($, cssContent) {'use strict';
 							};
 							
 							html += '</span>';
-
+								if(layout.qDef.IMGLINK==2){
+								if(parentscope.editmode){
+									//close element for pop up in edit mode
+									html += '</span>';
+								} else {
+									html += '</a>';
+								};
+							};
 						};
 						
 					
@@ -1493,7 +1613,7 @@ function($, cssContent) {'use strict';
 						};
 						
 						if(layout.qDef.mgoSinglePicControls){
-							if((!killzoomcontrols) & (rowcount == 1)){
+							if((!killzoomcontrols)){
 								html+= '<div class="mgoControlButs">';
 								html+= '<button class="lui-button butZoomout mgoIconButAdjust" alt="Zoom Out"><span class="lui-icon lui-icon--zoom-out"></span></button> ';
 								html+= '<button class="lui-button butZoomin mgoIconButAdjust" alt="Zoom In"><span class="lui-icon lui-icon--zoom-in"></span></button> ';
@@ -1503,7 +1623,7 @@ function($, cssContent) {'use strict';
 								//single print
 									html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';	
 								};
-								if(layout.qDef.IMGGRIDNOSELECT !=true){
+								if((layout.qDef.IMGGRIDNOSELECT !=true) & (rowcount == 1)){
 									html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';			
 								};
 								html+= '</div>';
@@ -1520,7 +1640,7 @@ function($, cssContent) {'use strict';
 								html+= '</div>';
 							} else {
 								html+= '<div class="mgoControlButs">';
-								if(layout.qDef.IMGGRIDNOSELECT !=true){
+								if((layout.qDef.IMGGRIDNOSELECT !=true) & (rowcount == 1)){
 									html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';	
 								};
 								html+= '</div>';
@@ -1543,7 +1663,7 @@ function($, cssContent) {'use strict';
 								//if 1 up make it selectable
 								if(grid1upDisplay){
 									if(layout.qDef.IMGGRIDNOSELECT !=true){
-										html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
+										html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dimToSelect.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
 									} else {
 										html += '<div class="mgoSinglePic '+imgScaleSingle+'" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
 									};
@@ -1765,7 +1885,15 @@ function($, cssContent) {'use strict';
 				var targSelectedPic = $(this).find('.mgoPicGrid > .mgoPicGrid');
 
 				if(this.hasAttribute("data-value")) {
-					var value = parseInt(this.getAttribute("data-value"), 10), dim = 0;
+					var value = parseInt(this.getAttribute("data-value"), 10); 
+					if(layout.qDef.IMGDIMTOSELECT !="d2"){
+						var dim = 0;
+					} else if((mydimensionCount == 2) & (layout.qDef.IMGDIMTOSELECT =="d2")){
+						var dim = 1;
+					} else {
+						var dim = 0;
+					};
+
 					if(layout.qDef.IMGGRIDFASTSELECT || grid1upDisplay){
 						self.backendApi.selectValues(dim, [value], true);	
 					} else {
@@ -1807,15 +1935,23 @@ function($, cssContent) {'use strict';
 
 			$element.find('.butClose').on('click', function(e) {
 
-				
-				var dim = 0;
+				if(layout.qDef.IMGDIMTOSELECT !="d2"){
+						var dim = 0;
+					} else if((mydimensionCount == 2) & (layout.qDef.IMGDIMTOSELECT =="d2")){
+						var dim = 1;
+					} else {
+						var dim = 0;
+					};
+
 										
 				require(["js/qlik"], function(qlik) {
 					// open the app
+					
 					var app = qlik.openApp(qlik.currApp().id);
-					var targNameFieldtoClear = layout.qHyperCube.qDimensionInfo[dim].qGroupFieldDefs[dim];
-
+					var targNameFieldtoClear = layout.qHyperCube.qDimensionInfo[dim].qGroupFieldDefs[0];
+					
 					var lastNameField = app.field(targNameFieldtoClear);
+					
 					lastNameField.clear();
 				});
 
