@@ -29,7 +29,7 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 **Tips and Tricks:**
 
 *FILE PATHS on the Server*
-In recent server releases (eg: feb 2018 server ) you will need to put all the images inside a folder inside the Extensions folder. Best approach if you want to do that is to create a Mashup named the folder you want to use and put the images in there. That way it gets registered with Sense and can be accessed through the browser. 
+In recent server releases (eg: feb 2018 server ) you will need to put all the images inside a folder inside the Extensions folder. Best approach if you want to do that is to create a Mashup named the folder you want to use and put the images in there. That way it gets registered with Sense and can be accessed through the browser. But whereever possible user browser accessible URLs.
 
 ### Screenshots and possibilities
 
