@@ -14,7 +14,9 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 ## Version 3 - for use in Qlik Sense 3 and later
 **Version 3.13 (MAR 2018) - Tested in Qlik Sense Server/Desktop Feb 2018 release.**
-*LOCALS FILE PATHS*
+
+*LOCALS FILE PATH ISSUES*
+
 **In recent releases (eg: Feb 2018 ) you will need to put all the images inside a folder inside the Extensions folder. That folder needs to get registered with Qlik Sense. The best approach is to create a Mashup named the folder you want to use and put the images in there. It is also possible to add a .qext file manually on the Desktop to the folder.**
 
 It appears that with the server you can't get away with just creating the mashup and copying the files into 
