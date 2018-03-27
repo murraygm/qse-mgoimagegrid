@@ -34,7 +34,7 @@ function($, cssContent) {'use strict';
 					uses: "sorting"
 				},
 				externalimages: {
-					label:"MGO Image Grid V3.12",
+					label:"MGO Image Grid V3.13",
 					component: "expandable-items",
 					items: {
 					imageSource: {
