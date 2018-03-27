@@ -2075,7 +2075,7 @@ function($, cssContent) {'use strict';
 
 					});
 
-				$element.find('.mgoPicGridHovRef').on('mouseleave', function(e) {
+				$element.find('.mgoPicGridHovRef').on('mouseleave click', function(e) {
 					var tooltipG2Show = $('#'+mmcustomToolTipGID);
 						tooltipG2Show.css('display','none');
 						
