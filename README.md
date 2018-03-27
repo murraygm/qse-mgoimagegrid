@@ -1,7 +1,7 @@
 # qse-mgoimagegrid
 Qlik Sense Extension to display images - for use with Qlik Sense
 
-**Download a zip of just the v3.11 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
+**Download a zip of just the v3.12 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
 
 **DOWNLOAD FULL PROJECT VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
@@ -13,6 +13,14 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 
 ## Version 3 - for use in Qlik Sense 3 and later
+**Version 3.13 (MAR 2018) - Tested in Qlik Sense Server/Desktop Feb 2018 release.**
+*LOCALS FILE PATHS*
+**In recent releases (eg: Feb 2018 ) you will need to put all the images inside a folder inside the Extensions folder. That folder needs to get registered with Qlik Sense. The best approach is to create a Mashup named the folder you want to use and put the images in there. It is also possible to add a .qext file manually on the Desktop to the folder.**
+
+**Where ever possible use the ONLINE option and fully browser accessible URLs instead of the local file approach.**
+
+Other updates:
+* Added a hover text option under "Image grid display options"
 
 **Version 3.11 (FEB 2018) - Tested in Qlik Sense Desktop Feb 2018 release.**
 
@@ -26,10 +34,6 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 **FIXED in 3.7: Local images issue FEB 2018** - image path for 'local' and the image field data (the filename) are now URI encoded.
 
-**Tips and Tricks:**
-
-*FILE PATHS on the Server*
-In recent server releases (eg: feb 2018 server ) you will need to put all the images inside a folder inside the Extensions folder. Best approach if you want to do that is to create a Mashup named the folder you want to use and put the images in there. That way it gets registered with Sense and can be accessed through the browser. But whereever possible user browser accessible URLs.
 
 ### Screenshots and possibilities
 
