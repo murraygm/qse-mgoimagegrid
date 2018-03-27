@@ -19,8 +19,8 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 **In recent releases (eg: Feb 2018 ) you will need to put all the images inside a folder inside the Extensions folder. That folder needs to get registered with Qlik Sense. The best approach is to create a Mashup named the folder you want to use and put the images in there. It is also possible to add a .qext file manually on the Desktop to the folder.**
 
-It appears that with the server you can't get away with just creating the mashup and copying the files into 
-C:\Qlik Sense Storage\StaticContent\Extensions
+It appears that with the server you can't get away with just creating the mashup and copying the files into
+C:\Qlik Sense Storage\StaticContent\Extensions. 
 The only way seems to be to create a mashup folder locally on the desktop, add all the images. Zip it, then import it via the QMC to the server in the Extensions area.
 
 **Where ever possible use the ONLINE option and fully browser accessible URLs instead of the local file approach.**
