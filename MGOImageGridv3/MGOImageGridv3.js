@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.11,
+			version: 3.13,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -34,7 +34,7 @@ function($, cssContent) {'use strict';
 					uses: "sorting"
 				},
 				externalimages: {
-					label:"MGO Image Grid V3.11",
+					label:"MGO Image Grid V3.12",
 					component: "expandable-items",
 					items: {
 					imageSource: {
@@ -142,6 +142,13 @@ function($, cssContent) {'use strict';
 										component: "text",
 										show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK !=1 ){ return true } else { return false } }
 									},
+									imgPopupTargType: {
+										ref : "qDef.POPUPTARGTYPE",
+										label : "Pop Up in same window",
+										type : "boolean",
+										defaultValue : false,
+										show: function(layout) { if( layout.qDef.IMGGRIDNOSELECT != true & layout.qDef.IMGLINK !=1 ){ return true } else { return false } }
+									}, 
 									imagePopSourceLinkType : {
 										type: "string",
 										component: "dropdown",
@@ -175,7 +182,7 @@ function($, cssContent) {'use strict';
                					label: "Single image",
 								items: {
 									imgSelectSingleTxt : {
-										label:"Below you can change source and interactions for the single image view",
+										label:"Below you can change source and interactions for the SELECTED single image view",
 										component: "text"
 										},
 									singleImageDisplayHeader : {
@@ -431,6 +438,47 @@ function($, cssContent) {'use strict';
 								}],
 								defaultValue: "a",
 								},
+							hoverDisplay: {
+								type:"items",
+								label:"Size",
+								items: {
+									imageGridHover : {
+										ref : "qDef.IMGGRIDHOVER",
+										label : "Display dimension/value on hover",
+										type : "boolean",
+										defaultValue : false
+										},
+									imageGridHoverType : {
+										type: "string",
+										component: "dropdown",
+										label: "Select text for hover",
+										ref: "qDef.IMGGRIDHOVERTYPE",
+										options: [{
+											value: "d1",
+											label: "Text = Dimension 1",
+											tooltip: "Use the 1st dimension as text for the hover"
+										},{
+											value: "d2",
+											label: "Text = Dimension 2",
+											tooltip: "Use the 2nd dimension as text for the hover"
+										}, {
+											value: "m1",
+											label: "Text = Measure 1",
+											tooltip: "Use the 1st measure as text for the hover"
+										}, {
+											value: "m2",
+											label: "Text =  Measure 2",
+											tooltip: "Use the 2nd measure as text for the hover"
+										},{
+											value: "m3",
+											label: "Text =  Measure 3",
+											tooltip: "Use the 3rd measure as text for the hover"
+										}],
+										defaultValue: "d1",
+										show: function(layout) { return layout.qDef.IMGGRIDHOVER } 
+										}	
+									}
+								},		
 							sizeDisplay: {
 								type:"items",
 								label:"Size",
@@ -1044,7 +1092,11 @@ function($, cssContent) {'use strict';
 			var parentscope = angular.element($element).scope().$parent.$parent.$parent;
 			$element.html(parentscope.editmode ? 'In Edit Mode' : 'Not in Edit mode');
 			
-			
+			if(layout.qDef.POPUPTARGTYPE){
+				var popUpType = '';
+			} else  {
+				var popUpType = ' target="_blank"';
+			};
 
 			//render data
 				$.each(qData.qMatrix, function ( key, row  ) {
@@ -1362,7 +1414,23 @@ function($, cssContent) {'use strict';
 					};
 
 					// hover for Dim value
-					var hoverDimText=dim.qText;
+					var hoverDimText="";
+					if(layout.qDef.IMGGRIDHOVER){
+						if(layout.qDef.IMGGRIDHOVERTYPE=="d1"){
+							 hoverDimText=dim.qText;
+						} else if ((layout.qDef.IMGGRIDHOVERTYPE=="d2") & (mydimensionCount == 2) ){
+							 hoverDimText=dim2.qText;
+						} else if ((layout.qDef.IMGGRIDHOVERTYPE=="m1") & (mymeasureCount >= 1) ){
+							 hoverDimText=meas1.qText;
+						} else if ((layout.qDef.IMGGRIDHOVERTYPE=="m2") & (mymeasureCount >= 2) ){
+							 hoverDimText=meas2.qText;
+						} else if ((layout.qDef.IMGGRIDHOVERTYPE=="m3") & (mymeasureCount == 3) ){
+							 hoverDimText=meas3.qText;
+						}
+
+					} else {
+						hoverDimText="";
+					}
 
 					//Check count and choose Grid or Single pic layout
 					if((rowcount > 1) & (!grid1upDisplay)){
@@ -1378,16 +1446,16 @@ function($, cssContent) {'use strict';
 							} else {
 								if(layout.qDef.IMGLINKPOPLINKSOURCE == "c"){
 									
-									html += '<a href="' + layout.qDef.IMGLINKPOPLINK + '" target="blank" class="mgotooltip">';
+									html += '<a href="' + layout.qDef.IMGLINKPOPLINK + '"' + popUpType + ' class="mgotooltip">';
 
 								} else if((layout.qDef.IMGLINKPOPLINKSOURCE == "d2") & (mydimensionCount == 2)){
 									
 
-									html += '<a href="' + dim2.qText + '" target="blank" class="mgotooltip">';
+									html += '<a href="' + dim2.qText + '"' + popUpType + ' class="mgotooltip">';
 																	
 
 								} else {
-									html += '<a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank" class="mgotooltip">';
+									html += '<a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '"' + popUpType + ' class="mgotooltip">';
 								}; 
 							};
 							
@@ -1395,7 +1463,7 @@ function($, cssContent) {'use strict';
 
 						
 							
-							html += '<span class="mgoPicGrid"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; ';
+							html += '<span class="mgoPicGrid mgoPicGridHovRef"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; ';
 							html += "background-image: url('"+imgFolderLocation + (encodeURI(dim.qText))+"'); ";
 							html += 'background-color: transparent; opacity: '+ imageOpacity +';">';
 							html += '</span></span>';
@@ -1491,16 +1559,16 @@ function($, cssContent) {'use strict';
 								} else {
 									if(layout.qDef.IMGLINKPOPLINKSOURCE == "c"){
 										
-										html += '<a href="' + layout.qDef.IMGLINKPOPLINK + '" target="blank" class="mgotooltip">';
+										html += '<a href="' + layout.qDef.IMGLINKPOPLINK + '"' + popUpType + ' class="mgotooltip">';
 
 									} else if((layout.qDef.IMGLINKPOPLINKSOURCE == "d2") & (mydimensionCount == 2)){
 										
 
-										html += '<a href="' + dim2.qText + '" target="blank" class="mgotooltip">';
+										html += '<a href="' + dim2.qText + '"' + popUpType + ' class="mgotooltip">';
 																		
 
 									} else {
-										html += '<a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank" class="mgotooltip">';
+										html += '<a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '"' + popUpType + ' class="mgotooltip">';
 									}; 
 								};
 							};	
@@ -1511,7 +1579,7 @@ function($, cssContent) {'use strict';
 								html += '<span data-value="'+ dim.qElemNumber + '">';
 							};
 							// render image 
-								html += '<span class="mgoPicGrid" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+								html += '<span class="mgoPicGrid mgoPicGridHovRef" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); background-color: transparent; opacity: '+ imageOpacity +';">';
 								html += '</span></span>';
 							
 
@@ -1723,18 +1791,19 @@ function($, cssContent) {'use strict';
 						if(layout.qDef.SINGLEIMGHEADER){
 
 							if(grid1upDisplay){
-								html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a></div>';
+								
+								//html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '"' + popUpType + ' > <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a></div>';
 							} else {	
 								if(customSingleImageNameTog){
-								html += '<div class="mgoHeader"><a href="' + customSingleImageLink + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + customSingleImageName + '</a>';
+								html += '<div class="mgoHeader"><a href="' + customSingleImageLink + '"' + popUpType + ' > <span class="lui-icon lui-icon--new-tab"></span> ' + customSingleImageName + '</a>';
 								
 								} else {
 									if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d1")){
-										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
+										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '"' + popUpType + ' > <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
 									} else if((mydimensionCount == 2) & (layout.qDef.SINGLEIMGLINKPOPLINKSOURCE=="d2")) {
-										html += '<div class="mgoHeader"><a href="' + dim2.qText + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim2.qText + '</a>';
+										html += '<div class="mgoHeader"><a href="' + dim2.qText + '"' + popUpType + ' > <span class="lui-icon lui-icon--new-tab"></span> ' + dim2.qText + '</a>';
 									} else {
-										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '" target="blank"> <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
+										html += '<div class="mgoHeader"><a href="' + imgFolderLocation + (encodeURI(dim.qText)) + '"' + popUpType + ' > <span class="lui-icon lui-icon--new-tab"></span> ' + dim.qText + '</a>';
 									};
 								}
 								html += '</div>';
@@ -1765,7 +1834,7 @@ function($, cssContent) {'use strict';
 
 				var imgPagingButtonStyle, imgPagingButtonLStyle, imgPagingButtonMStyle, imgPagingReset;
 				if((grid1upDisplay) & (imgridpage==1)){
-					imgPagingButtonStyle = 'style="'+ hideImageCount +' position: absolute; top: 0px; right:0px; z-index:100; font-size:10px; background-color:rgba(1,1,1,0.4); color:rgba(255,255,255,1); margin:0px 0px; padding: 4px;"';
+					imgPagingButtonStyle = 'style="'+ hideImageCount +' position: absolute; bottom: 0px; left:0px; z-index:100; font-size:10px; background-color:rgba(1,1,1,0.4); color:rgba(255,255,255,1); margin:0px 0px; padding: 4px;"';
 					imgPagingButtonLStyle = ' mgoLessMore1upButs" style="left:5px; z-index:101; " ><span class="lui-icon lui-icon--triangle-left"></span>';
 					imgPagingButtonMStyle = ' mgoLessMore1upButs" style="right:5px; z-index:102; " ><span class="lui-icon lui-icon--triangle-right"></span>';
 					
@@ -1962,7 +2031,59 @@ function($, cssContent) {'use strict';
 			});
 
 			//image mouseover
+			if(layout.qDef.IMGGRIDHOVER){
+				
+				var mmcustomToolTipGID = 'mgoBarToolTipG' + imgriduniqueID;
+				//custom bar tool tip
+				$('body').append('<div id="'+mmcustomToolTipGID+'" class="tooltipG2Show" style="display:none"></div>');
 
+				
+
+				$element.find('.mgoPicGridHovRef').on('mouseenter', function(h) {
+					var tooltipG2Show = $('#'+mmcustomToolTipGID);
+						
+
+						var relAnchor = $(this).offset();
+						var relXtip = Math.round(relAnchor.left)+(($(this).width()/4)*3)-4;
+						var relYtip = Math.round(relAnchor.top)+(($(this).height()/4)*3)-4;
+						//var relXtip = Math.round(h.pageX + 8);
+						//var relYtip = Math.round(h.pageY - 50);
+						
+						console.log(relXtip + ' - '+relYtip + ' .... ' + $(this).height());
+
+						//var m1GDataVal= $(parent).attr('data-value').split(',');
+						//console.log($(this).attr('data-value'));
+						//console.log(layout.qHyperCube.qDataPages[0].qMatrix[0][2]);
+						
+
+						tooltipG2Show.html('<span class="tooltipG2text">'+$(this).attr('data-value')+'</span>');
+						
+
+						tooltipG2Show.css({
+							'display':'block',
+							'position':'absolute',
+							'top':relYtip+'px',
+							'left':relXtip+'px',
+							'width':'100px',
+							'height':'auto',
+							'max-height':'100px',
+							'z-index':'1000',
+							'overflow':'hidden',
+							'pointer-events': 'none'
+    					});
+						
+
+					});
+
+				$element.find('.mgoPicGridHovRef').on('mouseleave', function(e) {
+					var tooltipG2Show = $('#'+mmcustomToolTipGID);
+						tooltipG2Show.css('display','none');
+						
+					});
+
+				
+
+			};
 			
 
 			//measure mouse over 

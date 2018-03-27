@@ -115,6 +115,20 @@ a.mgotooltip span.mgoimghoversm {
     z-index:9999;display:none;
 }
 
+.tooltipG2Show{
+	font-size: 12px;
+	color: #fff;
+	background-color: rgba(0,0,0,0.7);
+	border-radius: 0px 4px 4px 4px;
+	padding: 4px;
+	display: none;
+   	}
+.tooltipG2Show .tooltipG2text{
+	font-size: 12px;
+	color: #fff;
+	text-overflow:ellipsis;
+   	}
+
 span.mgoPopinEdit span.mgoimghoversm {
 		z-index:9999;display:none;
 	}
