@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.13,
+			version: 3.15,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -34,7 +34,7 @@ function($, cssContent) {'use strict';
 					uses: "sorting"
 				},
 				externalimages: {
-					label:"MGO Image Grid V3.13",
+					label:"MGO Image Grid V3.15",
 					component: "expandable-items",
 					items: {
 					imageSource: {
@@ -184,46 +184,6 @@ function($, cssContent) {'use strict';
 									imgSelectSingleTxt : {
 										label:"Below you can change source and interactions for the SELECTED single image view",
 										component: "text"
-										},
-									singleImageDisplayHeader : {
-										ref: "qDef.SINGLEIMGHEADER",
-										label: "Display image name and link",
-										type: "boolean",
-										defaultValue: true
-										},
-									singleImagePopSourceLinkType : {
-										type: "string",
-										component: "dropdown",
-										label: "Image link (URL) and label source",
-										ref: "qDef.SINGLEIMGLINKPOPLINKSOURCE",
-										options: [{
-											value: "d1",
-											label: "Link 1st dimension"
-										}, {
-											value: "d2",
-											label: "Link 2nd dimension"
-										}, {
-											value: "c",
-											label: "Custom link & label"
-										}],
-										defaultValue: "d1",
-										show: function(layout) { return layout.qDef.SINGLEIMGHEADER }
-										},
-									singleImageLinkCustomName : {
-										ref: "qDef.SINGLEIMGLINKCUSTOMNAME",
-										label: "Text for image name",
-										type: "string",
-										expression: "optional",
-										defaultValue: "",
-										show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
-										},
-									singleImageLinkCustomLink : {
-										ref: "qDef.SINGLEIMGLINKCUSTOMLINK",
-										label: "URL or local folder path for image link",
-										type: "string",
-										expression: "optional",
-										defaultValue: "",
-										show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
 										},
 									singleImageLinkCustomSourceTog : {
 										ref: "qDef.SINGLEIMGLINKCUSTOMSOURCETOG",
@@ -664,6 +624,46 @@ function($, cssContent) {'use strict';
 						type:"items",
 						label:"Single image display options",
 						items: {
+							singleImageDisplayHeader : {
+								ref: "qDef.SINGLEIMGHEADER",
+								label: "Display image name and link",
+								type: "boolean",
+								defaultValue: true
+								},
+							singleImagePopSourceLinkType : {
+								type: "string",
+								component: "dropdown",
+								label: "Image link (URL) and label source",
+								ref: "qDef.SINGLEIMGLINKPOPLINKSOURCE",
+								options: [{
+									value: "d1",
+									label: "Link 1st dimension"
+								}, {
+									value: "d2",
+									label: "Link 2nd dimension"
+								}, {
+									value: "c",
+									label: "Custom link & label"
+								}],
+								defaultValue: "d1",
+								show: function(layout) { return layout.qDef.SINGLEIMGHEADER }
+								},
+							singleImageLinkCustomName : {
+								ref: "qDef.SINGLEIMGLINKCUSTOMNAME",
+								label: "Text for image name",
+								type: "string",
+								expression: "optional",
+								defaultValue: "",
+								show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
+								},
+							singleImageLinkCustomLink : {
+								ref: "qDef.SINGLEIMGLINKCUSTOMLINK",
+								label: "URL or local folder path for image link",
+								type: "string",
+								expression: "optional",
+								defaultValue: "",
+								show: function(layout) { if(layout.qDef.SINGLEIMGHEADER & layout.qDef.SINGLEIMGLINKPOPLINKSOURCE == "c"){ return true } else { return false } } 
+								},
 							singleImageDifCustomBG : {
 								ref: "qDef.SINGLEIMGCUSTBGTOG",
 								label: "Use a different background colour (separate from grid view)",
@@ -2043,34 +2043,78 @@ function($, cssContent) {'use strict';
 					var tooltipG2Show = $('#'+mmcustomToolTipGID);
 						
 
+						var thisGridID =$('#mmI'+imgriduniqueID);
+						var thisGridIDPos =thisGridID.offset();
 						var relAnchor = $(this).offset();
-						var relXtip = Math.round(relAnchor.left)+(($(this).width()/4)*3)-4;
-						var relYtip = Math.round(relAnchor.top)+(($(this).height()/4)*3)-4;
-						//var relXtip = Math.round(h.pageX + 8);
-						//var relYtip = Math.round(h.pageY - 50);
-						
-						console.log(relXtip + ' - '+relYtip + ' .... ' + $(this).height());
+						var tipInOut='I';
+						var tipAboveBelow='B';
+						var tipPointerCssH='';
+						var tipPointerCssV='';
+						if(((Math.round(relAnchor.left)+(($(this).width()/8)*7))+100)>(Math.round(thisGridIDPos.left)+thisGridID.width())){
+							var relXtip = Math.round(relAnchor.left)+(($(this).width()/8)*7)-104;
+							//var relYtip = Math.round(relAnchor.top)+(($(this).height()/8)*7)-4;
+							tipInOut='O';
+							tipPointerCssH='style="left:86px; ';
+						} else {
+							var relXtip = Math.round(relAnchor.left)+(($(this).width()/8)*1)-4;
+							//var relYtip = Math.round(relAnchor.top)+(($(this).height()/8)*7)-4;
+							tipInOut='I';
+							tipPointerCssH='style="left:0px; ';
+						};
 
-						//var m1GDataVal= $(parent).attr('data-value').split(',');
-						//console.log($(this).attr('data-value'));
-						//console.log(layout.qHyperCube.qDataPages[0].qMatrix[0][2]);
-						
+						if(((Math.round(relAnchor.top)+(($(this).height()/8)*7))+100)>(Math.round(thisGridIDPos.top)+thisGridID.height())){
+							var relYtip = Math.round(relAnchor.top)+(($(this).height()/8)*1)-104;
+							tipAboveBelow='A';
+							tipPointerCssV='top:100px;"';
+						} else {
+							var relYtip = Math.round(relAnchor.top)+(($(this).height()/8)*7)-4;
+							tipAboveBelow='B';
+							tipPointerCssV='top:-14px"';
+						};
 
-						tooltipG2Show.html('<span class="tooltipG2text">'+$(this).attr('data-value')+'</span>');
 						
+						if(tipAboveBelow=='A'){
 
-						tooltipG2Show.css({
+							tooltipG2Show.css({
+							'display':'block',
+							'position':'absolute',
+							'top':relYtip+'px',
+							'bottom':'-'+relYtip+'px',
+							'left':relXtip+'px',
+							'z-index':'1000',				
+							'pointer-events': 'none'
+    						});
+						} else {
+							tooltipG2Show.css({
 							'display':'block',
 							'position':'absolute',
 							'top':relYtip+'px',
 							'left':relXtip+'px',
-							'width':'100px',
-							'height':'auto',
-							'max-height':'100px',
-							'z-index':'1000',
-							'overflow':'hidden',
+							'z-index':'1000',				
 							'pointer-events': 'none'
-    					});
+    						});
+
+						};
+
+						
+
+						if((tipInOut=='I') & (tipAboveBelow=='B')){
+								tooltipG2Show.html('<span class="tooltipG2point" '+tipPointerCssH+tipPointerCssV+'></span><span class="tooltipG2text">'+$(this).attr('data-value')+'</span>');
+								console.log("I B");
+							} else if((tipInOut=='I') & (tipAboveBelow=='A')){
+
+								tooltipG2Show.html('<span class="tooltipG2point2" '+tipPointerCssH+tipPointerCssV+'></span><span class="tooltipG2text">'+$(this).attr('data-value')+'</span>');
+	    						console.log("I A");
+	    					} else if((tipInOut=='O') & (tipAboveBelow=='B')){
+
+	    						tooltipG2Show.html('<span class="tooltipG2point" '+tipPointerCssH+tipPointerCssV+'></span><span class="tooltipG2text">'+$(this).attr('data-value')+'</span>');
+	    						console.log("O B");
+	    					} else {
+								tooltipG2Show.html('<span class="tooltipG2point2" '+tipPointerCssH+tipPointerCssV+'></span><span class="tooltipG2text">'+$(this).attr('data-value')+'</span>');
+								console.log("O A");
+	    					};
+
+						
 						
 
 					});
@@ -2152,7 +2196,9 @@ function($, cssContent) {'use strict';
 
 				var mmContainerTarg = $element.find(('.mgoSinglePic'));
 				var mmContainerTargContainer = $element.find(('.mgoSinglePicC'));
+
 				
+
 				var bgImageheightCAPTURE, bgImagewidthCAPTURE, bgImageOrient;
 				//get and store bg image orig size in px
 				var ImageUrlOrigA = mmContainerTarg.css('background-image').replace('url(', '').replace(')', '').replace("'", '').replace('"', '');
@@ -2163,7 +2209,7 @@ function($, cssContent) {'use strict';
 				{
 				    bgImageheightCAPTURE = $(this).height();
 				    bgImagewidthCAPTURE = $(this).width();
-				    bgImageOrient = bgImageheightCAPTURE / bgImagewidthCAPTURE;
+				    bgImageOrient = Math.round((bgImageheightCAPTURE / bgImagewidthCAPTURE)*100)/100;
 				    
 
 				});
@@ -2176,7 +2222,7 @@ function($, cssContent) {'use strict';
 			
 				$element.find('.butZoomout').on('click', function() {
 						
-						var mmContainerOrientation = mmContainerTarg.innerHeight() / mmContainerTarg.innerWidth();
+						var mmContainerOrientation =Math.round((mmContainerTarg.innerHeight() / mmContainerTarg.innerWidth())*100)/100;
 
 						
 						//current zoom on image:
@@ -2191,17 +2237,19 @@ function($, cssContent) {'use strict';
 
 						if (curZoomLevelArr == "contain"){
 							//check height to width (real zoom)
+							//console.log('contain');
 							//console.log('bgImageOrient ' +bgImageOrient+ ' - ' +'mmContainerOrientation ' + mmContainerOrientation);
 
 							if(bgImageOrient > mmContainerOrientation){
-								var curZoomLevel = Math.round(mmContainerOrientation*100);
+								var curZoomLevel = Math.round((mmContainerOrientation/bgImageOrient)*100);
+								//var curZoomLevel = 100;
 							} else if (bgImageOrient < mmContainerOrientation){
 								var curZoomLevel = 100;
 							} else {
 								var curZoomLevel = 100;
 							}
 						} else if(curZoomLevelArr == "auto"){
-							console.log('auto 1:1 factor:' + image100scaleFactorW);
+							//console.log('auto 1:1 factor:' + image100scaleFactorW);
 							var curZoomLevel = image100scaleFactorW;
 								
 						} else if(curZoomLevelArrParts[0] == "auto"){
@@ -2222,7 +2270,7 @@ function($, cssContent) {'use strict';
 						};
 						var zoomInc = curZoomLevel/10;
 						
-						//console.log('Out cur ' + curZoomLevelArr);
+						//console.log('Out cur ' + curZoomLevel);
 
 						var targZoomLevel = Math.round( (parseFloat(curZoomLevel) - parseFloat(zoomInc)) * 10 )/10;
 						
@@ -2248,7 +2296,7 @@ function($, cssContent) {'use strict';
 
 
 
-					var mmContainerOrientation = mmContainerTarg.innerHeight() / mmContainerTarg.innerWidth();
+					var mmContainerOrientation = Math.round((mmContainerTarg.innerHeight() / mmContainerTarg.innerWidth())*100)/100;
 
 						
 						//current zoom on image:
@@ -2263,11 +2311,11 @@ function($, cssContent) {'use strict';
 
 						if (curZoomLevelArr == "contain"){
 							//check height to width (real zoom)
-							console.log('contain');
+							//console.log('contain');
 							//console.log('bgImageOrient ' +bgImageOrient+ ' - ' +'mmContainerOrientation ' + mmContainerOrientation);
 							if(bgImageOrient > mmContainerOrientation){
-								var curZoomLevel = Math.round(mmContainerOrientation*100);
-
+								var curZoomLevel = Math.round((mmContainerOrientation/bgImageOrient)*100);
+								//var curZoomLevel = 100;
 							} else if (bgImageOrient < mmContainerOrientation){
 								var curZoomLevel = 100;
 
@@ -2275,12 +2323,12 @@ function($, cssContent) {'use strict';
 								var curZoomLevel = 100;
 							}
 						} else if(curZoomLevelArr == "auto"){
-							console.log('auto 1:1 factor:' + image100scaleFactorW);
+							//console.log('auto 1:1 factor:' + image100scaleFactorW);
 							var curZoomLevel = image100scaleFactorW;
 							
 							
 						} else if((curZoomLevelArrParts[0] == "auto") & (curZoomLevelArrParts.length == 2)){
-							console.log('auto width');
+							//console.log('auto width');
 							if(bgImageOrient > mmContainerOrientation){
 								var curZoomLevel = Math.round(mmContainerOrientation*100);
 							} else if (bgImageOrient < mmContainerOrientation){
@@ -2290,13 +2338,13 @@ function($, cssContent) {'use strict';
 							}
 
 						} else {
-							console.log('set value (zoomed already)');
+							//console.log('set value (zoomed already)');
 							var curZoomLevelValues = curZoomLevelArr.match(/-?[\d\.]+/g);
 							var curZoomLevel = curZoomLevelValues[0];
 						};
 						var zoomInc = curZoomLevel/10;
 						
-						//console.log('In cur ' + curZoomLevelArr);
+						//console.log('In cur ' + curZoomLevel);
 
 						var targZoomLevel = Math.round( (parseFloat(curZoomLevel) + parseFloat(zoomInc)) * 10 )/10;
 
@@ -2463,13 +2511,20 @@ function($, cssContent) {'use strict';
 						} else if(layout.qDef.SINGLEIMGDISPLAYOPT == "s"){
 							mmContainerTarg.css('background-size', '100% 100%');
 						};
+						//var mmContainerTargContainer = $element.find(('.mgoSinglePicC'));
+						//console.log(mmContainerTargContainer);
 
-						var mgoPicContW = Math.floor(mmContainerTargContainer.innerWidth());
-					   	var mgoPicContH = Math.floor(mmContainerTargContainer.innerHeight());
+						var mgoPicContW = Math.floor(mmContainerTarg.innerWidth());
+					   	var mgoPicContH = Math.floor(mmContainerTarg.innerHeight());
 
-						var curRotateLevelArrA = mmContainerTarg.css('-webkit-transform');
-						var curRotateLevelArrB = mmContainerTarg.css('-moz-transform');
-						var curRotateLevelArrC = mmContainerTarg.css('transform');
+					   	//mmContainerTargContainer
+
+					   	//console.log('w ' + mgoPicContW);
+					   	//console.log('h ' + mgoPicContH);
+
+						var curRotateLevelArrA = mmContainerTarg.css('transform');
+						//var curRotateLevelArrB = mmContainerTarg.css('-moz-transform');
+						//var curRotateLevelArrC = mmContainerTarg.css('transform');
 
 						//console.log(mgoPicContW + ' CW-CH ' + mgoPicContH);
 
@@ -2477,7 +2532,7 @@ function($, cssContent) {'use strict';
 
 						
 
-						if((curRotateLevelArrA == "none") || (curRotateLevelArrB == "none") || (curRotateLevelArrC == "none")){
+						if((rotateImgTurns == 0)){
 							curRotateLevel = 0;
 							targRotateLevel = 90;
 							targOffsetX=mgoPicContW;
@@ -2487,32 +2542,33 @@ function($, cssContent) {'use strict';
 							rotateImgTurns= 1;
 
 						} else {
-							var curRotateLevelValuesA = curRotateLevelArrA.match(/-?[\d\.]+/g);
-							var curMatrixVals = Math.round( (parseFloat(curRotateLevelValuesA[0])) * 10 );
+							//var curRotateLevelValuesA = curRotateLevelArrA.match(/-?[\d\.]+/g);
+							//var curMatrixVals = Math.round( (parseFloat(curRotateLevelValuesA[0])) * 10 );
 
-							if(curMatrixVals == -18){
+
+							if(rotateImgTurns == 3){
 								targRotateLevel = 0;
 								targOffsetX=0;
 								targOffsetY=0;
-								targOffsetW=mgoPicContW;
-								targOffsetH=mgoPicContH;
+								targOffsetW=mgoPicContH;
+								targOffsetH=mgoPicContW;
 								rotateImgTurns= 4;
 
-							} else if (curMatrixVals == -10){
+							} else if (rotateImgTurns == 2){
 								targRotateLevel = 270;
 								targOffsetX=0;
 								targOffsetY=mgoPicContH;
 								targOffsetW=mgoPicContH;
 								targOffsetH=mgoPicContW;
 								rotateImgTurns= 3;
-							} else if (curMatrixVals == 61){
+							} else if (rotateImgTurns == 1){
 								targRotateLevel = 180;
-								targOffsetX=mgoPicContW;
-								targOffsetY=mgoPicContH;
-								targOffsetW=mgoPicContW;
-								targOffsetH=mgoPicContH;
+								targOffsetX=mgoPicContH;
+								targOffsetY=mgoPicContW;
+								targOffsetW=mgoPicContH;
+								targOffsetH=mgoPicContW;
 								rotateImgTurns= 2;
-							} else {
+							} else if (rotateImgTurns == 4){
 								targRotateLevel = 90;
 								targOffsetX=mgoPicContW;
 								targOffsetY=0;
@@ -2524,17 +2580,18 @@ function($, cssContent) {'use strict';
 							
 						};
 
-
-						//console.log(rotateImgTurns);
+						//console.log('a '+curRotateLevelArrA);
+						//console.log('vals ' + curMatrixVals);
+						//console.log('turns ' + rotateImgTurns);
 
 						mmContainerTarg.css('position', 'absolute');
 						
-						mmContainerTarg.css('-moz-transform-origin', '0px 0px 0px');
-						mmContainerTarg.css('-webkit-transform-origin', '0px 0px 0px');
+						//mmContainerTarg.css('-moz-transform-origin', '0px 0px 0px');
+						//mmContainerTarg.css('-webkit-transform-origin', '0px 0px 0px');
 						mmContainerTarg.css('transform-origin', '0px 0px 0px');
 
-						mmContainerTarg.css('-moz-transform', 'rotate('+targRotateLevel+'deg)');
-						mmContainerTarg.css('-webkit-transform', 'rotate('+targRotateLevel+'deg)');
+						//mmContainerTarg.css('-moz-transform', 'rotate('+targRotateLevel+'deg)');
+						//mmContainerTarg.css('-webkit-transform', 'rotate('+targRotateLevel+'deg)');
 						mmContainerTarg.css('transform', 'rotate('+targRotateLevel+'deg)');
 
 						mmContainerTarg.css('top', targOffsetY+'px');
