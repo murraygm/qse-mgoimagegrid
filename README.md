@@ -13,7 +13,7 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 
 ## Version 3 - for use in Qlik Sense 3 and later
-**Version 3.15 (MAR 2018) - Tested in Qlik Sense Server Feb 2018 release, Desktop April 2018 release.**
+**Version 3.15 (April 2018) - Tested in Qlik Sense Server Feb 2018 release, Desktop April 2018 release.**
 
 *LOCALS FILE PATH ISSUES*
 
