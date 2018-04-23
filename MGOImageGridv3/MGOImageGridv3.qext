@@ -4,7 +4,7 @@
 	"icon" : "extension",
 	"preview": "MGOImageGridv3.png",
 	"type" : "visualization",
-	"version": 3.15,
+	"version": 3.16,
 	"preview" : "extension",
 	"author": "Murray Grigo-McMahon"
 }

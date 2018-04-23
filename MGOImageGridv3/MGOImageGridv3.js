@@ -4,7 +4,7 @@ function($, cssContent) {'use strict';
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties: {
-			version: 3.15,
+			version: 3.16,
 			qHyperCubeDef: {
 				qDimensions: [],
 				qMeasures: [],
@@ -34,7 +34,7 @@ function($, cssContent) {'use strict';
 					uses: "sorting"
 				},
 				externalimages: {
-					label:"MGO Image Grid V3.15",
+					label:"MGO Image Grid V3.16",
 					component: "expandable-items",
 					items: {
 					imageSource: {
@@ -377,7 +377,34 @@ function($, cssContent) {'use strict';
 						label:"Image grid display options",
 						grouped: true,
 						items: {
-							
+							gridStyle: {
+								type:"items",
+								label:"Grid style",
+								items: {
+									customGridStyle : {
+										ref : "qDef.objectStyling",
+										label : "Custom full grid styling (BG, Padding)",
+										type : "boolean",
+										defaultValue : false
+										},
+									customImageWidth : {
+										ref: "qDef.objectPadding",
+										label: "Width (px)",
+										type: "number",
+										expression: "optional",
+										defaultValue: 0,
+										show: function(layout) { return layout.qDef.objectStyling} 
+										},
+									gridBackground : {
+										ref: "qDef.objectBGCol",
+										label: "Background colour of object",
+										type: "string",
+										expression: "optional",
+										defaultValue: "transparent",
+										show: function(layout) { return layout.qDef.objectStyling} 
+										}
+									}
+								},
 							imageScalingGrid : {
 								type: "string",
 								component: "buttongroup",
@@ -842,7 +869,7 @@ function($, cssContent) {'use strict';
 								ref: "qDef.IMGCOLORFLAGTARG",
 								type: "string",
 								component: "dropdown",
-								label: "then, flag via this property",
+								label: "Use this as flag",
 								options: [{
 									value: "b",
 									label: "Background colour",
@@ -850,7 +877,7 @@ function($, cssContent) {'use strict';
 								},{
 									value: "e",
 									label: "Overide effect",
-									tooltip: "Overide image effect (eg turn of black and white)"
+									tooltip: "Overide image effect (eg turn off black and white)"
 								},{
 									value: "t1",
 									label: "Colour for measure 1",
@@ -859,6 +886,10 @@ function($, cssContent) {'use strict';
 									value: "t2",
 									label: "Colour for measure 2",
 									tooltip: "Overide colour on measure 2"
+								},{
+									value: "o",
+									label: "Add corner banner (overides image effect)",
+									tooltip: "Add an overlay corner banner"
 								}],
 								defaultValue: "b",
 								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0)){ return true } else { return false } } 
@@ -869,7 +900,31 @@ function($, cssContent) {'use strict';
 								label : "To this colour (HEX)",
 								defaultValue : "F00",
 								ref: "qDef.IMGCOLORFLAGDTARGCOL",
-								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0) & (layout.qDef.IMGCOLORFLAGTARG != "e")){ return true } else { return false } } 
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0) & (layout.qDef.IMGCOLORFLAGTARG != "e") & (layout.qDef.IMGCOLORFLAGTARG != "o")){ return true } else { return false } } 
+								},
+							colorFlagSashCol : {
+								type : "string",
+								expression: "optional",
+								label : "This colour banner (HEX)",
+								defaultValue : "F00",
+								ref: "qDef.IMGCOLORFLAGSASHCOL",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0) & (layout.qDef.IMGCOLORFLAGTARG == "o")){ return true } else { return false } } 
+								},
+							colorFlagSashTxt : {
+								type : "string",
+								expression: "optional",
+								label : "This text on the banner",
+								defaultValue : "",
+								ref: "qDef.IMGCOLORFLAGSASHTXT",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0) & (layout.qDef.IMGCOLORFLAGTARG == "o")){ return true } else { return false } } 
+								},
+							colorFlagSashTxtCol : {
+								type : "string",
+								expression: "optional",
+								label : "This colour banner (HEX)",
+								defaultValue : "FFF",
+								ref: "qDef.IMGCOLORFLAGSASHTXTCOL",
+								show: function(layout) { if((layout.qDef.IMGCOLORFLAG) & (layout.qDef.IMGCOLORFLAGREF > 0) & (layout.qDef.IMGCOLORFLAGTARG == "o")){ return true } else { return false } } 
 								}
 
 							}
@@ -888,14 +943,45 @@ function($, cssContent) {'use strict';
 
 		paint: function ( $element,layout ) {
 			var self = this, lastrow = 0, firstrow = 0, morebutton = false, lessbutton = false, imgSelectType = layout.qDef.IMGLINK, rowcount = this.backendApi.getRowCount(), imgFolderLocation = "", qData = layout.qHyperCube.qDataPages[(layout.qHyperCube.qDataPages.length - 1)], mymeasureCount = layout.qHyperCube.qMeasureInfo.length, mydimensionCount = layout.qHyperCube.qDimensionInfo.length, measBarCol1 = "FFF", measBarCol2="FFF", measBarHeight=10,  imgScaleSingle = "mgoImgScaleFit", imgBGCol = "FFF", imgBorderCol = "FFF", imgBorderSize = 0, imgCHeight = 100, imgCWidth = 100, imgScaleGrid = "mgoImgScaleFit";
+			
+			var objectStylingTog = layout.qDef.objectStyling;
+			var objectBGColv=layout.qDef.objectBGCol;
+			var objectPadv=layout.qDef.objectPadding;
+			var objectBGColIns;
+
+			console.log(objectBGColv);
+
+			if((objectStylingTog) & (rowcount>1)){
+				if(typeof objectBGColv!= 'undefined'){
+					objectBGColv.replace(/#/g, '');
+					objectBGColIns = 'background-color:#'+objectBGColv+';';
+
+				} else {
+
+					objectBGColIns = 'background-color:transparent;';
+				};
+				if(typeof objectPadv!= 'undefined'){
+					
+					objectBGColIns += 'padding:'+objectPadv+'px;';
+					
+				} else {
+
+					objectBGColIns += 'padding:0px;';
+				};
+			} else{
+					objectBGColIns="";
+
+			};
+
+
 			var imgriduniqueID = layout.qInfo.qId;
-			var html = '<div id="mmI'+imgriduniqueID+'">';
+			var html = '<div id="mmI'+imgriduniqueID+'" class="MGOImageGrid" style="'+objectBGColIns+'">';
 			
 			var imgridpage = layout.qDef.IMGPAGINGSIZE;
 			var mgoSinglePicModeActive;
 			var killzoomcontrols = true;
 
-
+			
 			var hideImageCount;
 			if(layout.qDef.IMGPAGINGDISPLAY){
 				hideImageCount = 'display: none;';
@@ -1047,6 +1133,7 @@ function($, cssContent) {'use strict';
 			var colFlagToggle=layout.qDef.IMGCOLORFLAG, colFlagTargData = "", colFlagTargDataType ="", colFlagTargDataOP ="", colFlagTargValue= "", colFlagTargValue2= "", colFlagTargProperty ="", colFlagTargColValue="";
 			var colFlagTextColInsert='color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
 			var colFlagTextColInsertM1='color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL, colFlagTextColInsertM2='color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+			var colFlagSash=0, colFlagSashCol = layout.qDef.IMGCOLORFLAGSASHCOL, colFlagSashTxt = layout.qDef.IMGCOLORFLAGSASHTXT, colFlagSashTxtCol = layout.qDef.IMGCOLORFLAGSASHTXTCOL; 
 			if(colFlagToggle){
 				
 				colFlagTargData = layout.qDef.IMGCOLORFLAGREF;
@@ -1072,6 +1159,8 @@ function($, cssContent) {'use strict';
 					colFlagTargColValue = layout.qDef.IMGCOLORFLAGDTARGCOL;
 					colFlagTargColValue = colFlagTargColValue.replace(/#/g, '');
 				};
+				
+
 				/**
 				console.log(
 					'colFlagTargData ' + colFlagTargData +
@@ -1399,6 +1488,59 @@ function($, cssContent) {'use strict';
 								}
 
 							};
+						} else if((colFlagTargProperty=="o")){
+							colFlagTextColInsertM1 = 'color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+							colFlagTextColInsertM2 = 'color:#'+layout.qDef.IMGMEASDISPLAYSTYLETXTCOL;
+
+							colFlagSash=0;
+
+							var colFlagSashInsert = '<span class="colFlagSashBox"><span class="colFlagSash" style="background-color:#'+colFlagSashCol+'; color:#'+colFlagSashTxtCol+';">';
+							colFlagSashInsert += colFlagSashTxt;
+							colFlagSashInsert += '</span></span>';
+
+
+							if(colFlagTargDataType=="meas"){
+								// chose target measure
+								var colFlagMeasTarg;
+								if((colFlagTargData == 3) & (mymeasureCount>0)) {
+									colFlagMeasTarg= meas1.qNum;
+								} else if ((colFlagTargData == 4) & (mymeasureCount>1)) {
+									colFlagMeasTarg= meas2.qNum;
+								} else if ((colFlagTargData == 5) & (mymeasureCount>2)) {
+									colFlagMeasTarg= meas3.qNum;
+								};
+								//assess type of operator equal
+
+
+								if((colFlagTargDataOP=="e") & (colFlagMeasTarg == colFlagTargValue)){
+									custImgEffectClass="";
+									colFlagSash = 1;
+								} else if((colFlagTargDataOP=="g") & (colFlagMeasTarg > colFlagTargValue)){
+									custImgEffectClass="";
+									colFlagSash = 1;
+								} else if((colFlagTargDataOP=="l") & (colFlagMeasTarg < colFlagTargValue)){
+									custImgEffectClass="";
+									colFlagSash = 1;
+								} else if((colFlagTargDataOP=="b") & (colFlagMeasTarg > colFlagTargValue) & (colFlagMeasTarg < colFlagTargValue2)){
+									custImgEffectClass="";
+									colFlagSash = 1;
+								};
+
+							} else {
+								// chose target dim
+								var colFlagDimTarg;
+								if((colFlagTargData == 1) & (mydimensionCount>0)) {
+									colFlagDimTarg = dim.qText;
+								} else if ((colFlagTargData == 2) & (mydimensionCount>1)) {
+									colFlagDimTarg = dim2.qText;
+								} ;
+								//assess 
+								if(colFlagDimTarg == colFlagTargValue){
+									custImgEffectClass="";
+									colFlagSash = 1;
+								}
+
+							};
 						};
 					}
 
@@ -1466,6 +1608,12 @@ function($, cssContent) {'use strict';
 							html += '<span class="mgoPicGrid mgoPicGridHovRef"  data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; ';
 							html += "background-image: url('"+imgFolderLocation + (encodeURI(dim.qText))+"'); ";
 							html += 'background-color: transparent; opacity: '+ imageOpacity +';">';
+							//add banner flag
+							if(colFlagSash){
+								html+=colFlagSashInsert;
+
+							};
+
 							html += '</span></span>';
 						
 							//check if measure added
@@ -1580,6 +1728,12 @@ function($, cssContent) {'use strict';
 							};
 							// render image 
 								html += '<span class="mgoPicGrid mgoPicGridHovRef" data-value="'+hoverDimText+'" style="'+ imgBGColInsert +'; border-bottom: '+ imgBorderSize + 'px solid #' + imgBorderCol +'; border-right: '+ imgBorderSize + 'px solid #' + imgBorderCol +';"><span class="mgoPicGrid '+imgScaleGrid+' '+custImgEffectClass+'" style="height:' + imgCHeight + 'px; width:' + imgCWidth + 'px; background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); background-color: transparent; opacity: '+ imageOpacity +';">';
+								//add banner flag
+									if(colFlagSash){
+										html+=colFlagSashInsert;
+
+									};
+
 								html += '</span></span>';
 							
 
@@ -1689,7 +1843,7 @@ function($, cssContent) {'use strict';
 								html+= '<button class="lui-button butReposition">Reset</button>';
 								if(layout.qDef.IMGPRINTGRIDTOG){
 								//single print
-									html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';	
+									html+= '<button class="lui-button butPrint mgoIconButAdjust" style="margin-right:2px;" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';	
 								};
 								if((layout.qDef.IMGGRIDNOSELECT !=true) & (rowcount == 1)){
 									html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';			
@@ -1703,7 +1857,7 @@ function($, cssContent) {'use strict';
 							if(layout.qDef.IMGPRINTGRIDTOG){
 								//single print
 								html+= '<div class="mgoControlButs">';
-								html+= '<button class="butPrint lui-button mgoIconButAdjust" alt="Print" type="button"><span class="lui-icon lui-icon--print"></span></button>';
+								html+= '<button class="lui-button butPrint mgoIconButAdjust" alt="Print" style="margin-right:2px;" type="button"><span class="lui-icon lui-icon--print"></span></button>';
 								html+= '<button class="lui-button butClose mgoIconButAdjust" alt="Close"><span class="lui-icon lui-icon--remove"></span></button> ';	
 								html+= '</div>';
 							} else {
@@ -1721,7 +1875,13 @@ function($, cssContent) {'use strict';
 							if(rowcount == 1){
 								if(customSingleImageSourceType){
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + customSingleImageSourceURL + ');background-color: #' + imgBGCol +';">';
-									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + customSingleImageSourceURL + '); ' + imgBGColInsert +';"></div>';
+									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + customSingleImageSourceURL + '); ' + imgBGColInsert +';">';
+									//add banner flag
+										if(colFlagSash){
+											html+=colFlagSashInsert;
+
+										};
+									html += '</div>';
 
 								} else {
 									
@@ -1732,13 +1892,29 @@ function($, cssContent) {'use strict';
 								if(grid1upDisplay){
 									if(layout.qDef.IMGGRIDNOSELECT !=true){
 										html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dimToSelect.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
+										//add banner flag
+										if(colFlagSash){
+											html+=colFlagSashInsert;
+
+										};
 									} else {
 										html += '<div class="mgoSinglePic '+imgScaleSingle+'" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
+										//add banner flag
+										if(colFlagSash){
+											html+=colFlagSashInsert;
+
+										};
 									};
 									
 								} else {
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');background-color: #' + imgBGCol +';">';
-									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';"></div>';
+									html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
+										//add banner flag
+										if(colFlagSash){
+											html+=colFlagSashInsert;
+
+										};
+									html += '</div>';
 								
 								};
 							};
@@ -1748,15 +1924,33 @@ function($, cssContent) {'use strict';
 									
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+' selectable" data-value="'+ dim.qElemNumber + '" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';">';
 									if(layout.qDef.IMGGRIDNOSELECT !=true){
-									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+' selectable" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');"></div></div>';
+									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+' selectable" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');">';
+									//add banner flag
+										if(colFlagSash){
+											html+=colFlagSashInsert;
+
+										};
+									html += '</div></div>';
 									} else {
-									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+'" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');"></div></div>';
+									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+'" data-value="'+ dim.qElemNumber +'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');">';
+										//add banner flag
+										if(colFlagSash){
+											html+=colFlagSashInsert;
+
+										};
+									html += '</div></div>';
 
 									};
 								} else {
 									//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');background-color: #' + imgBGCol +';">';
 									//html += '<div class="mgoSinglePicC"><div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + '); ' + imgBGColInsert +';"></div>';
-									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');"></div></div>';
+									html += '<div class="mgoSinglePicC"><div style="' + imgBGColInsert +'; position:absolute; width:100%; height:100%"><div class="mgoSinglePic '+imgScaleSingle+' '+custImgEffectClass+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');">';
+									//add banner flag
+										if(colFlagSash){
+											html+=colFlagSashInsert;
+
+										};
+									html += '</div></div>';
 
 								};
 							//html += '<div class="mgoSinglePic '+imgScaleSingle+'" style="background-image: url(' + imgFolderLocation + (encodeURI(dim.qText)) + ');background-color: #' + imgBGCol +';">';
@@ -2656,7 +2850,7 @@ function($, cssContent) {'use strict';
 				     + ' <button class="lui-button" onclick="var tg=document.getElementById(\'mmIComtainer\'); tg.style.transformOrigin=\'0 0\'; tg.style.transform=\'scale(2.0)\'; tg.style.width=\'50%\';">200%</button>'
 				     + ' <button class="lui-button" onclick="var tg=document.getElementById(\'mmIComtainer\'); tg.style.transformOrigin=\'0 0\'; tg.style.transform=\'scale(4.0)\'; tg.style.width=\'25%\';">400%</button>'
 				     + ' </span>'
-				     +'<br><br><button class="lui-button lui-button--success mmIconButAdjust" alt="Fit Height" onclick="window.print();" type="button"><span class="lui-icon lui-icon--print"></span> Print</button> <button class="lui-button" onclick="location.reload();">Return to sheet</button></div><div id="mmIComtainer" style="background-color:#ffffff">'+printContents+'</div>';
+				     +'<br><br><button class="lui-button mmIconButAdjust" alt="Fit Height" onclick="window.print();" type="button"><span class="lui-icon lui-icon--print"></span> Print</button> <button class="lui-button" onclick="location.reload();">Return to sheet</button></div><div id="mmIComtainer" style="background-color:#ffffff">'+printContents+'</div>';
 			 	};
 			     
 
