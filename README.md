@@ -1,7 +1,7 @@
 # qse-mgoimagegrid
 Qlik Sense Extension to display images - for use with Qlik Sense
 
-**Download a zip of just the v3.15 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
+**Download a zip of just the v3.16 extension, ready to add to server [zip of MGOImageGridv3 folder] (https://github.com/murraygm/qse-mgoimagegrid/raw/master/MGOImageGridv3.zip)**
 
 **DOWNLOAD FULL PROJECT VIA GITHUB https://github.com/murraygm/qse-mgoimagegrid/archive/master.zip**
 or grab just what you need from the project https://github.com/murraygm/qse-mgoimagegrid
@@ -13,7 +13,12 @@ or check out the project page on [Qlik Branch](http://branch.qlik.com/#!/project
 
 
 ## Version 3 - for use in Qlik Sense 3 and later
-**Version 3.15 (April 2018) - Tested in Qlik Sense Server Feb 2018 release, Desktop April 2018 release.**
+**Version 3.16 (April 2018) - Tested in Qlik Sense Server Feb 2018 release, Desktop April 2018 release.**
+
+Other updates:
+* Added 'banner' option to 'Colour Indicator' properties
+* Zoom/rotate bug fix for Chrome
+* Added option to set background colour and padding for the full object.
 
 *LOCALS FILE PATH ISSUES*
 
@@ -42,6 +47,10 @@ Other updates:
 
 
 ### Screenshots and possibilities
+
+![s316][s316]
+
+[s316]: https://raw.githubusercontent.com/murraygm/qse-mgoimagegrid/master/screenshots/v316.png "s316"
 
 ![s0][s0]
 
